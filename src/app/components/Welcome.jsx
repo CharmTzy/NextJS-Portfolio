@@ -1,13 +1,13 @@
-import Image from "next/image";
-import {Inter} from "next/font/google";
 
-const inter = Inter({subsets: ["latin"]});
+import { Inter } from "next/font/google";
 
-export default function Welcome() {
+const inter = Inter({ subsets: ["latin"] });
+
+export default function Welcome({className}) {
   return (
-    <main className="flex min-h-screen flex-col bg-gradient-to-br from-[#0c0c0c] to-[#1a1a1a] text-white">
+    <main className="flex min-h-screen flex-col bg-[var(--bg-color)] text-[var(--text-color)]">
       {/* Hero Section */}
-      <section className="flex-1 flex flex-col items-start justify-center text-left px-6 lg:px-24">
+      <section className={`flex-1 flex flex-col items-start justify-center text-left px-6 lg:px-24 ${className}`}>
         <h1 className="text-5xl lg:text-7xl font-extrabold">
           <span className="block">
             {Array.from("Helloworld I'm").map((letter, index) => (
@@ -31,9 +31,13 @@ export default function Welcome() {
             ))}
           </span>
         </h1>
-        <p className="mt-6 max-w-2xl text-lg text-gray-300">Web Developer with experience in Digital Concept Arts, Frontend Web Designs. I love fun Web UI, collaboration, and making products. I value simple content structure, clean design patterns, and thoughtful interactions.</p>
+        <p className="mt-6 max-w-2xl text-lg text-gray-300">
+          Web Developer with experience in Digital Concept Arts, Frontend Web Designs. I love fun Web UI, collaboration, and making products. I value simple content structure, clean design patterns, and thoughtful interactions.
+        </p>
         <div className="mt-10 flex items-center space-x-6">
-          <button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform">Let’s Talk!</button>
+          <button className="bg-gradient-to-r from-purple-500 to-blue-500 text-white font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform">
+            Let’s Talk!
+          </button>
         </div>
       </section>
     </main>

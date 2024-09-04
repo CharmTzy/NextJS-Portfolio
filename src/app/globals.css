@@ -2,32 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
+@keyframes slideUp {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.slide-up-navbar {
+  animation: slideUp 0.5s ease-out forwards;
+}
+
+.slide-up-welcome {
+  animation: slideUp 0.5s ease-out 0.5s forwards; 
+}
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --bg-color: #f8f8f8;
+  --text-color: #0c0c0c;
+  --primary-gradient: linear-gradient(to right, #f39c12, #f1c40f);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+/* Night Theme */
+[data-theme='night'] {
+  --bg-color: #0c0c0c;
+  --text-color: #ffffff;
+  --primary-gradient: linear-gradient(to right, #34495e, #2c3e50);
 }
 
+/* Winter Theme */
+[data-theme='winter'] {
+  --bg-color: #e0f7fa;
+  --text-color: #005b96;
+  --primary-gradient: linear-gradient(to right, #00c6ff, #0072ff);
+}
+
+/* Apply the variables */
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
+  background-color: var(--bg-color);
+  color: var(--text-color);
 }
