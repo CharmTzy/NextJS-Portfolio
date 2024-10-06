@@ -5,7 +5,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function Welcome({className}) {
   return (
-    <main className="flex min-h-screen flex-col bg-[var(--bg-color)] text-[var(--text-color)]">
+    <main className="flex min-h-screen flex-col bg-custom-gradient text-[var(--text-color)]">
       {/* Hero Section */}
       <section className={`flex-1 flex flex-col items-start justify-center text-left px-6 lg:px-24 ${className}`}>
         <h1 className="text-5xl lg:text-7xl font-extrabold">

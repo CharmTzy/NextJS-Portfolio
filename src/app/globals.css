@@ -21,25 +21,27 @@
   animation: slideUp 0.5s ease-out 0.5s forwards; 
 }
 
+
 :root {
-  --bg-color: #f8f8f8;
+  --bg-color: linear-gradient(90deg, rgba(236,231,225,1) 0%, rgba(232,213,225,1) 76%, rgba(228,201,224,1) 100%);
   --text-color: #0c0c0c;
   --primary-gradient: linear-gradient(to right, #f39c12, #f1c40f);
 }
 
 /* Night Theme */
 [data-theme='night'] {
-  --bg-color: #0c0c0c;
+  --bg-color: linear-gradient(90deg, rgba(17,17,27,1) 0%, rgba(34,24,45,1) 62%, rgba(61,35,75,1) 100%);
   --text-color: #ffffff;
   --primary-gradient: linear-gradient(to right, #34495e, #2c3e50);
 }
 
 /* Winter Theme */
 [data-theme='winter'] {
-  --bg-color: #e0f7fa;
+  --bg-color: linear-gradient(135deg, #e0f7fa, #d0e9ff);
   --text-color: #005b96;
   --primary-gradient: linear-gradient(to right, #00c6ff, #0072ff);
 }
+
 
 body {
   background-color: var(--bg-color);
