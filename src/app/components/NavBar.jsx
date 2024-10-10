@@ -34,8 +34,6 @@ const Navbar = ({className}) => {
         return <SunIcon className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-yellow-500 hover:text-yellow-600 ${isRotating ? "rotate-180" : "rotate-0"}`} onClick={toggleMode} />;
       case "night":
         return <MoonIcon className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-blue-500 hover:text-blue-600 ${isRotating ? "rotate-180" : "rotate-0"}`} onClick={toggleMode} />;
-      case "winter":
-        return <img src="/snowflake.png" alt="Snowflake Icon" width={24} height={24} className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer hover:opacity-80 ${isRotating ? "rotate-180" : "rotate-0"}`} onClick={toggleMode} />;
       default:
         return null;
     }

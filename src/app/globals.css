@@ -23,7 +23,7 @@
 
 
 :root {
-  --bg-color: linear-gradient(90deg, rgba(236,231,225,1) 0%, rgba(232,213,225,1) 76%, rgba(228,201,224,1) 100%);
+  --bg-color: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(232,213,225,1) 76%, rgba(228,201,224,1) 100%);
   --text-color: #0c0c0c;
   --primary-gradient: linear-gradient(to right, #f39c12, #f1c40f);
 }
@@ -35,16 +35,26 @@
   --primary-gradient: linear-gradient(to right, #34495e, #2c3e50);
 }
 
-/* Winter Theme */
-[data-theme='winter'] {
-  --bg-color: linear-gradient(135deg, #e0f7fa, #d0e9ff);
-  --text-color: #005b96;
-  --primary-gradient: linear-gradient(to right, #00c6ff, #0072ff);
-}
-
-
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
   overflow-x: hidden;
+}
+
+@keyframes gradientMove {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animated-gradient {
+  background-size: 200% 200%;
+  background-position: 0% 50%;
+  animation: gradientMove 3s ease-in-out infinite;
 }

@@ -1,7 +1,7 @@
 "use client";
-import React, {createContext, useContext, useState, ReactNode, useEffect} from "react";
+import React, {createContext, useContext, useState, ReactNode} from "react";
 
-type Theme = "day" | "night" | "winter";
+type Theme = "day" | "night";
 
 interface ThemeContextType {
   theme: Theme;
@@ -23,11 +23,8 @@ export const ThemeProvider = ({children}: {children: ReactNode}) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => {
-      // Correcting the sequence: day -> night -> winter
       if (prevTheme === "day") {
         return "night";
-      } else if (prevTheme === "night") {
-        return "winter";
       } else {
         return "day";
       }
