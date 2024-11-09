@@ -1,9 +1,8 @@
-// NavBar.jsx
 "use client";
-import {useTheme} from "./ThemeContent";
 import Link from "next/link";
 import React, {useState} from "react";
 import {Bars3Icon, XMarkIcon, CogIcon, SunIcon, MoonIcon} from "@heroicons/react/24/solid";
+import {useCurrentTheme} from "../hooks/useCurrentTheme";
 
 const navLinks = [
   {title: "Home", path: "#home"},
@@ -13,29 +12,38 @@ const navLinks = [
 ];
 
 const Navbar = ({className}) => {
-  const {theme, toggleTheme} = useTheme();
+  const {currentTheme, toggleTheme} = useCurrentTheme();
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
 
-  const toggleMode = () => {
-    if (isRotating) return;
-    setIsRotating(true);
-
-    setTimeout(() => {
-      toggleTheme();
-      setIsRotating(false);
-    }, 500);
-  };
-
   const getIcon = () => {
-    switch (theme) {
-      case "day":
-        return <SunIcon className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-yellow-500 hover:text-yellow-600 ${isRotating ? "rotate-180" : "rotate-0"}`} onClick={toggleMode} />;
-      case "night":
-        return <MoonIcon className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-blue-500 hover:text-blue-600 ${isRotating ? "rotate-180" : "rotate-0"}`} onClick={toggleMode} />;
-      default:
-        return null;
+    if (currentTheme === "light") {
+      return (
+        <SunIcon
+          className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-yellow-500 hover:text-yellow-600 ${isRotating ? "rotate-180" : "rotate-0"}`}
+          onClick={() => {
+            setIsRotating(true);
+            setTimeout(() => {
+              toggleTheme();
+              setIsRotating(false);
+            }, 500);
+          }}
+        />
+      );
+    } else {
+      return (
+        <MoonIcon
+          className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-blue-500 hover:text-blue-600 ${isRotating ? "rotate-180" : "rotate-0"}`}
+          onClick={() => {
+            setIsRotating(true);
+            setTimeout(() => {
+              toggleTheme();
+              setIsRotating(false);
+            }, 500);
+          }}
+        />
+      );
     }
   };
 
@@ -45,11 +53,13 @@ const Navbar = ({className}) => {
         <div className="flex items-center justify-between w-full">
           {/* Icons on the left side */}
           <div className="flex items-center space-x-4">
+            {/* Settings (Cog) Icon */}
             <button onClick={() => setSettingsOpen(!settingsOpen)} className="text-black hover:text-gray-700 focus:outline-none">
-              <CogIcon className={`h-8 w-8 transition-transform duration-500 ${settingsOpen ? "transform rotate-90" : "transform rotate-0"}`} />
+              <CogIcon className={`h-8 w-8 transition-transform duration-500 ${settingsOpen ? "rotate-90" : "rotate-0"}`} />
             </button>
 
-            <div className={`transition-all duration-500 transform ${settingsOpen ? "translate-x-12 opacity-100" : "translate-x-0 opacity-0"}`}>{getIcon()}</div>
+            {/* Theme Toggle Icon - only appears when settingsOpen is true */}
+            <div className={`transition-all duration-500 transform ${settingsOpen ? "translate-x-12 opacity-100" : "opacity-0"}`}>{getIcon()}</div>
           </div>
 
           {/* Hamburger icon for mobile */}
@@ -74,7 +84,6 @@ const Navbar = ({className}) => {
           </ul>
         </div>
       </nav>
-
       <div className={`fixed top-0 left-0 w-full h-full bg-black text-white z-20 transform ${navbarOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-300 ease-in-out`}>
         <button onClick={() => setNavbarOpen(false)} className="absolute top-8 right-8 text-white focus:outline-none">
           <XMarkIcon className="h-8 w-8" />

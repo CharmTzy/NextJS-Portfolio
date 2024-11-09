@@ -2,37 +2,27 @@
 @tailwind components;
 @tailwind utilities;
 
-@keyframes slideUp {
+/* Slide-up animation keyframes */
+@keyframes slide-up {
   0% {
+    transform: translateY(100px);
     opacity: 0;
-    transform: translateY(20px);
   }
   100% {
-    opacity: 1;
     transform: translateY(0);
+    opacity: 1;
   }
 }
 
-.slide-up-navbar {
-  animation: slideUp 0.5s ease-out forwards;
+/* Slide-up animation class */
+.animate-slide-up {
+  animation: slide-up 0.6s ease-out forwards;
 }
-
-.slide-up-welcome {
-  animation: slideUp 0.5s ease-out 0.5s forwards; 
-}
-
 
 :root {
-  --bg-color: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(232,213,225,1) 76%, rgba(228,201,224,1) 100%);
+  --bg-color: linear-gradient(90deg, rgb(255, 255, 255) 0%, rgba(232, 213, 225, 1) 76%, rgba(228, 201, 224, 1) 100%);
   --text-color: #0c0c0c;
   --primary-gradient: linear-gradient(to right, #f39c12, #f1c40f);
-}
-
-/* Night Theme */
-[data-theme='night'] {
-  --bg-color: linear-gradient(90deg, rgba(17,17,27,1) 0%, rgba(34,24,45,1) 62%, rgba(61,35,75,1) 100%);
-  --text-color: #ffffff;
-  --primary-gradient: linear-gradient(to right, #34495e, #2c3e50);
 }
 
 body {
@@ -41,6 +31,7 @@ body {
   overflow-x: hidden;
 }
 
+/* Animated gradient keyframes */
 @keyframes gradientMove {
   0% {
     background-position: 0% 50%;
