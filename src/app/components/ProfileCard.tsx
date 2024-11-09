@@ -11,7 +11,7 @@ export default function ProfileCard() {
     <div className={`flex flex-col lg:flex-row items-center ${currentTheme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"} rounded-3xl p-8 sm:p-12 shadow-lg max-w-4xl w-full animate-slide-up`}>
       {/* Profile Image */}
       <div className="flex-shrink-0 mb-6 lg:mb-0 lg:mr-12 lg:relative lg:-top-20">
-        <Image src="/profile-pic.jpeg" alt="Avatar" width={120} height={120} className="rounded-full object-cover lg:w-[180px] lg:h-[180px] w-auto h-auto" style={{width: "100px", height: "100px"}} priority />
+        <Image src="/profile-pic.png" alt="Avatar" width={120} height={120} className="rounded-full object-cover lg:w-[180px] lg:h-[180px] w-auto h-auto" style={{width: "100px", height: "100px"}} priority />
       </div>
 
       {/* Text Content */}
