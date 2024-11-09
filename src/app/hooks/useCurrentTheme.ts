@@ -1,18 +1,21 @@
 "use client";
-import {useTheme} from "next-themes";
-import {useState, useEffect} from "react";
+// Initialize currentTheme using resolved theme on mount
+import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 
 export function useCurrentTheme() {
-  const {setTheme, theme} = useTheme();
-  const [currentTheme, setCurrentTheme] = useState(null); 
+  const { theme, setTheme, resolvedTheme } = useTheme(); // Use resolvedTheme for initial state
+  const [currentTheme, setCurrentTheme] = useState(null);
 
-  // Toggle theme between "light" and "dark"
+  useEffect(() => {
+    if (resolvedTheme) setCurrentTheme(resolvedTheme); // Set theme on mount to avoid hydration mismatch
+  }, [resolvedTheme]);
+
   const toggleTheme = () => {
     const newTheme = currentTheme === "light" ? "dark" : "light";
     setTheme(newTheme);
     setCurrentTheme(newTheme);
-    console.log("Theme toggled to:", newTheme); // Log the theme change
   };
 
-  return {currentTheme, toggleTheme};
+  return { currentTheme, toggleTheme };
 }

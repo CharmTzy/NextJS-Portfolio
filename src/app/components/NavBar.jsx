@@ -16,7 +16,7 @@ const Navbar = ({className}) => {
   const [navbarOpen, setNavbarOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
-
+  if (!currentTheme) return null;
   const getIcon = () => {
     if (currentTheme === "light") {
       return (
