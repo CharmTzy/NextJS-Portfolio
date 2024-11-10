@@ -25,7 +25,7 @@ export default function Home() {
         </section>
 
         {/* About Section */}
-        <section id="about" className="slide-up w-full mt-16">
+        <section id="about" className="slide-up w-full lg:mt-20 lg:pt-24">
           <About />
         </section>
       </div>

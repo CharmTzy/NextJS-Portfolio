@@ -47,7 +47,7 @@ export default function ProfileCard() {
         {/* Additional Text and Button Styles */}
         <p className={`mt-2 text-base lg:text-lg ${currentTheme === "dark" ? "text-gray-400" : "text-gray-500"} max-w-xl`}>Web Developer with experience in Frontend Web Designs. I ❤️ fun Web UI, collaboration, and making project ideas.</p>
         <p className={`mt-2 text-base lg:text-lg ${currentTheme === "dark" ? "text-gray-400" : "text-gray-500"} max-w-xl`}>I value simple content structure, clean design patterns, and thoughtful interactions.</p>
-        <button className={`mt-6 ${currentTheme === "dark" ? "bg-gradient-to-r from-blue-700 to-purple-700 text-white" : "bg-gradient-to-r from-purple-500 to-blue-500 text-white"} font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform`}>Let’s Talk!</button>
+        <button className={`mt-12 ${currentTheme === "dark" ? "bg-gradient-to-r from-blue-700 to-purple-700 text-white" : "bg-gradient-to-r from-purple-500 to-blue-500 text-white"} font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform`}>Let’s Talk!</button>
       </div>
     </div>
   );
