@@ -49,3 +49,6 @@ body {
   background-position: 0% 50%;
   animation: gradientMove 3s ease-in-out infinite;
 }
+html {
+  scroll-behavior: smooth;
+}

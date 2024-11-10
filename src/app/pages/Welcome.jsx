@@ -9,7 +9,7 @@ export default function Welcome() {
   if (!currentTheme) return null;
 
   return (
-    <div className={`flex items-center justify-center min-h-screen ${currentTheme === "dark" ? "bg-gradient-to-br from-[#201926] via-[#161c22] to-[#17292D]" : "bg-gradient-to-br from-purple-100 via-blue-100 to-green-100"} p-8 pt-24 ${inter.className}`}>
+    <div className={`flex items-center justify-center min-h-screen p-8 pt-24 ${inter.className}`}>
       <ProfileCard />
     </div>
   );

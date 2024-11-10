@@ -26,7 +26,7 @@ export default function ProfileCard() {
 
         {/* Name with Gradient */}
         <h1 className="text-4xl lg:text-6xl font-mono font-bold mb-2">
-          <span className={`block mt-4 text-transparent bg-clip-text bg-[200%_auto] ${currentTheme === "dark" ? "bg-gradient-to-r from-[#41e4fd] via-[#b2a8fd] to-[#8678f9]" : "bg-gradient-to-r from-[#41e4fd] via-[#b2a8fd] to-[#8678f9]"} animate-text-gradient`}>
+          <span className={`block mt-4 text-transparent bg-clip-text bg-[200%_auto] bg-gradient-to-r from-[#41e4fd] via-[#b2a8fd] to-[#8678f9] animate-text-gradient`}>
             {Array.from("WAI YAN.").map((letter, index) => (
               <span key={index} className="hover:text-[#41e4fd] transition-colors">
                 {letter}
