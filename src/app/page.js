@@ -12,11 +12,11 @@ export default function Home() {
   if (!currentTheme) return null;
 
   return (
-    <main className="flex min-h-screen flex-col">
+    <main className={`flex min-h-screen flex-col overflow-x-hidden ${currentTheme === "dark" ? "bg-gradient-to-br from-[#201926] via-[#161c22] to-[#17292D]" : "bg-gradient-to-br from-purple-100 via-blue-100 to-green-100"} `}>
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <Navbar className="slide-up" />
 
-      <div className={` ${currentTheme === "dark" ? "bg-gradient-to-br from-[#201926] via-[#161c22] to-[#17292D]" : "bg-gradient-to-br from-purple-100 via-blue-100 to-green-100"} `}>
+      <div>
         {/* Welcome Section */}
         <section id="welcome" className="slide-up w-full">
           <Welcome />
