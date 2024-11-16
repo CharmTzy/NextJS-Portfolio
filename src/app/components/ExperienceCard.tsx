@@ -7,7 +7,7 @@ export default function ExperienceCard() {
   return (
     <div className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"}`}>
       <div className="mb-4">
-        <div className={`text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>2 YEARS OF</div>
+        <div className={`text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>3 YEARS OF</div>
         <div className="text-xl sm:text-2xl font-bold">EXPERIENCE</div>
       </div>
       <div className="space-y-4">

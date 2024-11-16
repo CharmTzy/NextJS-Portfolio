@@ -100,3 +100,21 @@ html {
   color: #9ca3af;
 }
 
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+
+@keyframes spinColors {
+  from {
+    --angle: 0deg;
+  }
+  to {
+    --angle: 360deg;
+  }
+}
+
+.animate-rotate {
+  animation: spinColors 3s linear infinite;
+}
