@@ -32,7 +32,7 @@ export default function AboutMeCard() {
           ></div>
 
           <div className={`relative z-10 flex items-center justify-center w-full h-full rounded-lg ${currentTheme === "dark" ? "bg-[#1F2937]" : "bg-white"}`}>
-            <Image src="/about-me.png" alt="About Me" width={240} height={240} className="rounded-lg object-cover" priority />
+            <Image src="/about-me.png" alt="About Me" width={240} height={240} className="rounded-lg object-cover" draggable="false" onContextMenu={(e) => e.preventDefault()} priority />
           </div>
         </div>
       </div>

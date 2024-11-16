@@ -11,7 +11,7 @@ export default function ProfileCard() {
     <div className={`flex flex-col lg:flex-row items-center ${currentTheme === "dark" ? "card-container card-container-dark" : "card-container card-container-light"} animate-slide-up`}>
       {/* Profile Image */}
       <div className="flex-shrink-0 mb-6 lg:mb-0 lg:mr-12 lg:relative lg:-top-20">
-        <Image src="/profile-pic.png" alt="Avatar" width={120} height={120} className="rounded-full object-cover lg:w-[180px] lg:h-[180px] w-auto h-auto" style={{width: "100px", height: "100px"}} priority />
+        <Image src="/profile-pic.png" alt="Avatar" width={120} height={120} className="rounded-full object-cover lg:w-[180px] lg:h-[180px] w-auto h-auto" style={{width: "100px", height: "100px"}} draggable="false" onContextMenu={(e) => e.preventDefault()} priority />
       </div>
 
       <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
