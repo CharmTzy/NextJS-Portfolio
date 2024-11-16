@@ -2,6 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
+.opacity-0 {
+  opacity: 0;
+}
 /* Slide-up animation keyframes */
 @keyframes slide-up {
   0% {
@@ -67,12 +70,12 @@ html {
 }
 
 .card-container-dark {
-  background-color: #1F2937;
+  background-color: #1f2937;
   color: #ffffff;
 }
 
 .text-gray-light {
-  color: #6b7280; 
+  color: #6b7280;
 }
 
 .text-gray-dark {

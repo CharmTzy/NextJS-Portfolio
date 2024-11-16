@@ -2,14 +2,15 @@
 import "../globals.css";
 import Image from "next/image";
 import {useCurrentTheme} from "../hooks/useCurrentTheme";
-
+import {useInView} from "../hooks/useInView";
 export default function AboutMeCard() {
   const {currentTheme} = useCurrentTheme();
-
+  const {ref, isInView} = useInView(0.2);
   return (
     <div
+      ref={ref}
       className={`flex flex-col lg:flex-row items-center lg:items-start rounded-3xl shadow-md p-6 lg:p-8 
-        ${currentTheme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"}`}
+        ${currentTheme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"} ${isInView ? "animate-slide-up" : "opacity-0"}`}
     >
       {/* Left Text Section */}
       <div className="flex-1">

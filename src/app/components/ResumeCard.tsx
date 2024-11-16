@@ -1,12 +1,12 @@
 "use client";
 import {Download, Eye} from "lucide-react";
 import {useCurrentTheme} from "../hooks/useCurrentTheme";
-
+import {useInView} from "../hooks/useInView";
 export default function ResumeCard() {
   const {currentTheme} = useCurrentTheme();
-
+  const {ref, isInView} = useInView(0.2);
   return (
-    <div className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"}`}>
+    <div ref={ref} className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"} ${isInView ? "animate-slide-up" : "opacity-0"}`}>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <div>
           <div className={`text-xs sm:text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>2024 CV</div>
