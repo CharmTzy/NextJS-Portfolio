@@ -1,8 +1,7 @@
-// src/app/components/NavBar.jsx
 "use client";
 import Link from "next/link";
 import React, {useState, useEffect} from "react";
-import {Bars3Icon, XMarkIcon, CogIcon, SunIcon, MoonIcon} from "@heroicons/react/24/solid";
+import {Bars3Icon, XMarkIcon, SunIcon, MoonIcon} from "@heroicons/react/24/solid";
 import {useCurrentTheme} from "../hooks/useCurrentTheme";
 
 const navLinks = [
@@ -15,7 +14,6 @@ const navLinks = [
 const Navbar = ({className}) => {
   const {currentTheme, toggleTheme} = useCurrentTheme();
   const [navbarOpen, setNavbarOpen] = useState(false);
-  const [settingsOpen, setSettingsOpen] = useState(false);
   const [isRotating, setIsRotating] = useState(false);
   const [activeSection, setActiveSection] = useState("#welcome");
 
@@ -84,13 +82,9 @@ const Navbar = ({className}) => {
           bg-opacity-80 rounded-full border px-6 py-2 w-[95%] max-w-screen-xl shadow-lg lg:px-24 lg:py-6 ${className}`}
       >
         <div className="flex items-center justify-between w-full">
-          <div className="flex items-center space-x-4">
-            <button onClick={() => setSettingsOpen(!settingsOpen)} className={`${currentTheme === "dark" ? "text-white" : "text-black"} hover:text-gray-500 focus:outline-none`}>
-              <CogIcon className={`h-8 w-8 transition-transform duration-500 ${settingsOpen ? "rotate-90" : "rotate-0"}`} />
-            </button>
-            <div className={`transition-all duration-500 transform ${settingsOpen ? "translate-x-12 opacity-100" : "opacity-0"}`}>{getIcon()}</div>
-          </div>
+          <div className="flex items-center">{getIcon()}</div>
 
+          {/* Hamburger icon for mobile */}
           <div className="lg:hidden">
             <button onClick={() => setNavbarOpen(!navbarOpen)} className={`${currentTheme === "dark" ? "text-white" : "text-black"} hover:text-gray-500 focus:outline-none`}>
               {navbarOpen ? <XMarkIcon className="h-8 w-8" /> : <Bars3Icon className="h-8 w-8" />}

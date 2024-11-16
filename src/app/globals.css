@@ -52,3 +52,51 @@ body {
 html {
   scroll-behavior: smooth;
 }
+
+/* Reusable Card Classes */
+.card-container {
+  border-radius: 1.5rem;
+  padding: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.card-container-light {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.card-container-dark {
+  background-color: #1F2937;
+  color: #ffffff;
+}
+
+.text-gray-light {
+  color: #6b7280; 
+}
+
+.text-gray-dark {
+  color: #9ca3af;
+}
+
+.icon-button {
+  padding: 0.5rem;
+  border-radius: 9999px;
+  background-color: #f3f4f6;
+  color: #000000;
+}
+
+.icon-button-dark {
+  background-color: #374151;
+  color: #ffffff;
+}
+
+.link-hover {
+  text-decoration: none;
+  transition: color 0.3s ease-in-out;
+}
+
+.link-hover:hover {
+  color: #9ca3af;
+}
+

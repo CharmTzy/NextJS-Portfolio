@@ -6,19 +6,22 @@ export default function ResumeCard() {
   const {currentTheme} = useCurrentTheme();
 
   return (
-    <div className={`rounded-3xl p-4 sm:p-6 shadow-sm ${currentTheme === "dark" ? "bg-gray-800 text-white" : "bg-white text-black"}`}>
+    <div className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"}`}>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0">
         <div>
-          <div className={`text-xs sm:text-sm ${currentTheme === "dark" ? "text-gray-400" : "text-gray-500"}`}>2024 CV</div>
+          <div className={`text-xs sm:text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>2024 CV</div>
           <div className="font-semibold text-base sm:text-lg">RESUME</div>
         </div>
         <div className="flex space-x-2">
-          <button className={`p-2 rounded-full ${currentTheme === "dark" ? "bg-gray-700 text-white" : "bg-gray-100 text-black"}`}>
+          {/* Download Button */}
+          <a href="/WAI%20YAN%20AUNG%20RESUME.pdf" download className={`icon-button ${currentTheme === "dark" ? "icon-button-dark" : ""}`}>
             <Download className="w-4 h-4" />
-          </button>
-          <button className={`p-2 rounded-full ${currentTheme === "dark" ? "bg-gray-700 text-white" : "bg-gray-100 text-black"}`}>
+          </a>
+
+          {/* View Button */}
+          <a href="/WAI%20YAN%20AUNG%20RESUME.pdf" target="_blank" rel="noopener noreferrer" className={`icon-button ${currentTheme === "dark" ? "icon-button-dark" : ""}`}>
             <Eye className="w-4 h-4" />
-          </button>
+          </a>
         </div>
       </div>
     </div>

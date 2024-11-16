@@ -1,4 +1,3 @@
-// src/app/page.js
 "use client";
 import Navbar from "./components/NavBar";
 import Welcome from "./pages/Welcome";
@@ -17,7 +16,6 @@ export default function Home() {
       <link rel="icon" href="/favicon.ico" sizes="any" />
       <Navbar className="slide-up" />
 
-      {/* Wrapper for both sections to make them scrollable */}
       <div className={` ${currentTheme === "dark" ? "bg-gradient-to-br from-[#201926] via-[#161c22] to-[#17292D]" : "bg-gradient-to-br from-purple-100 via-blue-100 to-green-100"} `}>
         {/* Welcome Section */}
         <section id="welcome" className="slide-up w-full">
