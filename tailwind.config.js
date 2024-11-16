@@ -11,13 +11,13 @@ module.exports = {
         'custom-gradient': 'var(--bg-color)',
       },
       animation: {
-        'text-gradient': 'textShift 1.5s ease-in-out infinite', // Increased time and changed keyframe name
+        'text-gradient': 'textShift 1.5s ease-in-out infinite',
       },
       keyframes: {
         textShift: {
-          '0%': { backgroundPosition: '0% center' }, // Start from left
-          '50%': { backgroundPosition: '100% center' }, // Move to right
-          '100%': { backgroundPosition: '0% center' }, // Move back to left
+          '0%': { backgroundPosition: '0% center' },
+          '50%': { backgroundPosition: '100% center' },
+          '100%': { backgroundPosition: '0% center' },
         },
       },
     },
