@@ -4,8 +4,8 @@ import Welcome from "./pages/Welcome";
 import About from "./pages/About";
 import {useCurrentTheme} from "./hooks/useCurrentTheme";
 import {Inter} from "next/font/google";
+import Image from "next/image";
 import "./globals.css";
-const inter = Inter({subsets: ["latin"]});
 
 export default function Home() {
   const {currentTheme} = useCurrentTheme();
@@ -26,6 +26,12 @@ export default function Home() {
         <section id="about" className="w-full lg:mt-20 lg:pt-24">
           <About />
         </section>
+      </div>
+
+      <div className="fixed bottom-6 right-6 z-50">
+        <a target="_blank" href="https://www.buymeacoffee.com/redx04" className={`flex items-center px-4 py-2 text-white border border-transparent rounded-full shadow-md transition-all hover:underline hover:shadow-lg hover:opacity-85 bg-amber-300`}>
+          <img className="justify-center items-center" src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee" />
+        </a>
       </div>
     </main>
   );
