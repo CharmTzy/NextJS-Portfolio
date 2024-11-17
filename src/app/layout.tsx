@@ -9,12 +9,12 @@ export const metadata = {
   description: "NextJS app",
 };
 
-export default function RootLayout({children}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <>
       <html lang="en" suppressHydrationWarning>
         <head />
-        <body suppressHydrationWarning>
+        <body className="bg-black" suppressHydrationWarning>
           <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
             {children}
           </ThemeProvider>
