@@ -7,7 +7,7 @@ import {useCurrentTheme} from "../hooks/useCurrentTheme";
 const navLinks = [
   {title: "Home", path: "#welcome"},
   {title: "AboutMe", path: "#about"},
-  {title: "Skills", path: "#skills"},
+  {title: "Skills", path: "#skill"},
   {title: "Projects", path: "#projects"},
 ];
 

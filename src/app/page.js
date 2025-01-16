@@ -2,9 +2,8 @@
 import Navbar from "./components/NavBar";
 import Welcome from "./pages/Welcome";
 import About from "./pages/About";
+import Skill from "./pages/Skill";
 import {useCurrentTheme} from "./hooks/useCurrentTheme";
-import {Inter} from "next/font/google";
-import Image from "next/image";
 import "./globals.css";
 
 export default function Home() {
@@ -25,6 +24,10 @@ export default function Home() {
         {/* About Section */}
         <section id="about" className="w-full lg:mt-20 lg:pt-24">
           <About />
+        </section>
+
+        <section id="skill" className="w-full lg:mt-20 lg:pt-24">
+          <Skill/>
         </section>
       </div>
 
