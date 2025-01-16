@@ -88,7 +88,7 @@ export default function SkillSlideshowBox() {
   }, []);
 
   return (
-    <div ref={ref} className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"} ${isInView ? "animate-slide-up" : "opacity-0"}`}>
+    <div ref={ref} className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"} ${isInView ? "animate-slide-up" : "opacity-0"} p-6 sm:p-8 shadow-lg rounded-lg sm:w-3/4 lg:w-1/2`}>
       <h1 className="text-2xl font-bold mb-8 text-center">Web Development</h1>
       <div className="slideshow-container w-full">
         <div className="slideshow-track" ref={trackRef}>
