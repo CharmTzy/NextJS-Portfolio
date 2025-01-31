@@ -14,7 +14,7 @@ export default function ResumeCard() {
         </div>
         <div className="flex space-x-2">
           {/* Download Button */}
-          <a href="/WAI%20YAN%20AUNG%20RESUME.pdf" download className={`icon-button ${currentTheme === "dark" ? "icon-button-dark" : ""}`}>
+          <a href="/WAI%20YAN%20AUNG%20Resume.pdf" download className={`icon-button ${currentTheme === "dark" ? "icon-button-dark" : ""}`}>
             <Download className="w-4 h-4" />
           </a>
 
