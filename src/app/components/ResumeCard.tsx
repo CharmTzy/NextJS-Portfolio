@@ -19,7 +19,7 @@ export default function ResumeCard() {
           </a>
 
           {/* View Button */}
-          <a href="/WAI%20YAN%20AUNG%20RESUME.pdf" target="_blank" rel="noopener noreferrer" className={`icon-button ${currentTheme === "dark" ? "icon-button-dark" : ""}`}>
+          <a href="/WAI%20YAN%20AUNG%20Resume.pdf" target="_blank" rel="noopener noreferrer" className={`icon-button ${currentTheme === "dark" ? "icon-button-dark" : ""}`}>
             <Eye className="w-4 h-4" />
           </a>
         </div>
