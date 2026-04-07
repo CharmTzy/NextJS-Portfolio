@@ -1,53 +1,121 @@
-"use client";
-import Image from "next/image";
+type HeroStat = {
+  value: string;
+  label: string;
+};
 
-import {useCurrentTheme} from "../hooks/useCurrentTheme";
+type ProfileCardProps = {
+  name: string;
+  role: string;
+  tagline: string;
+  availability: string;
+  stats: HeroStat[];
+  primaryHref: string;
+  secondaryHref: string;
+};
 
-export default function ProfileCard() {
-  const {currentTheme} = useCurrentTheme();
-  if (!currentTheme) return null;
-
+export default function ProfileCard({
+  name,
+  role,
+  tagline,
+  availability,
+  stats,
+  primaryHref,
+  secondaryHref,
+}: ProfileCardProps) {
   return (
-    <div className={`flex flex-col lg:flex-row items-center ${currentTheme === "dark" ? "card-container card-container-dark" : "card-container card-container-light"} animate-slide-up`}>
-      {/* Profile Image */}
-      <div className="flex-shrink-0 mb-6 lg:mb-0 lg:mr-12 lg:relative lg:-top-20">
-        <Image src="/profile-pic.png" alt="Avatar" width={120} height={120} className="rounded-full object-cover lg:w-[180px] lg:h-[180px] w-auto h-auto" style={{width: "100px", height: "100px"}} draggable="false" onContextMenu={(e) => e.preventDefault()} priority />
+    <div className="hero-inner">
+      <div className="hero-content fade-up visible">
+        <div className="hero-badge">
+          <div className="badge-dot" />
+          {availability}
+        </div>
+        <h1 className="hero-title">
+          <div className="name">{name}</div>
+          <div className="role">{role}</div>
+        </h1>
+        <p className="hero-tagline" dangerouslySetInnerHTML={{ __html: tagline }} />
+        <div className="hero-actions">
+          <a href={primaryHref} className="btn-primary">
+            View My Work
+          </a>
+          <a href={secondaryHref} className="btn-ghost">
+            Get in Touch →
+          </a>
+        </div>
+        <div className="hero-stats">
+          {stats.map((stat) => (
+            <div key={stat.label}>
+              <div className="stat-num">{stat.value}</div>
+              <div className="stat-label">{stat.label}</div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      <div className="flex flex-col items-center lg:items-start text-center lg:text-left">
-        <span className="text-lg lg:text-3xl font-mono mb-2">
-          {Array.from("Helloworld I'm").map((letter, index) => (
-            <span key={index} className="hover:text-[#41e4fd] transition-colors">
-              {letter}
-            </span>
-          ))}
-        </span>
-
-        {/* Name with Gradient */}
-        <h1 className="text-4xl lg:text-6xl font-mono font-bold mb-2">
-          <span className={`block mt-4 text-transparent bg-clip-text bg-[200%_auto] bg-gradient-to-r from-[#41e4fd] via-[#b2a8fd] to-[#8678f9] animate-text-gradient`}>
-            {Array.from("WAI YAN.").map((letter, index) => (
-              <span key={index} className="hover:text-[#41e4fd] transition-colors">
-                {letter}
+      <div className="hero-visual fade-up visible" style={{ transitionDelay: "0.2s" }}>
+        <div className="hero-card">
+          <div className="card-header">
+            <div className="card-dot" style={{ background: "#ff5f57" }} />
+            <div className="card-dot" style={{ background: "#febc2e" }} />
+            <div className="card-dot" style={{ background: "#28c840" }} />
+            <span className="card-file-label">DEVELOPER.PY — PYTHON</span>
+          </div>
+          <div className="card-window">
+            <div className="code-line">
+              <span className="ln">01</span>
+              <span>
+                <span className="kw">class</span> <span className="fn">WaiYanAung</span>:
               </span>
-            ))}
-          </span>
-        </h1>
-
-        {/* Job Title */}
-        <h2 className="text-4xl lg:text-5xl font-mono font-bold mb-4">
-          {Array.from("Fullstack Developer").map((letter, index) => (
-            <span key={index} className="hover:text-[#41e4fd] transition-colors">
-              {letter}
-            </span>
-          ))}
-        </h2>
-
-        <p className={`mt-2 text-base lg:text-lg ${currentTheme === "dark" ? "text-gray-400" : "text-gray-500"} max-w-xl`}>Web Developer with experience in Frontend Web Designs. I ❤️ fun Web UI, collaboration, and making project ideas.</p>
-        <p className={`mt-2 text-base lg:text-lg ${currentTheme === "dark" ? "text-gray-400" : "text-gray-500"} max-w-xl`}>I value simple content structure, clean design patterns, and thoughtful interactions.</p>
-        <a href="https://wa.me/+6588779884" target="_blank" rel="noopener noreferrer" className={`mt-12 ${currentTheme === "dark" ? "bg-gradient-to-r from-blue-700 to-purple-700 text-white" : "bg-gradient-to-r from-purple-500 to-blue-500 text-white"} font-semibold py-3 px-8 rounded-full shadow-lg transform hover:scale-105 transition-transform`}>
-          Let’s Talk!
-        </a>
+            </div>
+            <div className="code-line">
+              <span className="ln">02</span>
+              <span>
+                <span className="kw">def</span> __init__(self):
+              </span>
+            </div>
+            <div className="code-line">
+              <span className="ln">03</span>
+              <span>
+                self.name = <span className="str">&quot;{name}&quot;</span>
+              </span>
+            </div>
+            <div className="code-line">
+              <span className="ln">04</span>
+              <span>
+                self.role = <span className="str">&quot;AI</span>
+              </span>
+            </div>
+            <div className="code-line">
+              <span className="ln">05</span>
+              <span>
+                <span className="str">&quot;Engineer&quot;</span>
+              </span>
+            </div>
+            <div className="code-line">
+              <span className="ln">06</span>
+              <span>
+                self.stack = [<span className="str">&quot;React&quot;</span>, <span className="str">&quot;Node.js&quot;</span>]
+              </span>
+            </div>
+            <div className="code-line">
+              <span className="ln">07</span>
+              <span>&nbsp;</span>
+            </div>
+            <div className="code-line">
+              <span className="ln">08</span>
+              <span>
+                <span className="kw">def</span> <span className="fn">say_hello</span>(self):
+              </span>
+            </div>
+            <div className="code-line">
+              <span className="ln">09</span>
+              <span>
+                print(<span className="str">&quot;Crafting future-proof digital architectures.&quot;</span>)
+                <span className="typing-cursor" />
+              </span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

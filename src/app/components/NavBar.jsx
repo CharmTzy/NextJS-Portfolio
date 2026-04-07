@@ -1,132 +1,116 @@
 "use client";
-import Link from "next/link";
-import React, {useState, useEffect} from "react";
-import {Bars3Icon, XMarkIcon, SunIcon, MoonIcon} from "@heroicons/react/24/solid";
-import {useCurrentTheme} from "../hooks/useCurrentTheme";
 
-const navLinks = [
-  {title: "Home", path: "#welcome"},
-  {title: "AboutMe", path: "#about"},
-  {title: "Skills", path: "#skill"},
-  {title: "Projects", path: "#projects"},
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useTheme } from "next-themes";
+import { MoonStar, SunMedium } from "lucide-react";
+
+const navItems = [
+  { label: "Skills", sectionId: "skills", href: "/#skills" },
+  { label: "Experience", sectionId: "experience", href: "/#experience" },
+  { label: "Projects", sectionId: "projects", href: "/#projects" },
+  { label: "Updates", href: "/updates" },
+  { label: "Contact", sectionId: "contact", href: "/#contact" },
 ];
 
-const Navbar = ({className}) => {
-  const {currentTheme, toggleTheme} = useCurrentTheme();
-  const [navbarOpen, setNavbarOpen] = useState(false);
-  const [isRotating, setIsRotating] = useState(false);
-  const [activeSection, setActiveSection] = useState("#welcome");
-
-  const getIcon = () => {
-    return currentTheme === "light" ? (
-      <SunIcon
-        className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-yellow-500 hover:text-yellow-600 ${isRotating ? "rotate-180" : "rotate-0"}`}
-        onClick={() => {
-          setIsRotating(true);
-          setTimeout(() => {
-            toggleTheme();
-            setIsRotating(false);
-          }, 500);
-        }}
-      />
-    ) : (
-      <MoonIcon
-        className={`h-6 w-6 transition-transform duration-500 ease-in-out cursor-pointer text-blue-500 hover:text-blue-600 ${isRotating ? "rotate-180" : "rotate-0"}`}
-        onClick={() => {
-          setIsRotating(true);
-          setTimeout(() => {
-            toggleTheme();
-            setIsRotating(false);
-          }, 500);
-        }}
-      />
-    );
-  };
+export default function Navbar({ logo, ctaHref = "#contact" }) {
+  const { theme, setTheme } = useTheme();
+  const pathname = usePathname();
+  const [mounted, setMounted] = useState(false);
+  const [activeHash, setActiveHash] = useState("");
+  const isHomePage = pathname === "/";
 
   useEffect(() => {
-    if (!currentTheme) return;
+    setMounted(true);
+
+    if (!isHomePage) {
+      setActiveHash("");
+      return undefined;
+    }
 
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 100;
+      const sections = navItems
+        .filter((item) => item.sectionId)
+        .map((item) => document.getElementById(item.sectionId))
+        .filter(Boolean);
 
-      const sections = navLinks.map((link) => {
-        const section = document.querySelector(link.path);
-        if (section) {
-          return {id: link.path, offsetTop: section.offsetTop};
-        }
-        return null;
+      const current = sections.find((section) => {
+        const top = section.offsetTop - 120;
+        const bottom = top + section.offsetHeight;
+        return window.scrollY >= top && window.scrollY < bottom;
       });
 
-      const currentSection = sections.find((section) => section && scrollPosition >= section.offsetTop && scrollPosition < section.offsetTop + document.querySelector(section.id).offsetHeight);
-
-      if (currentSection && currentSection.id !== activeSection) {
-        setActiveSection(currentSection.id);
+      if (current?.id) {
+        setActiveHash(`#${current.id}`);
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
-    return () => {
-      window.removeEventListener("scroll", handleScroll);
-    };
-  }, [currentTheme, activeSection]);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
 
-  if (!currentTheme) {
-    return <div className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-10 px-6 py-2 w-[95%] max-w-screen-xl lg:px-24 lg:py-6 ${className}`} />;
-  }
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, [isHomePage]);
+
+  const currentTheme = mounted ? theme || "dark" : "dark";
+
+  const getHref = (item) => {
+    if (isHomePage && item.sectionId) {
+      return `#${item.sectionId}`;
+    }
+
+    return item.href;
+  };
+
+  const isActive = (item) => {
+    if (item.href === "/updates") {
+      return pathname === "/updates";
+    }
+
+    return isHomePage && item.sectionId ? activeHash === `#${item.sectionId}` : false;
+  };
+
+  const handleCta = () => {
+    if (isHomePage && ctaHref.startsWith("#")) {
+      document.querySelector(ctaHref)?.scrollIntoView({ behavior: "smooth" });
+      return;
+    }
+
+    window.location.href = ctaHref;
+  };
 
   return (
-    <div className={`${navbarOpen ? "overflow-hidden max-h-screen" : ""}`}>
-      <nav
-        className={`fixed top-8 left-1/2 transform -translate-x-1/2 z-10 
-          ${currentTheme === "dark" ? "bg-gray-900 border-gray-700 text-white" : "bg-white border-gray-300 text-black"}
-          bg-opacity-80 rounded-full border px-6 py-2 w-[95%] max-w-screen-xl shadow-lg lg:px-24 lg:py-6 ${className}`}
-      >
-        <div className="flex items-center justify-between w-full">
-          <div className="flex items-center">{getIcon()}</div>
-
-          {/* Hamburger icon for mobile */}
-          <div className="lg:hidden">
-            <button onClick={() => setNavbarOpen(!navbarOpen)} className={`${currentTheme === "dark" ? "text-white" : "text-black"} hover:text-gray-500 focus:outline-none`}>
-              {navbarOpen ? <XMarkIcon className="h-8 w-8" /> : <Bars3Icon className="h-8 w-8" />}
-            </button>
-          </div>
-
-          {/* Desktop Navigation Links */}
-          <ul className="hidden lg:flex space-x-12 text-lg font-medium">
-            {navLinks.map((link, index) => (
-              <li key={index} className="relative group flex items-center">
-                <span className={`absolute left-[-18px] ${activeSection === link.path ? "opacity-100" : "opacity-0"} group-hover:opacity-100 transition-opacity duration-300`}>
-                  <span className={`inline-block w-2 h-2 mb-0.5 ${currentTheme === "dark" ? "bg-white" : "bg-black"} rounded-full`}></span>
-                </span>
-                <Link href={link.path} scroll={true} className={`${currentTheme === "dark" ? "text-white hover:text-gray-300" : "text-black hover:text-gray-700"} transition-all duration-300 font-mono`}>
-                  {`</${link.title}>`}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </nav>
-
-      {/* Mobile Menu */}
-      <div className={`fixed top-0 left-0 w-full h-full ${currentTheme === "dark" ? "bg-gray-900 text-white" : "bg-white text-black"} z-20 transform ${navbarOpen ? "translate-x-0" : "translate-x-full"} transition-transform duration-300 ease-in-out`}>
-        <button onClick={() => setNavbarOpen(false)} className="absolute top-8 right-8 focus:outline-none">
-          <XMarkIcon className="h-8 w-8" />
+    <nav>
+      <Link href="/" className="nav-logo">
+        {logo}
+      </Link>
+      <ul className="nav-links">
+        {navItems.map((item) => (
+          <li key={`${item.label}-${item.href}`}>
+            <Link href={getHref(item)} className={isActive(item) ? "active" : ""}>
+              {item.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div className="nav-right">
+        <button
+          type="button"
+          className="theme-toggle"
+          title="Toggle theme"
+          aria-label="Toggle theme"
+          onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
+        >
+          {currentTheme === "dark" ? <SunMedium size={16} /> : <MoonStar size={16} />}
         </button>
-        <ul className="flex flex-col items-center justify-center space-y-12 h-full text-2xl font-mono">
-          {navLinks.map((link, index) => (
-            <li key={index} className="flex items-center space-x-2">
-              <span className={`w-2 h-2 mb-0.5 rounded-full ${activeSection === link.path ? (currentTheme === "dark" ? "bg-white" : "bg-black") : "bg-transparent"}`}></span>
-              <Link href={link.path} onClick={() => setNavbarOpen(false)} scroll={true} className="hover:text-gray-300 transition-colors">
-                {`</${link.title}>`}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <button
+          type="button"
+          className="nav-cta"
+          onClick={handleCta}
+        >
+          Hire Me
+        </button>
       </div>
-
-      {navbarOpen && <div onClick={() => setNavbarOpen(false)} className="fixed inset-0 bg-black opacity-50 z-10"></div>}
-    </div>
+    </nav>
   );
-};
-
-export default Navbar;
+}
