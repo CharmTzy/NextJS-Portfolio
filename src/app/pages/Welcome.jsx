@@ -1,16 +1,17 @@
-"use client";
 import ProfileCard from "../components/ProfileCard";
-import {useCurrentTheme} from "../hooks/useCurrentTheme";
-import {Inter} from "next/font/google";
-const inter = Inter({subsets: ["latin"]});
 
-export default function Welcome() {
-  const {currentTheme} = useCurrentTheme();
-  if (!currentTheme) return null;
-
+export default function Welcome({ personalInfo, stats }) {
   return (
-    <div className={`flex items-center justify-center min-h-screen p-8 pt-24 ${inter.className}`}>
-      <ProfileCard />
-    </div>
+    <section id="hero">
+      <ProfileCard
+        name={personalInfo.name}
+        role={personalInfo.role}
+        tagline={personalInfo.tagline}
+        availability={personalInfo.availability}
+        stats={stats}
+        primaryHref="#projects"
+        secondaryHref="#contact"
+      />
+    </section>
   );
 }

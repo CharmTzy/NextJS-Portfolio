@@ -1,25 +1,57 @@
-import {Inter} from "next/font/google";
+import { Instrument_Serif, JetBrains_Mono, Space_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
-import {ThemeProvider} from "./components/theme-provider";
+import FloatingCoffeeButton from "./components/FloatingCoffeeButton";
+import { ThemeProvider } from "./components/theme-provider";
+import { personalInfo } from "./data/portfolio";
 
-const inter = Inter({subsets: ["latin"]});
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-space-grotesk",
+});
+
+const syne = Syne({
+  subsets: ["latin"],
+  variable: "--font-syne",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+});
+
+const instrumentSerif = Instrument_Serif({
+  subsets: ["latin"],
+  weight: "400",
+  style: ["normal", "italic"],
+  variable: "--font-instrument-serif",
+});
 
 export const metadata = {
-  title: "Wai Yan's Portfoilio",
-  description: "NextJS app",
+  title: "Wai Yan Aung — AI Engineer",
+  description:
+    "Portfolio of Wai Yan Aung, a Singapore-based AI engineer building modern interfaces, practical software, and GitHub-backed projects.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico" },
+      { url: "/favicon.png", type: "image/png" },
+    ],
+    shortcut: "/favicon.ico",
+    apple: "/favicon.png",
+  },
 };
 
-export default function RootLayout({children}: {children: React.ReactNode}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <>
-      <html lang="en" suppressHydrationWarning>
-        <head />
-        <body className="bg-black" suppressHydrationWarning>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
-            {children}
-          </ThemeProvider>
-        </body>
-      </html>
-    </>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${spaceGrotesk.variable} ${syne.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+        suppressHydrationWarning
+      >
+        <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false}>
+          {children}
+          <FloatingCoffeeButton href={personalInfo.buyMeACoffeeUrl} />
+        </ThemeProvider>
+      </body>
+    </html>
   );
 }

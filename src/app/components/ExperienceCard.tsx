@@ -1,36 +1,38 @@
-"use client";
-import { useCurrentTheme } from "../hooks/useCurrentTheme";
-import { useInView } from "../hooks/useInView";
+import FadeUp from "./FadeUp";
 
-export default function ExperienceCard() {
-  const { currentTheme } = useCurrentTheme();
-  const { ref, isInView } = useInView(0.2);
+export default function ExperienceCard({ experiences = [] }) {
   return (
-    <div ref={ref} className={`card-container ${currentTheme === "dark" ? "card-container-dark" : "card-container-light"} ${isInView ? "animate-slide-up" : "opacity-0"}`}>
-      <div className="mb-4">
-        <div className={`text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>3 YEARS OF</div>
-        <div className="text-xl sm:text-2xl font-bold">EXPERIENCE</div>
-      </div>
-      <div className="space-y-4">
-        {[
-          { title: "Freelancer", company: "", period: "2023 - Present" },
-          { title: "IT Application Engineer", company: "BitCare", period: "2024 - 2025", lineThrough: true, link: "https://bitcare.sg" },
-        ].map(({ title, company, period, lineThrough, link }, index) => (
-          <div key={index} className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
-            <div>
-              <div className={`font-semibold text-base sm:text-lg ${lineThrough ? "line-through" : ""}`}>{title}</div>
-              {company && link ? (
-                <a href={link} target="_blank" rel="noopener noreferrer" className={`link-hover ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>
-                  {company}
-                </a>
-              ) : (
-                <div className={`text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>{company}</div>
-              )}
+    <FadeUp className="timeline">
+      {experiences.map((experience) => (
+        <div key={`${experience.role}-${experience.period}`} className="timeline-item">
+          <div className="exp-card">
+            <div className="exp-header">
+              <div>
+                <div className="exp-role">{experience.role}</div>
+                {experience.companyUrl ? (
+                  <a href={experience.companyUrl} target="_blank" rel="noreferrer" className="exp-company">
+                    {experience.company}
+                  </a>
+                ) : (
+                  <div className="exp-company">{experience.company}</div>
+                )}
+              </div>
+              <div className="exp-period">{experience.period}</div>
             </div>
-            <div className={`text-sm ${currentTheme === "dark" ? "text-gray-dark" : "text-gray-light"}`}>{period}</div>
+            <div className="exp-desc">{experience.description}</div>
+            <div className="exp-techs">
+              {experience.techs.map((tech) => (
+                <span
+                  key={`${experience.role}-${tech.label}`}
+                  className={`tag ${tech.variant === "default" ? "" : tech.variant}`.trim()}
+                >
+                  {tech.label}
+                </span>
+              ))}
+            </div>
           </div>
-        ))}
-      </div>
-    </div>
+        </div>
+      ))}
+    </FadeUp>
   );
 }
