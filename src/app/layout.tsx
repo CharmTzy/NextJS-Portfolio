@@ -1,4 +1,4 @@
-import { Instrument_Serif, JetBrains_Mono, Space_Grotesk, Syne } from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk, Syne } from "next/font/google";
 import "./globals.css";
 import FloatingCoffeeButton from "./components/FloatingCoffeeButton";
 import { ThemeProvider } from "./components/theme-provider";
@@ -19,12 +19,6 @@ const jetbrainsMono = JetBrains_Mono({
   variable: "--font-jetbrains-mono",
 });
 
-const instrumentSerif = Instrument_Serif({
-  subsets: ["latin"],
-  weight: "400",
-  style: ["normal", "italic"],
-  variable: "--font-instrument-serif",
-});
 
 export const metadata = {
   title: "Wai Yan Aung — AI Engineer",
@@ -44,7 +38,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${syne.variable} ${jetbrainsMono.variable} ${instrumentSerif.variable}`}
+        className={`${spaceGrotesk.variable} ${syne.variable} ${jetbrainsMono.variable}`}
         suppressHydrationWarning
       >
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false}>
