@@ -55,6 +55,8 @@
   --timeline-pill-bg: rgba(56, 189, 248, 0.06);
   --status-overlay-a: radial-gradient(circle at top right, rgba(56, 189, 248, 0.14), transparent 34%);
   --status-overlay-b: radial-gradient(circle at bottom left, rgba(129, 140, 248, 0.12), transparent 30%);
+  --coffee-btn-bg: linear-gradient(180deg, rgba(40, 30, 10, 0.96), rgba(28, 20, 5, 0.98));
+  --coffee-btn-border: rgba(254, 188, 46, 0.28);
 }
 
 /* LIGHT THEME */
@@ -109,6 +111,8 @@
   --timeline-pill-bg: rgba(2, 132, 199, 0.05);
   --status-overlay-a: radial-gradient(circle at top right, rgba(2, 132, 199, 0.12), transparent 34%);
   --status-overlay-b: radial-gradient(circle at bottom left, rgba(99, 102, 241, 0.08), transparent 30%);
+  --coffee-btn-bg: linear-gradient(180deg, rgba(255, 248, 235, 0.96), rgba(255, 240, 210, 0.92));
+  --coffee-btn-border: rgba(200, 140, 20, 0.2);
 }
 
 * {
@@ -351,8 +355,8 @@ nav {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: var(--surface-gradient-strong);
-  border: 1px solid var(--border2);
+  background: var(--coffee-btn-bg);
+  border: 1px solid var(--coffee-btn-border);
   border-radius: 999px;
   box-shadow: var(--surface-float-shadow);
   z-index: 140;
@@ -368,14 +372,20 @@ nav {
   width: 2rem;
   height: 2rem;
   object-fit: contain;
+  filter: drop-shadow(0 1px 4px rgba(254, 188, 46, 0.5));
+  transition: filter 0.2s;
 }
 
 .floating-coffee-button:hover {
   transform: translateY(-3px) scale(1.03);
-  border-color: var(--accent);
+  border-color: rgba(254, 188, 46, 0.5);
   box-shadow:
     var(--surface-float-shadow),
-    0 0 0 6px var(--glow);
+    0 0 0 6px rgba(254, 188, 46, 0.1);
+}
+
+.floating-coffee-button:hover img {
+  filter: drop-shadow(0 2px 8px rgba(254, 188, 46, 0.7));
 }
 
 /* HERO */
@@ -913,9 +923,10 @@ nav {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 3rem;
+  font-size: 3.5rem;
   position: relative;
   overflow: hidden;
+  filter: drop-shadow(0 2px 12px rgba(0,0,0,0.4));
 }
 
 .project-thumb::after {
@@ -1614,13 +1625,15 @@ nav {
 }
 
 .cl-icon {
-  width: 38px;
-  height: 38px;
-  border-radius: 9px;
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1rem;
+  font-size: 1.15rem;
+  flex-shrink: 0;
+  border: 1px solid var(--border2);
 }
 
 .cl-label {
@@ -1656,7 +1669,7 @@ nav {
 .form-group select,
 .form-group textarea {
   background: var(--card-strong);
-  border: 1px solid var(--border);
+  border: 1px solid var(--border2);
   border-radius: 12px;
   padding: 0.8rem 1rem;
   color: var(--text);
