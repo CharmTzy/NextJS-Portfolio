@@ -8,13 +8,14 @@ export const personalInfo = {
   email: "wai71308@gmail.com",
   githubUrl: `https://github.com/${GITHUB_USERNAME}`,
   githubHandle: GITHUB_USERNAME,
+  linkedinUrl: "https://www.linkedin.com/in/wai-yan-aung-sg",
   whatsappUrl: "https://wa.me/+6588779884",
   whatsappLabel: "+65 8877 9884",
   resumeUrl: "/WAI%20YAN%20AUNG%20Resume.pdf",
   buyMeACoffeeUrl: "https://www.buymeacoffee.com/redx04",
-  availability: "Available for new opportunities",
+  availability: "Open to opportunities · Singapore",
   tagline:
-    "Building <span>modern web experiences</span> with thoughtful UI, practical engineering, and a growing focus on AI, security, and useful software systems.",
+    "I build <span>production-ready web applications</span> with clean UI, practical AI integrations, and engineering that holds up in the real world.",
   footerTagline:
     "Designed & built by Wai Yan Aung · AI Engineer · Singapore · Made with coffee and curiosity",
 };
@@ -86,16 +87,16 @@ export const skillCards = [
     ],
   },
   {
-    icon: "🔬",
+    icon: "🤖",
     iconBackground: "rgba(52,211,153,0.1)",
-    title: "AI, Security & Learning",
+    title: "AI & Machine Learning",
     description:
-      "Exploring ML labs, phishing detection, IoT ideas, and practical experimentation that sharpens my engineering range.",
+      "Building practical AI systems — from rule-based detection engines and ML experiments to integrating models into real products.",
     tags: [
-      { label: "ML Labs", variant: "green" },
+      { label: "Machine Learning", variant: "green" },
       { label: "Rule-based AI", variant: "green" },
-      { label: "Security", variant: "green" },
-      { label: "IoT", variant: "green" },
+      { label: "Security AI", variant: "green" },
+      { label: "Python", variant: "green" },
     ],
   },
 ];
@@ -106,12 +107,12 @@ export const experiences = [
     company: "Independent",
     period: "2023 – Present",
     description:
-      "Designing and building websites, landing pages, and app-style interfaces with an emphasis on modern presentation, clean UI, and practical delivery.",
+      "Delivered custom websites and full-stack interfaces for clients, taking projects from brief to deployment. Focused on fast load times, accessible design, and clean component architecture that clients can maintain.",
     techs: [
       { label: "Next.js", variant: "default" },
       { label: "React", variant: "default" },
       { label: "UI Design", variant: "green" },
-      { label: "Frontend", variant: "purple" },
+      { label: "Vercel", variant: "purple" },
     ],
   },
   {
@@ -120,25 +121,25 @@ export const experiences = [
     companyUrl: "https://bitcare.sg",
     period: "2024 – 2025",
     description:
-      "Supported application delivery and internal software workflows, contributing to dependable day-to-day operations and product-related engineering needs.",
+      "Managed application lifecycle and internal tooling at a Singapore-based software company. Contributed to engineering workflows, triaged production issues, and coordinated cross-functional delivery to keep systems running reliably.",
     techs: [
-      { label: "Applications", variant: "default" },
-      { label: "Support", variant: "purple" },
-      { label: "Workflow", variant: "green" },
+      { label: "Application Ops", variant: "default" },
+      { label: "Troubleshooting", variant: "purple" },
+      { label: "Process Improvement", variant: "green" },
       { label: "Delivery", variant: "default" },
     ],
   },
   {
-    role: "Project Builder & Collaborator",
-    company: "Academic and personal builds",
-    period: "Ongoing",
+    role: "Software Engineer (Academic Projects)",
+    company: "Singapore Institute of Technology",
+    period: "2022 – 2025",
     description:
-      "Built coursework and self-driven software projects spanning web development, Flask systems, rule-based phishing detection, and design-focused portfolio work.",
+      "Designed and shipped over 10 software projects covering AI/ML, full-stack web systems, data structures, and cloud-deployed apps. Highlights include a live phishing detection engine and an e-commerce platform with Stripe integration.",
     techs: [
       { label: "Python", variant: "default" },
-      { label: "Java", variant: "purple" },
-      { label: "Node.js", variant: "green" },
-      { label: "GitHub", variant: "default" },
+      { label: "Node.js", variant: "purple" },
+      { label: "Flask", variant: "green" },
+      { label: "Java", variant: "default" },
     ],
   },
 ];
@@ -152,17 +153,17 @@ export const contactLinks = [
     iconBackground: "rgba(56,189,248,0.1)",
   },
   {
+    label: "LinkedIn",
+    value: "linkedin.com/in/wai-yan-aung-sg",
+    href: personalInfo.linkedinUrl,
+    icon: "💼",
+    iconBackground: "rgba(129,140,248,0.1)",
+  },
+  {
     label: "GitHub",
     value: `github.com/${GITHUB_USERNAME}`,
     href: personalInfo.githubUrl,
     icon: "⌨️",
-    iconBackground: "rgba(129,140,248,0.1)",
-  },
-  {
-    label: "WhatsApp",
-    value: personalInfo.whatsappLabel,
-    href: personalInfo.whatsappUrl,
-    icon: "💬",
     iconBackground: "rgba(52,211,153,0.1)",
   },
   {
