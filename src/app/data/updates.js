@@ -10,7 +10,7 @@ export const updatesPageContent = {
   currentStatus:
     "Currently polishing my portfolio, improving project storytelling, and building a more personal space on the web.",
   stats: [
-    { value: "6", label: "Starter posts" },
+    { value: "Editable", label: "Feed mode" },
     { value: "Now", label: "Posting style" },
     { value: "Live", label: "Feed status" },
   ],
