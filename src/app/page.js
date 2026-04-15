@@ -29,7 +29,7 @@ export default async function Home() {
       <Projects projects={githubData.projects} />
       <Contact
         contactLinks={contactLinks}
-        intro="Whether you need a polished portfolio-worthy website, a practical AI-focused build, or a collaborator who cares about design and implementation together, I'd love to hear from you."
+        intro="Whether it's a client project, a full-time opportunity, or a collaboration — if you need someone who thinks carefully about both design and engineering, reach out and let's talk."
         email={personalInfo.email}
       />
 
