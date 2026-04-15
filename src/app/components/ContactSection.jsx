@@ -35,7 +35,7 @@ export default function ContactSection({ links = [], intro, email }) {
   return (
     <FadeUp className="contact-grid">
       <div className="contact-info">
-        <h3>Open to exciting software opportunities</h3>
+        <h3>Let&apos;s build something together</h3>
         <p>{intro}</p>
         <div className="contact-links">
           {links.map((link) => (

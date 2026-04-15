@@ -1717,6 +1717,93 @@ footer span {
   transform: translateY(0);
 }
 
+/* MOBILE MENU */
+.nav-hamburger {
+  display: none;
+  width: 2.5rem;
+  height: 2.5rem;
+  cursor: pointer;
+  background: var(--toggle-bg);
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  transition:
+    background 0.35s,
+    border-color 0.35s,
+    color 0.35s,
+    transform 0.2s;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted2);
+  flex-shrink: 0;
+}
+
+.nav-hamburger:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.mobile-menu-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.48);
+  z-index: 98;
+  backdrop-filter: blur(4px);
+}
+
+.mobile-menu {
+  display: none;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: min(80vw, 300px);
+  background: var(--nav-bg);
+  backdrop-filter: blur(24px);
+  border-left: 1px solid var(--border);
+  z-index: 99;
+  flex-direction: column;
+  padding: 5.5rem 1.75rem 2rem;
+  gap: 0.5rem;
+  transform: translateX(100%);
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.mobile-menu.open {
+  transform: translateX(0);
+}
+
+.mobile-nav-links {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.mobile-nav-links a {
+  display: block;
+  color: var(--muted2);
+  font-size: 1.05rem;
+  font-weight: 600;
+  padding: 0.75rem 0.5rem;
+  border-radius: 10px;
+  transition: color 0.2s, background 0.2s;
+  letter-spacing: -0.01em;
+}
+
+.mobile-nav-links a:hover,
+.mobile-nav-links a.active {
+  color: var(--accent);
+  background: var(--soft-accent-bg);
+}
+
+.mobile-hire-btn {
+  width: 100%;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
 /* RESPONSIVE */
 @media (max-width: 900px) {
   #hero {
@@ -1748,8 +1835,21 @@ footer span {
     padding: 1rem 1.1rem;
   }
 
-  .nav-links {
+  .nav-links,
+  .nav-cta-desktop {
     display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  .mobile-menu-overlay {
+    display: block;
+  }
+
+  .mobile-menu {
+    display: flex;
   }
 
   .section-wrap {

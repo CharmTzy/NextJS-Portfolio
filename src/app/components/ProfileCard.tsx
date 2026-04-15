@@ -58,7 +58,7 @@ export default function ProfileCard({
             <div className="card-dot" style={{ background: "#ff5f57" }} />
             <div className="card-dot" style={{ background: "#febc2e" }} />
             <div className="card-dot" style={{ background: "#28c840" }} />
-            <span className="card-file-label">DEVELOPER.PY — PYTHON</span>
+            <span className="card-file-label">PORTFOLIO.PY — PYTHON</span>
           </div>
           <div className="card-window">
             <div className="code-line">
@@ -70,31 +70,31 @@ export default function ProfileCard({
             <div className="code-line">
               <span className="ln">02</span>
               <span>
-                <span className="kw">def</span> __init__(self):
+                &nbsp;&nbsp;<span className="kw">def</span> <span className="fn">__init__</span>(self):
               </span>
             </div>
             <div className="code-line">
               <span className="ln">03</span>
               <span>
-                self.name = <span className="str">&quot;{name}&quot;</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;self.name = <span className="str">&quot;{name}&quot;</span>
               </span>
             </div>
             <div className="code-line">
               <span className="ln">04</span>
               <span>
-                self.role = <span className="str">&quot;AI</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;self.role = <span className="str">&quot;{role}&quot;</span>
               </span>
             </div>
             <div className="code-line">
               <span className="ln">05</span>
               <span>
-                <span className="str">&quot;Engineer&quot;</span>
+                &nbsp;&nbsp;&nbsp;&nbsp;self.location = <span className="str">&quot;Singapore&quot;</span>
               </span>
             </div>
             <div className="code-line">
               <span className="ln">06</span>
               <span>
-                self.stack = [<span className="str">&quot;React&quot;</span>, <span className="str">&quot;Node.js&quot;</span>]
+                &nbsp;&nbsp;&nbsp;&nbsp;self.stack = [<span className="str">&quot;Next.js&quot;</span>, <span className="str">&quot;Python&quot;</span>, <span className="str">&quot;AI&quot;</span>]
               </span>
             </div>
             <div className="code-line">
@@ -104,13 +104,13 @@ export default function ProfileCard({
             <div className="code-line">
               <span className="ln">08</span>
               <span>
-                <span className="kw">def</span> <span className="fn">say_hello</span>(self):
+                &nbsp;&nbsp;<span className="kw">def</span> <span className="fn">available</span>(self):
               </span>
             </div>
             <div className="code-line">
               <span className="ln">09</span>
               <span>
-                print(<span className="str">&quot;Crafting future-proof digital architectures.&quot;</span>)
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="kw">return</span> <span className="str">True</span>
                 <span className="typing-cursor" />
               </span>
             </div>
