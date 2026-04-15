@@ -322,6 +322,124 @@ const projectOverrides = {
   },
 };
 
+const projectCaseStudyOverrides = {
+  "Phishing-Email-Detection": {
+    headline:
+      "A practical phishing-detection demo that turns a rule-based idea into something people can actually test.",
+    status: "Live demo available",
+    role: "AI logic, product structure, and interface shaping",
+    timeline: "Personal build · 2026",
+    challenge:
+      "The goal was to make phishing-detection logic feel understandable and useful, instead of leaving it as a code-only experiment.",
+    solution:
+      "I focused on translating rule-based checks into a simple interactive flow, then packaged the result so a visitor can try suspicious content and immediately understand the decision path.",
+    outcome:
+      "The project became one of the strongest examples in the portfolio because it combines security thinking, AI-adjacent logic, and a shareable live experience.",
+    highlights: [
+      "Built an interactive workflow instead of stopping at model or notebook logic.",
+      "Turned detection rules into a product-style experience with clear feedback.",
+      "Connected the repository to a deployable demo so the project feels real and testable.",
+    ],
+    learnings: [
+      "Security-related ideas land better when users can see the decision process clearly.",
+      "A small but working interface often communicates more value than raw code alone.",
+      "Rule-based systems are still useful when the problem space needs explainability.",
+    ],
+  },
+  "Yang-Bum-Safety": {
+    headline:
+      "An internal workflow-style project centered on uploads, structure, and dependable document handling.",
+    status: "Repository available",
+    role: "Backend workflow design and application delivery",
+    timeline: "Practical build",
+    challenge:
+      "Internal tools can become messy quickly when uploads, validation, and document organization are not designed carefully.",
+    solution:
+      "I treated the project like a real operations workflow, shaping the upload paths, data handling, and general structure so the experience stayed practical and maintainable.",
+    outcome:
+      "The result shows that operations-facing software can still be thoughtful product work, especially when reliability matters more than visual flash.",
+    highlights: [
+      "Worked with file upload flows and backend-oriented application structure.",
+      "Organized safety-related information into clearer, more usable workflows.",
+      "Balanced practical utility with enough polish to feel intentional.",
+    ],
+    learnings: [
+      "Admin and internal software still deserve good information architecture.",
+      "File-heavy products need careful handling around validation and structure.",
+      "Workflow clarity matters just as much as visual design in operations tools.",
+    ],
+  },
+  hotel_system_flask: {
+    headline:
+      "A server-rendered hotel booking prototype that helped strengthen full application thinking beyond frontend polish.",
+    status: "Repository available",
+    role: "Python/Flask implementation and application flow design",
+    timeline: "Coursework / self-driven practice",
+    challenge:
+      "The project needed to cover multiple connected flows such as routing, login behavior, and booking-style interactions in a coherent way.",
+    solution:
+      "I used Flask templates and database-backed structure to build a more complete web-app experience, focusing on how the parts connect instead of treating each screen in isolation.",
+    outcome:
+      "It became a strong learning project for thinking about systems, forms, and state across a multi-page application.",
+    highlights: [
+      "Built around Flask templates and MySQL-backed flows.",
+      "Covered routing, authentication-style patterns, and booking interactions.",
+      "Strengthened backend and application-structure thinking.",
+    ],
+    learnings: [
+      "Server-rendered projects teach a lot about application flow and structure.",
+      "Forms and routing become much easier to reason about when the data model is clear.",
+      "Even prototype systems benefit from clean separation between logic and presentation.",
+    ],
+  },
+  "SEP-Assignment-2": {
+    headline:
+      "A larger e-commerce-style coursework build that explores architecture, uploads, auth, and transaction flows.",
+    status: "Repository available",
+    role: "Feature delivery, architecture work, and integration thinking",
+    timeline: "Coursework build",
+    challenge:
+      "This project had more moving parts than a simple demo, so the real difficulty was keeping the architecture understandable while still shipping features.",
+    solution:
+      "I approached it as a broader product build, combining Node.js and Express patterns with file handling, authentication flows, and commerce-related functionality.",
+    outcome:
+      "It serves as a good example of how I handle a larger surface area: break the product into flows, keep the structure understandable, and deliver the core behaviors cleanly.",
+    highlights: [
+      "Worked across multiple flows instead of a single isolated feature.",
+      "Combined uploads, auth, and commerce-style thinking in one codebase.",
+      "Used the project as practice for structuring a larger application.",
+    ],
+    learnings: [
+      "As scope grows, naming and file structure matter more than ever.",
+      "Shipping larger coursework projects still benefits from real product thinking.",
+      "Feature breadth only helps when the user journey still feels coherent.",
+    ],
+  },
+  INF2008_ML_Labs: {
+    headline:
+      "A machine-learning lab space that reflects experimentation, iteration, and growing AI interest.",
+    status: "Lab repository",
+    role: "Experimentation, learning, and technical exploration",
+    timeline: "Coursework / ongoing learning",
+    challenge:
+      "ML learning can stay too abstract unless experiments are organized in a way that makes patterns and progress visible.",
+    solution:
+      "I treated the labs as a structured learning space, using them to test ideas, reinforce concepts, and build intuition around practical AI work.",
+    outcome:
+      "The repository represents the exploration side of my portfolio and supports the direction I’m taking as an AI-focused builder.",
+    highlights: [
+      "Collects machine-learning exercises and iterative experiments.",
+      "Supports practical learning rather than passive study.",
+      "Connects well with security and product ideas elsewhere in the portfolio.",
+    ],
+    learnings: [
+      "Hands-on repetition is how ML concepts actually stick.",
+      "Documented experiments make technical growth much easier to track.",
+      "AI work gets stronger when paired with usable product thinking.",
+    ],
+  },
+};
+
 const fallbackProfile = {
   public_repos: 11,
   followers: 2,
@@ -475,18 +593,77 @@ function getTagsFromLanguage(language = "") {
   ];
 }
 
+function slugifyProject(value = "") {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function formatProjectDate(dateString) {
+  if (!dateString) return "Recently";
+
+  return new Intl.DateTimeFormat("en", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  }).format(new Date(dateString));
+}
+
+function buildProjectCaseStudy(repo, override, mappedTags, liveUrl) {
+  const detail = projectCaseStudyOverrides[repo.name] || {};
+  const projectName = override.title || repo.name;
+  const primaryLanguage = repo.language || mappedTags[0]?.label || "Software";
+  const stackLabels = mappedTags.map((tag) => tag.label);
+
+  return {
+    headline:
+      detail.headline ||
+      `${projectName} is a practical ${primaryLanguage} project built to show how I approach delivery, product shape, and engineering structure.`,
+    status: detail.status || (liveUrl ? "Live project" : "Repository available"),
+    role: detail.role || "Design, implementation, and iteration",
+    timeline: detail.timeline || "Personal / academic project",
+    challenge:
+      detail.challenge ||
+      `The main challenge was turning the idea into something structured enough to feel real while keeping the implementation understandable.`,
+    solution:
+      detail.solution ||
+      `I focused on shaping the core workflow, choosing a stack that fit the problem, and organizing the build around ${stackLabels
+        .slice(0, 3)
+        .join(", ")}.`,
+    outcome:
+      detail.outcome ||
+      (liveUrl
+        ? "The result is a project that can be explored through both the live experience and the source code."
+        : "The result is a working repository that captures the architecture, workflow, and implementation decisions behind the build."),
+    highlights: detail.highlights || [
+      `Built with ${stackLabels.slice(0, 3).join(", ")}.`,
+      "Structured to communicate both the implementation and the product thinking behind it.",
+      "Useful as a portfolio example because it shows practical delivery instead of isolated snippets.",
+    ],
+    learnings: detail.learnings || [
+      "Clear project structure makes demos easier to understand and extend.",
+      "Even smaller builds feel stronger when the user flow is obvious.",
+      "Technical work becomes easier to present when the story is as clear as the code.",
+    ],
+  };
+}
+
 function mapRepository(repo) {
   const override = projectOverrides[repo.name] || {};
   const homepage = override.liveUrl || repo.homepage || null;
+  const tags = override.tags || getTagsFromLanguage(repo.language);
+  const caseStudy = buildProjectCaseStudy(repo, override, tags, homepage);
 
   return {
+    slug: slugifyProject(repo.name),
     name: override.title || repo.name,
     originalName: repo.name,
     description:
       override.description ||
       repo.description ||
       "GitHub project pulled directly into this portfolio with real repository metadata.",
-    tags: override.tags || getTagsFromLanguage(repo.language),
+    tags,
     emoji: override.emoji || getEmojiFromLanguage(repo.language),
     gradient: override.gradient || getGradientFromLanguage(repo.language),
     githubUrl: repo.html_url,
@@ -495,6 +672,9 @@ function mapRepository(repo) {
     stars: repo.stargazers_count || 0,
     priority: override.priority || 999,
     updatedAt: repo.updated_at,
+    updatedLabel: formatProjectDate(repo.updated_at),
+    primaryLanguage: repo.language || tags[0]?.label || "Software",
+    caseStudy,
   };
 }
 
@@ -552,4 +732,14 @@ export async function getPortfolioData() {
     },
     projects,
   };
+}
+
+export async function getProjectBySlug(slug) {
+  const { projects } = await getPortfolioData();
+  return projects.find((project) => project.slug === slug) || null;
+}
+
+export async function getProjectSlugs() {
+  const { projects } = await getPortfolioData();
+  return projects.map((project) => project.slug);
 }
