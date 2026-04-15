@@ -94,7 +94,7 @@ export default function ProfileCard({
             <div className="code-line">
               <span className="ln">06</span>
               <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;self.stack = [<span className="str">&quot;Next.js&quot;</span>, <span className="str">&quot;Python&quot;</span>, <span className="str">&quot;AI&quot;</span>]
+                &nbsp;&nbsp;&nbsp;&nbsp;self.stack = [<span className="str">&quot;React&quot;</span>, <span className="str">&quot;Python&quot;</span>]
               </span>
             </div>
             <div className="code-line">
