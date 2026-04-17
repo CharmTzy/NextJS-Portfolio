@@ -6,8 +6,8 @@ export default function Projects({ projects }) {
     <section id="projects">
       <div className="section-wrap">
         <FadeUp className="section-header">
-          <div className="section-label">Portfolio</div>
-          <h2 className="section-title">Projects from GitHub</h2>
+          <div className="section-label">Selected Work</div>
+          <h2 className="section-title">Selected Work</h2>
         </FadeUp>
         <ProjectsGrid projects={projects} />
       </div>
