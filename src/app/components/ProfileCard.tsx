@@ -13,15 +13,11 @@ type ProfileCardProps = {
   secondaryHref: string;
 };
 
-export default function ProfileCard({
-  name,
-  role,
-  tagline,
-  availability,
-  stats,
-  primaryHref,
-  secondaryHref,
-}: ProfileCardProps) {
+export default function ProfileCard({ name, role, tagline, availability, stats, primaryHref, secondaryHref }: ProfileCardProps) {
+  const nameParts = name.trim().split(/\s+/);
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : name;
+  const firstNames = nameParts.length > 1 ? nameParts.slice(0, -1).join(" ") : "";
+
   return (
     <div className="hero-inner fade-up visible">
       <div className="hero-eyebrow">
@@ -31,7 +27,15 @@ export default function ProfileCard({
         </div>
         <span className="hero-location">Singapore · 2025</span>
       </div>
-      <h1 className="hero-name">{name}</h1>
+      <h1 className="hero-name">
+        {firstNames ? (
+          <>
+            {firstNames} <span className="hero-name-highlight">{lastName}</span>
+          </>
+        ) : (
+          <span className="hero-name-highlight">{lastName}</span>
+        )}
+      </h1>
       <div className="hero-role-row">
         <div className="hero-rule" />
         <span className="hero-role">{role}</span>

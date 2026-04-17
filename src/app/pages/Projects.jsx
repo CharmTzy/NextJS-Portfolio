@@ -8,6 +8,7 @@ export default function Projects({ projects }) {
         <FadeUp className="section-header">
           <div className="section-label">Selected Work</div>
           <h2 className="section-title">Selected Work</h2>
+          <p className="section-subtitle">A focused set of projects that best represent my full‑stack delivery, practical AI work, and product-level UI polish.</p>
         </FadeUp>
         <ProjectsGrid projects={projects} />
       </div>
