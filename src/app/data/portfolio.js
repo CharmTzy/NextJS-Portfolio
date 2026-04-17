@@ -146,36 +146,43 @@ export const experiences = [
 
 export const contactLinks = [
   {
-    label: "Email",
-    value: personalInfo.email,
-    href: `mailto:${personalInfo.email}`,
-    icon: "📧",
-    iconBackground: "rgba(56,189,248,0.15)",
-  },
-  {
     label: "LinkedIn",
-    value: "linkedin.com/in/wai-yan-1839512a8",
+    value: "/in/wai-yan-1839512a8",
     href: personalInfo.linkedinUrl,
-    icon: "💼",
-    iconBackground: "rgba(129,140,248,0.15)",
   },
   {
     label: "GitHub",
-    value: `github.com/${GITHUB_USERNAME}`,
+    value: `@${GITHUB_USERNAME}`,
     href: personalInfo.githubUrl,
-    icon: "⌨️",
-    iconBackground: "rgba(52,211,153,0.15)",
+  },
+  {
+    label: "WhatsApp",
+    value: personalInfo.whatsappLabel,
+    href: personalInfo.whatsappUrl,
   },
   {
     label: "Resume",
     value: "Download PDF",
     href: personalInfo.resumeUrl,
-    icon: "📄",
-    iconBackground: "rgba(56,189,248,0.15)",
   },
 ];
 
 const projectOverrides = {
+  "Lingo-Man": {
+    title: "Lingo Man",
+    description:
+      "A playful language-learning web app built to help users practise vocabulary and phrases through an interactive, game-inspired interface.",
+    tags: [
+      { label: "React", variant: "default" },
+      { label: "JavaScript", variant: "purple" },
+      { label: "Netlify", variant: "green" },
+    ],
+    emoji: "🗣️",
+    gradient: "linear-gradient(135deg,#0d1426,#1e1a3a)",
+    liveLabel: "Live",
+    liveUrl: "https://unique-gumption-cf1f09.netlify.app/",
+    priority: 0,
+  },
   Web_System_Project: {
     title: "Nova Markets",
     description:
@@ -189,7 +196,7 @@ const projectOverrides = {
     gradient: "linear-gradient(135deg,#0d1426,#1a2540)",
     liveLabel: "Live",
     liveUrl: "https://nova-markets.org",
-    priority: 0,
+    priority: 1,
   },
   "Phishing-Email-Detection": {
     title: "Phishing Email Detection",
@@ -204,7 +211,7 @@ const projectOverrides = {
     gradient: "linear-gradient(135deg,#0d1426,#1a2540)",
     liveLabel: "Live",
     liveUrl: "https://huggingface.co/spaces/nik-fireball/phishing-email-detection",
-    priority: 1,
+    priority: 2,
   },
   "Yang-Bum-Safety": {
     title: "Yang Bum Safety",
@@ -462,6 +469,16 @@ const fallbackProfile = {
 };
 
 const fallbackRepos = [
+  {
+    name: "Lingo-Man",
+    description: "A playful language-learning web app with an interactive, game-inspired interface.",
+    language: "JavaScript",
+    stargazers_count: 0,
+    homepage: "https://unique-gumption-cf1f09.netlify.app/",
+    html_url: `https://github.com/${GITHUB_USERNAME}/Lingo-Man`,
+    updated_at: "2026-04-10T00:00:00Z",
+    fork: false,
+  },
   {
     name: "Web_System_Project",
     description: "Full e-commerce platform with Stripe integration and admin dashboard.",

@@ -1,22 +1,23 @@
-import { JetBrains_Mono, Space_Grotesk, Syne } from "next/font/google";
-import "./globals.css";
+import { Fraunces, JetBrains_Mono, Space_Grotesk } from "next/font/google";
+
 import FloatingCoffeeButton from "./components/FloatingCoffeeButton";
 import { ThemeProvider } from "./components/theme-provider";
 import { personalInfo } from "./data/portfolio";
 
 const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
-  variable: "--font-space-grotesk",
+  variable: "--font-sans",
 });
 
-const syne = Syne({
+const fraunces = Fraunces({
   subsets: ["latin"],
-  variable: "--font-syne",
+  variable: "--font-serif",
+  axes: ["SOFT", "WONK", "opsz"],
 });
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-mono",
 });
 
 
@@ -38,7 +39,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${syne.variable} ${jetbrainsMono.variable}`}
+        className={`${spaceGrotesk.variable} ${fraunces.variable} ${jetbrainsMono.variable}`}
         suppressHydrationWarning
       >
         <ThemeProvider attribute="data-theme" defaultTheme="dark" enableSystem={false}>
