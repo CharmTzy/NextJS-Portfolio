@@ -602,6 +602,9 @@ const fallbackRepos = [
   },
 ];
 
+const INCLUDED_PROJECTS = new Set(["Lingo-Man", "Web_System_Project", "Phishing-Email-Detection"]);
+const INCLUDED_PROJECT_LIST = Array.from(INCLUDED_PROJECTS);
+
 function getGradientFromLanguage(language = "") {
   const lower = language.toLowerCase();
 
@@ -752,18 +755,26 @@ export async function getPortfolioData() {
     console.warn("Using fallback GitHub portfolio data:", error);
   }
 
-  const publicRepos = Array.isArray(repos)
-    ? repos.filter((repo) => !repo.fork).sort((a, b) => {
-        const aPriority = projectOverrides[a.name]?.priority || 999;
-        const bPriority = projectOverrides[b.name]?.priority || 999;
+  const sourceRepos = Array.isArray(repos) ? repos.filter((repo) => !repo.fork) : fallbackRepos;
 
-        if (aPriority !== bPriority) {
-          return aPriority - bPriority;
-        }
+  // Only show the 3 selected projects.
+  // If GitHub API omits any (private repo, API issue, etc.), fill from fallback.
+  const selectedRepos = INCLUDED_PROJECT_LIST.map((name) => {
+    const fromApi = sourceRepos.find((repo) => repo.name === name);
+    if (fromApi) return fromApi;
+    return fallbackRepos.find((repo) => repo.name === name);
+  }).filter(Boolean);
 
-        return new Date(b.updated_at) - new Date(a.updated_at);
-      })
-    : fallbackRepos;
+  const publicRepos = selectedRepos.sort((a, b) => {
+    const aPriority = projectOverrides[a.name]?.priority || 999;
+    const bPriority = projectOverrides[b.name]?.priority || 999;
+
+    if (aPriority !== bPriority) {
+      return aPriority - bPriority;
+    }
+
+    return new Date(b.updated_at) - new Date(a.updated_at);
+  });
 
   const projects = publicRepos.map(mapRepository);
 
