@@ -8,10 +8,13 @@ export default function ProjectsGrid({ projects = [] }) {
         <FadeUp key={project.originalName} className="project-card" delay={index * 0.05}>
           <Link href={`/projects/${project.slug}`} className="project-card-main">
             <div className="project-thumb" style={{ background: project.gradient }}>
-              <span style={{ zIndex: 1, position: "relative" }}>{project.emoji}</span>
+              <div className="project-thumb-inner">
+                <span>{project.emoji}</span>
+                <span className="project-thumb-badge">Case Study</span>
+              </div>
             </div>
             <div className="project-body">
-              <div className="project-kicker">Case Study</div>
+              <div className="project-kicker">Selected Project</div>
               <div className="project-heading-row">
                 <div className="project-title">{project.name}</div>
                 <span className="project-star">⭐ {project.stars}</span>
@@ -38,10 +41,7 @@ export default function ProjectsGrid({ projects = [] }) {
 
             <div className="project-tags-row">
               {project.tags.map((tag) => (
-                <span
-                  key={`${project.originalName}-${tag.label}`}
-                  className={`tag ${tag.variant === "default" ? "" : tag.variant}`.trim()}
-                >
+                <span key={`${project.originalName}-${tag.label}`} className={`tag ${tag.variant === "default" ? "" : tag.variant}`.trim()}>
                   {tag.label}
                 </span>
               ))}

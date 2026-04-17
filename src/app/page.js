@@ -19,7 +19,7 @@ export default async function Home() {
 
   return (
     <main className="site-shell">
-      <SiteBackground />
+      <SiteBackground animateDot avoidSelector=".hero-eyebrow, .hero-name, .hero-role-row, .hero-tagline, .hero-actions" />
 
       <Navbar logo={personalInfo.shortLogo} />
 
@@ -27,11 +27,7 @@ export default async function Home() {
       <Skill skills={skillCards} />
       <About experiences={experiences} />
       <Projects projects={githubData.projects} />
-      <Contact
-        contactLinks={contactLinks}
-        intro="Whether it's a client project, a full-time opportunity, or a collaboration — if you need someone who thinks carefully about both design and engineering, reach out and let's talk."
-        email={personalInfo.email}
-      />
+      <Contact contactLinks={contactLinks} intro="Whether it's a client project, a full-time opportunity, or a collaboration — if you need someone who thinks carefully about both design and engineering, reach out and let's talk." email={personalInfo.email} />
 
       <SiteFooter personalInfo={personalInfo} />
     </main>

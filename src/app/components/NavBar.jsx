@@ -106,6 +106,7 @@ export default function Navbar({ logo, ctaHref = "#contact" }) {
     <>
       <nav>
         <Link href="/" className="nav-logo">
+          <span className="nav-logo-dot" />
           {logo}
         </Link>
         <ul className="nav-links">
@@ -118,56 +119,31 @@ export default function Navbar({ logo, ctaHref = "#contact" }) {
           ))}
         </ul>
         <div className="nav-right">
-          <button
-            type="button"
-            className="theme-toggle"
-            title="Toggle theme"
-            aria-label="Toggle theme"
-            onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
-          >
+          <button type="button" className="theme-toggle" title="Toggle theme" aria-label="Toggle theme" onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}>
             {currentTheme === "dark" ? <SunMedium size={16} /> : <MoonStar size={16} />}
           </button>
-          <button
-            type="button"
-            className="nav-cta nav-cta-desktop"
-            onClick={handleCta}
-          >
+          <button type="button" className="nav-cta nav-cta-desktop" onClick={handleCta}>
             Hire Me
           </button>
-          <button
-            type="button"
-            className="nav-hamburger"
-            aria-label={mobileOpen ? "Close menu" : "Open menu"}
-            onClick={() => setMobileOpen((prev) => !prev)}
-          >
+          <button type="button" className="nav-hamburger" aria-label={mobileOpen ? "Close menu" : "Open menu"} onClick={() => setMobileOpen((prev) => !prev)}>
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
       </nav>
 
       {/* Mobile menu overlay */}
-      {mobileOpen && (
-        <div className="mobile-menu-overlay" onClick={() => setMobileOpen(false)} />
-      )}
+      {mobileOpen && <div className="mobile-menu-overlay" onClick={() => setMobileOpen(false)} />}
       <div className={`mobile-menu${mobileOpen ? " open" : ""}`}>
         <ul className="mobile-nav-links">
           {navItems.map((item) => (
             <li key={`mobile-${item.label}-${item.href}`}>
-              <Link
-                href={getHref(item)}
-                className={isActive(item) ? "active" : ""}
-                onClick={handleMobileNavClick}
-              >
+              <Link href={getHref(item)} className={isActive(item) ? "active" : ""} onClick={handleMobileNavClick}>
                 {item.label}
               </Link>
             </li>
           ))}
         </ul>
-        <button
-          type="button"
-          className="btn-primary mobile-hire-btn"
-          onClick={handleCta}
-        >
+        <button type="button" className="btn-primary mobile-hire-btn" onClick={handleCta}>
           Hire Me
         </button>
       </div>
