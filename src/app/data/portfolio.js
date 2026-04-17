@@ -13,7 +13,7 @@ export const personalInfo = {
   whatsappLabel: "+65 8877 9884",
   resumeUrl: "/WAI%20YAN%20AUNG%20Resume.pdf",
   buyMeACoffeeUrl: "https://www.buymeacoffee.com/redx04",
-  availability: "Open to opportunities · Singapore",
+  availability: "Available",
   tagline:
     "I build <span>production-ready web applications</span> with clean UI, practical AI integrations, and engineering that holds up in the real world.",
   footerTagline:
@@ -176,6 +176,21 @@ export const contactLinks = [
 ];
 
 const projectOverrides = {
+  Web_System_Project: {
+    title: "Nova Markets",
+    description:
+      "A full-featured e-commerce platform with product listings, cart, checkout, Stripe payment integration, and an admin dashboard for order and inventory management.",
+    tags: [
+      { label: "Node.js", variant: "default" },
+      { label: "Express", variant: "purple" },
+      { label: "MySQL", variant: "green" },
+    ],
+    emoji: "🛍️",
+    gradient: "linear-gradient(135deg,#0d1426,#1a2540)",
+    liveLabel: "Live",
+    liveUrl: "https://nova-markets.org",
+    priority: 0,
+  },
   "Phishing-Email-Detection": {
     title: "Phishing Email Detection",
     description:
@@ -183,12 +198,12 @@ const projectOverrides = {
     tags: [
       { label: "Python", variant: "default" },
       { label: "Rule-based AI", variant: "default" },
-      { label: "Render", variant: "green" },
+      { label: "HuggingFace", variant: "green" },
     ],
     emoji: "🛡️",
     gradient: "linear-gradient(135deg,#0d1426,#1a2540)",
     liveLabel: "Live",
-    liveUrl: "https://phishing-email-detection-s0sg.onrender.com",
+    liveUrl: "https://huggingface.co/spaces/nik-fireball/phishing-email-detection",
     priority: 1,
   },
   "Yang-Bum-Safety": {
@@ -447,6 +462,16 @@ const fallbackProfile = {
 };
 
 const fallbackRepos = [
+  {
+    name: "Web_System_Project",
+    description: "Full e-commerce platform with Stripe integration and admin dashboard.",
+    language: "JavaScript",
+    stargazers_count: 0,
+    homepage: "https://nova-markets.org",
+    html_url: `https://github.com/${GITHUB_USERNAME}/Web_System_Project`,
+    updated_at: "2026-04-01T00:00:00Z",
+    fork: false,
+  },
   {
     name: "INF2008_ML_Labs",
     description: "",

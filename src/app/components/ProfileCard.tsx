@@ -23,99 +23,35 @@ export default function ProfileCard({
   secondaryHref,
 }: ProfileCardProps) {
   return (
-    <div className="hero-inner">
-      <div className="hero-content fade-up visible">
+    <div className="hero-inner fade-up visible">
+      <div className="hero-eyebrow">
         <div className="hero-badge">
           <div className="badge-dot" />
           {availability}
         </div>
-        <h1 className="hero-title">
-          <div className="name">{name}</div>
-          <div className="role">{role}</div>
-        </h1>
-        <p className="hero-tagline" dangerouslySetInnerHTML={{ __html: tagline }} />
-        <div className="hero-actions">
-          <a href={primaryHref} className="btn-primary">
-            View My Work
-          </a>
-          <a href={secondaryHref} className="btn-ghost">
-            Get in Touch →
-          </a>
-        </div>
-        <div className="hero-stats">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <div className="stat-num">{stat.value}</div>
-              <div className="stat-label">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+        <span className="hero-location">Singapore · 2025</span>
       </div>
-
-      <div className="hero-visual fade-up visible" style={{ transitionDelay: "0.2s" }}>
-        <div className="hero-card">
-          <div className="card-header">
-            <div className="card-dot" style={{ background: "#ff5f57" }} />
-            <div className="card-dot" style={{ background: "#febc2e" }} />
-            <div className="card-dot" style={{ background: "#28c840" }} />
-            <span className="card-file-label">PORTFOLIO.PY — PYTHON</span>
+      <h1 className="hero-name">{name}</h1>
+      <div className="hero-role-row">
+        <div className="hero-rule" />
+        <span className="hero-role">{role}</span>
+      </div>
+      <p className="hero-tagline" dangerouslySetInnerHTML={{ __html: tagline }} />
+      <div className="hero-actions">
+        <a href={primaryHref} className="btn-primary">
+          View My Work
+        </a>
+        <a href={secondaryHref} className="btn-ghost">
+          Get in Touch →
+        </a>
+      </div>
+      <div className="hero-stats">
+        {stats.map((stat) => (
+          <div key={stat.label}>
+            <div className="stat-num">{stat.value}</div>
+            <div className="stat-label">{stat.label}</div>
           </div>
-          <div className="card-window">
-            <div className="code-line">
-              <span className="ln">01</span>
-              <span>
-                <span className="kw">class</span> <span className="fn">WaiYanAung</span>:
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">02</span>
-              <span>
-                &nbsp;&nbsp;<span className="kw">def</span> <span className="fn">__init__</span>(self):
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">03</span>
-              <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;self.name = <span className="str">&quot;{name}&quot;</span>
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">04</span>
-              <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;self.role = <span className="str">&quot;{role}&quot;</span>
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">05</span>
-              <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;self.location = <span className="str">&quot;Singapore&quot;</span>
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">06</span>
-              <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;self.stack = [<span className="str">&quot;React&quot;</span>, <span className="str">&quot;Python&quot;</span>]
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">07</span>
-              <span>&nbsp;</span>
-            </div>
-            <div className="code-line">
-              <span className="ln">08</span>
-              <span>
-                &nbsp;&nbsp;<span className="kw">def</span> <span className="fn">available</span>(self):
-              </span>
-            </div>
-            <div className="code-line">
-              <span className="ln">09</span>
-              <span>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span className="kw">return</span> <span className="str">True</span>
-                <span className="typing-cursor" />
-              </span>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
