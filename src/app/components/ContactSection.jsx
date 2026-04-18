@@ -22,6 +22,8 @@ export default function ContactSection({ links = [], intro, email }) {
   const handleSubmit = (event) => {
     event.preventDefault();
 
+    if (!formData.message?.trim()) return;
+
     const subject = encodeURIComponent(`Portfolio inquiry from ${formData.name || "a visitor"}`);
     const body = encodeURIComponent(
       `Name: ${formData.name || ""}\nEmail: ${formData.senderEmail || ""}\n\nMessage:\n${formData.message || ""}`
@@ -35,7 +37,7 @@ export default function ContactSection({ links = [], intro, email }) {
   return (
     <FadeUp className="contact-grid">
       <div className="contact-info">
-        <h3>Let&apos;s build something together</h3>
+        <h3>Let&apos;s build something great</h3>
         <p>{intro}</p>
         <div className="contact-links">
           {links.map((link) => (
@@ -69,6 +71,7 @@ export default function ContactSection({ links = [], intro, email }) {
               placeholder="Your name"
               value={formData.name}
               onChange={handleChange}
+              autoComplete="name"
             />
           </div>
           <div className="form-group">
@@ -80,6 +83,7 @@ export default function ContactSection({ links = [], intro, email }) {
               placeholder="your@email.com"
               value={formData.senderEmail}
               onChange={handleChange}
+              autoComplete="email"
             />
           </div>
           <div className="form-group">
@@ -91,9 +95,10 @@ export default function ContactSection({ links = [], intro, email }) {
               placeholder="Tell me about your project or opportunity..."
               value={formData.message}
               onChange={handleChange}
+              required
             />
           </div>
-          <button className="btn-primary" style={{ width: "100%", textAlign: "center", border: "none" }} type="submit">
+          <button className="btn-primary btn-block" type="submit" disabled={!formData.message?.trim()}>
             {sent ? "✓ Message Sent!" : "Send Message →"}
           </button>
         </form>

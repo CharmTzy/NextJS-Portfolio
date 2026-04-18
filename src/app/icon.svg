@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Wai Yan">
+  <defs>
+    <linearGradient id="wyAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5b7cfe" />
+      <stop offset="100%" stop-color="#7d97ff" />
+    </linearGradient>
+  </defs>
+  <rect width="32" height="32" rx="9" fill="#070a10" />
+  <rect x="2.5" y="2.5" width="27" height="27" rx="7" fill="none" stroke="url(#wyAccent)" stroke-width="1.2" opacity="0.85" />
+  <circle cx="24" cy="8" r="2.2" fill="url(#wyAccent)" />
+  <text
+    x="16"
+    y="22.5"
+    text-anchor="middle"
+    font-family="ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+    font-size="14"
+    font-weight="800"
+    fill="#e8edf5"
+    letter-spacing="-0.06em"
+  >
+    WY
+  </text>
+</svg>

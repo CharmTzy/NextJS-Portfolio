@@ -9,25 +9,38 @@ export default function ProjectsGrid({ projects = [] }) {
           <Link href={`/projects/${project.slug}`} className="project-card-main">
             <div className="project-thumb" style={{ background: project.gradient }}>
               <div className="project-thumb-inner">
-                <span>{project.emoji}</span>
-                <span className="project-thumb-badge">Case Study</span>
+                <span className="project-emoji" aria-hidden="true">
+                  {project.emoji}
+                </span>
+                <span className="project-thumb-badge">Case study</span>
               </div>
             </div>
             <div className="project-body">
-              <div className="project-kicker">Selected Project</div>
+              <div className="project-meta-row">
+                <div className="project-kicker">Selected work</div>
+                <div className="project-meta">
+                  <span className="project-meta-item">{project.primaryLanguage}</span>
+                  <span className="project-meta-dot" aria-hidden="true">
+                    ·
+                  </span>
+                  <span className="project-meta-item">Updated {project.updatedLabel}</span>
+                </div>
+              </div>
               <div className="project-heading-row">
                 <div className="project-title">{project.name}</div>
-                <span className="project-star">⭐ {project.stars}</span>
+                <span className="project-star" title="GitHub stars" aria-label={`GitHub stars: ${project.stars}`}>
+                  ★ {project.stars}
+                </span>
               </div>
               <div className="project-desc">{project.description}</div>
-              <div className="project-detail-cta">Read project story →</div>
+              <div className="project-detail-cta">Read case study →</div>
             </div>
           </Link>
 
           <div className="project-footer">
             <div className="project-links">
               <Link href={`/projects/${project.slug}`} className="proj-link">
-                Case Study
+                Case study
               </Link>
               {project.liveUrl ? (
                 <a href={project.liveUrl} target="_blank" rel="noreferrer" className="proj-link">

@@ -1,8 +1,8 @@
 const GITHUB_USERNAME = "CharmTzy";
 
 export const personalInfo = {
-  name: "Wai Yan Aung",
-  shortLogo: "WYA.DEV",
+  name: "Wai Yan",
+  shortLogo: "NIK_FIREBALL",
   role: "AI Engineer",
   location: "Singapore",
   email: "wai71308@gmail.com",
@@ -15,80 +15,111 @@ export const personalInfo = {
   buyMeACoffeeUrl: "https://www.buymeacoffee.com/redx04",
   availability: "Available",
   tagline: "I build <span>production-ready web applications</span> with clean UI, practical AI integrations, and engineering that holds up in the real world.",
-  footerTagline: "Designed & built by Wai Yan Aung · AI Engineer · Singapore · Made with coffee and curiosity",
+  footerTagline: "Designed & built by Wai Yan · AI Engineer · Singapore · Made with coffee and curiosity",
 };
 
 export const skillCards = [
   {
-    icon: "🎨",
-    iconBackground: "rgba(56,189,248,0.1)",
-    title: "Frontend Development",
-    description: "Responsive user interfaces with a focus on modern layouts, smooth interactions, and clean visual structure.",
-    tags: [
-      { label: "Next.js", variant: "default" },
-      { label: "React", variant: "default" },
-      { label: "JavaScript", variant: "default" },
-      { label: "Tailwind", variant: "default" },
+    title: "Programming Languages",
+    description: "Core languages I use across web apps, services, and academic engineering work.",
+    items: [
+      { label: "Python", iconSlug: "python", color: "3776AB" },
+      { label: "JavaScript", iconSlug: "javascript", color: "F7DF1E" },
+      { label: "TypeScript", iconSlug: "typescript", color: "3178C6" },
+      { label: "HTML5", iconSlug: "html5", color: "E34F26" },
+      { label: "CSS3", iconSlug: "css", color: "1572B6" },
+      {
+        label: "React Native",
+        iconSlug: "reactnative",
+        color: "61DAFB",
+        iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/reactnative/reactnative-original.svg",
+      },
+      {
+        label: "Java",
+        iconSlug: "java",
+        color: "ED8B00",
+        iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/java/java-original.svg",
+      },
     ],
   },
   {
-    icon: "⚙️",
-    iconBackground: "rgba(129,140,248,0.1)",
-    title: "Backend & APIs",
-    description: "Building application logic, RESTful endpoints, and project backends with JavaScript and Python stacks.",
-    tags: [
-      { label: "Node.js", variant: "purple" },
-      { label: "Express", variant: "purple" },
-      { label: "Python", variant: "purple" },
-      { label: "Flask", variant: "purple" },
+    title: "Web & API",
+    description: "Interfaces, frameworks, design tooling, runtimes, APIs, payments, and AI assistants for end-to-end delivery.",
+    items: [
+      { label: "Next.js", iconSlug: "nextdotjs", color: "FFFFFF" },
+      { label: "React", iconSlug: "react", color: "61DAFB" },
+      { label: "Tailwind CSS", iconSlug: "tailwindcss", color: "06B6D4" },
+      { label: "Figma", iconSlug: "figma", color: "F24E1E" },
+      { label: "Node.js", iconSlug: "nodedotjs", color: "5FA04E" },
+      { label: "Express", iconSlug: "express", color: "FFFFFF" },
+      { label: "REST API", iconSlug: "fastapi", color: "009688" },
+      { label: "Stripe", iconSlug: "stripe", color: "635BFF", iconUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAKlBMVEVHcExTOv1TOv1TOv3///9JLf2rov5PNf1AHf3h3v9qV/3Bu/5+b/6XjP7mn8mgAAAAA3RSTlMATNu3u8+LAAAAeUlEQVQokeXTSw7AIAgEUBRH0Or9r9tq+jOlJl13lrzMRpDIeTbjHZGzqcXRS6936d2Yv6OIjQIoSpEHClRzXVIIEXdsBe7zngElx2P+RMQQ/ocpZrEwLTUrMGylYZ8rtnXJsYn9bUvBVeARz/WaaGeO09OcHvXsO6zlzAtOlzDZtAAAAABJRU5ErkJggg==" },
+      {
+        label: "ChatGPT",
+        iconSlug: "chatgpt",
+        color: "74AA9C",
+        iconUrl: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAcCAMAAABF0y+mAAAAUVBMVEVHcEz////////////////////////////////////////////d3d3Dw8PR0dHo6OgiIiIBAQFFRUXz8/O1tbVubm5aWlqgoKA5OTl8fHyLi4s1UCuLAAAADHRSTlMAM4fC7P+GYGEX4D7Ojz1PAAABKElEQVR4AY2TBZLEMBDEQloMtdn7/4depnzMKgjIONC90g/jBNN46rvPnCdemS4f1PXGB27XN3fnC/fPbl7WL/aKwbbLSes2ewzayrfmFICog2Sam7kLBinDXLSAj8I4H3LCCIKqDKuH9ACYjrtj7LtYBT5JmVkYfXcCcJFDFh6qtnZocuhGYBPeZiol23RRk6NtSUhNrrCqzOBq2xSTDpMF7L8qXh7ApL1TFR1AmdGGCwDtJtXB5tqyK/KkgC07YkgBFjtQk9qwAw1NLtpniwLlkMQEcGpBQDNZih5s5r7TgtA2fSTwM2RVUMCYrEAwbBaLygY5YXB5S1nUQQSCPMbtLdm2ql+lon3D4PqlhOZl/lpEX7j/qzSNy/uiPnef6U+tHYa3dngChykXpLJcwZkAAAAASUVORK5CYII=",
+      },
+      {
+        label: "OpenClaw",
+        iconSlug: "openclaw",
+        color: "5b7cfe",
+        iconUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@master/svg/openclaw.svg",
+      },
     ],
   },
   {
-    icon: "🗄️",
-    iconBackground: "rgba(52,211,153,0.1)",
-    title: "Databases & Data",
-    description: "Working with relational and document databases to support app features, records, and internal workflows.",
-    tags: [
-      { label: "MySQL", variant: "green" },
-      { label: "MongoDB", variant: "green" },
-      { label: "PostgreSQL", variant: "green" },
-      { label: "Firebase", variant: "green" },
+    title: "Databases & Cloud",
+    description: "Data storage, deployment, and hosting tools that support production-ready apps.",
+    items: [
+      { label: "MySQL", iconSlug: "mysql", color: "4479A1" },
+      { label: "PostgreSQL", iconSlug: "postgresql", color: "4169E1" },
+      { label: "MongoDB", iconSlug: "mongodb", color: "47A248" },
+      { label: "Firebase", iconSlug: "firebase", color: "DD2C00", iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/firebase/firebase-plain.svg" },
+      {
+        label: "AWS",
+        iconSlug: "amazonwebservices",
+        color: "FF9900",
+        iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/amazonwebservices/amazonwebservices-original-wordmark.svg",
+      },
     ],
   },
   {
-    icon: "🧩",
-    iconBackground: "rgba(56,189,248,0.1)",
-    title: "UI Systems & Design",
-    description: "Using design thinking, consistent styling, and component-based structure to make projects feel polished.",
-    tags: [
-      { label: "Figma", variant: "default" },
-      { label: "Responsive UI", variant: "default" },
-      { label: "Themes", variant: "default" },
-      { label: "UX detail", variant: "default" },
-    ],
-  },
-  {
-    icon: "🚀",
-    iconBackground: "rgba(129,140,248,0.1)",
-    title: "Deployment & Tooling",
-    description: "Shipping projects with modern workflows, code hosting, and deployment platforms that make iteration easier.",
-    tags: [
-      { label: "GitHub", variant: "purple" },
-      { label: "Vercel", variant: "purple" },
-      { label: "Render", variant: "purple" },
-      { label: "AWS", variant: "purple" },
-    ],
-  },
-  {
-    icon: "🤖",
-    iconBackground: "rgba(52,211,153,0.1)",
     title: "AI & Machine Learning",
-    description: "Building practical AI systems — from rule-based detection engines and ML experiments to integrating models into real products.",
-    tags: [
-      { label: "Machine Learning", variant: "green" },
-      { label: "Rule-based AI", variant: "green" },
-      { label: "Security AI", variant: "green" },
-      { label: "Python", variant: "green" },
+    description: "Practical AI work focused on useful product integration and explainable systems.",
+    items: [
+      { label: "scikit-learn", iconSlug: "scikitlearn", color: "F7931E" },
+      { label: "Pandas", iconSlug: "pandas", color: "150458" },
+      { label: "NumPy", iconSlug: "numpy", color: "013243" },
+      { label: "Jupyter", iconSlug: "jupyter", color: "F37626" },
+    ],
+  },
+  {
+    title: "Desktop OS",
+    description: "Primary desktop environments I build and ship from.",
+    items: [
+      {
+        label: "Windows",
+        iconSlug: "windows",
+        color: "0078D6",
+        iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/windows11/windows11-original.svg",
+      },
+      {
+        label: "macOS",
+        iconSlug: "apple",
+        color: "000000",
+        iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apple/apple-original.svg",
+      },
+    ],
+  },
+  {
+    title: "Tooling & Deployment",
+    description: "Version control, deployment, and workflow tools used to ship and maintain projects.",
+    items: [
+      { label: "GitHub", iconSlug: "github", color: "181717" },
+      { label: "Vercel", iconSlug: "vercel", color: "FFFFFF" },
+      { label: "Render", iconSlug: "render", color: "46E3B7" },
+      { label: "Postman", iconSlug: "postman", color: "FF6C37" },
     ],
   },
 ];

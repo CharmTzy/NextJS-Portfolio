@@ -23,7 +23,7 @@ export default function ExperienceCard({ experiences = [] }) {
             {experience.techs.map((tech) => (
               <span
                 key={`${experience.role}-${tech.label}`}
-                className="tag"
+                className={`tag ${tech.variant === "default" ? "" : tech.variant}`.trim()}
               >
                 {tech.label}
               </span>

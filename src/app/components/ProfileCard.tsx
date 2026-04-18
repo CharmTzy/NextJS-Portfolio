@@ -6,6 +6,7 @@ type HeroStat = {
 type ProfileCardProps = {
   name: string;
   role: string;
+  location: string;
   tagline: string;
   availability: string;
   stats: HeroStat[];
@@ -13,10 +14,13 @@ type ProfileCardProps = {
   secondaryHref: string;
 };
 
-export default function ProfileCard({ name, role, tagline, availability, stats, primaryHref, secondaryHref }: ProfileCardProps) {
-  const nameParts = name.trim().split(/\s+/);
-  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : name;
+export default function ProfileCard({ name, role, location, tagline, availability, stats, primaryHref, secondaryHref }: ProfileCardProps) {
+  const trimmed = name.trim();
+  const nameParts = trimmed.split(/\s+/);
+  const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : trimmed;
   const firstNames = nameParts.length > 1 ? nameParts.slice(0, -1).join(" ") : "";
+  /** Short display names read better as one gradient lockup (e.g. “Wai Yan”). */
+  const useFullNameLockup = nameParts.length > 0 && nameParts.length <= 2;
 
   return (
     <div className="hero-inner fade-up visible">
@@ -25,10 +29,12 @@ export default function ProfileCard({ name, role, tagline, availability, stats, 
           <div className="badge-dot" />
           {availability}
         </div>
-        <span className="hero-location">Singapore · 2025</span>
+        <span className="hero-location">{location}</span>
       </div>
-      <h1 className="hero-name">
-        {firstNames ? (
+      <h1 className={`hero-name${useFullNameLockup ? " hero-name-lockup" : ""}`}>
+        {useFullNameLockup ? (
+          <span className="hero-name-highlight">{trimmed}</span>
+        ) : firstNames ? (
           <>
             {firstNames} <span className="hero-name-highlight">{lastName}</span>
           </>

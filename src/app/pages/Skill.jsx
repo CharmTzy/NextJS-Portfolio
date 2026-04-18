@@ -8,6 +8,7 @@ export default function Skill({ skills }) {
         <FadeUp className="section-header">
           <div className="section-label">Expertise</div>
           <h2 className="section-title">Skills & Technologies</h2>
+          <p className="section-subtitle">A curated stack of tools and technologies I use to design, build, deploy, and improve modern digital products.</p>
         </FadeUp>
         <WebSkillsCard skills={skills} />
       </div>

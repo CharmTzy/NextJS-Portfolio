@@ -21,7 +21,7 @@ export async function generateMetadata({ params }) {
   }
 
   return {
-    title: `${project.name} — Wai Yan Aung`,
+    title: `${project.name} — Wai Yan`,
     description: project.caseStudy.headline,
   };
 }

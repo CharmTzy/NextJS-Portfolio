@@ -21,17 +21,9 @@ const jetbrainsMono = JetBrains_Mono({
 
 
 export const metadata = {
-  title: "Wai Yan Aung — AI Engineer",
+  title: "Wai Yan — AI Engineer",
   description:
-    "Portfolio of Wai Yan Aung, a Singapore-based AI engineer building modern interfaces, practical software, and GitHub-backed projects.",
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon.png", type: "image/png" },
-    ],
-    shortcut: "/favicon.ico",
-    apple: "/favicon.png",
-  },
+    "Portfolio of Wai Yan, a Singapore-based AI engineer building modern interfaces, practical software, and GitHub-backed projects.",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
