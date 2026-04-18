@@ -146,13 +146,12 @@ body {
     0 10px 35px rgba(79, 142, 247, 0.25);
   opacity: var(--dot-opacity, 0);
 
-  /* JS-driven position (grid-aligned random walk) */
+  /* JS-driven orbital position */
   left: 0;
   top: 0;
   transform: translate3d(var(--dot-x, 70vw), var(--dot-y, 70vh), 0);
-  transition:
-    transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1),
-    opacity 0.25s ease;
+  transition: opacity 0.3s ease;
+  will-change: transform;
 }
 
 a {
