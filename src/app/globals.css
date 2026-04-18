@@ -136,22 +136,39 @@ body {
 .site-background::after {
   content: "";
   position: absolute;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
+  margin-left: -5px;
+  margin-top: -5px;
   border-radius: 999px;
   background: var(--accent);
   box-shadow:
-    0 0 0 6px rgba(79, 142, 247, 0.12),
-    0 0 0 18px rgba(79, 142, 247, 0.06),
-    0 10px 35px rgba(79, 142, 247, 0.25);
+    0 0 0 5px rgba(79, 142, 247, 0.18),
+    0 0 0 14px rgba(79, 142, 247, 0.08),
+    0 0 30px 6px rgba(79, 142, 247, 0.35);
   opacity: var(--dot-opacity, 0);
 
-  /* JS-driven orbital position */
   left: 0;
   top: 0;
   transform: translate3d(var(--dot-x, 70vw), var(--dot-y, 70vh), 0);
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease;
+  animation: dot-pulse 2.4s ease-in-out infinite;
   will-change: transform;
+}
+
+@keyframes dot-pulse {
+  0%, 100% {
+    box-shadow:
+      0 0 0 5px rgba(79, 142, 247, 0.18),
+      0 0 0 14px rgba(79, 142, 247, 0.08),
+      0 0 30px 6px rgba(79, 142, 247, 0.35);
+  }
+  50% {
+    box-shadow:
+      0 0 0 7px rgba(79, 142, 247, 0.22),
+      0 0 0 20px rgba(79, 142, 247, 0.06),
+      0 0 40px 10px rgba(79, 142, 247, 0.45);
+  }
 }
 
 a {

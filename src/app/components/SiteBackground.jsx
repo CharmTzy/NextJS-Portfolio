@@ -10,16 +10,15 @@ function randInt(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-function pickNewDirection(currentDir) {
-  const candidates = [0, 1, 2, 3].filter((d) => d !== currentDir);
-  return candidates[randInt(0, candidates.length - 1)];
+function easeInOutCubic(t) {
+  return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
 }
 
 /**
- * Background grid + dot that walks around grid squares to the right of
- * the hero name. The dot stays inside a rectangular play area defined by
- * the name's right edge and the viewport right edge, moving one grid cell
- * per step and occasionally changing direction.
+ * Background grid + dot that smoothly walks grid cells inside the empty
+ * column to the right of the hero name. The dot eases between adjacent
+ * grid intersections, pausing briefly at each one, so the motion feels
+ * organic rather than jumpy.
  */
 export default function SiteBackground({
   animateDot = false,
@@ -44,7 +43,9 @@ export default function SiteBackground({
 
     let gridSize = getGridSize();
     const EDGE_MARGIN = 24;
-    const GAP_FROM_NAME = 24;
+    const GAP_FROM_NAME = 16;
+    const MOVE_DURATION = 700;
+    const PAUSE_DURATION = 420;
 
     const measureTextRect = (el) => {
       try {
@@ -72,30 +73,24 @@ export default function SiteBackground({
       const h = window.innerHeight;
 
       if (!anchor) {
-        return {
-          left: w * 0.55,
-          right: w - EDGE_MARGIN,
-          top: EDGE_MARGIN,
-          bottom: h - EDGE_MARGIN,
-        };
+        return { left: w * 0.58, right: w - EDGE_MARGIN, top: EDGE_MARGIN, bottom: Math.min(h - EDGE_MARGIN, h * 0.75) };
       }
 
       const r = measureTextRect(anchor);
       return {
         left: r.right + GAP_FROM_NAME,
         right: w - EDGE_MARGIN,
-        top: Math.max(EDGE_MARGIN, r.top - gridSize),
-        bottom: Math.min(h - EDGE_MARGIN, r.bottom + gridSize),
+        top: Math.max(EDGE_MARGIN, r.top - gridSize * 0.6),
+        bottom: Math.min(window.innerHeight - EDGE_MARGIN, r.bottom + gridSize * 0.6),
       };
     };
 
-    const snapGrid = (area) => {
-      const startCol = Math.ceil(area.left / gridSize);
-      const endCol = Math.floor(area.right / gridSize);
-      const startRow = Math.ceil(area.top / gridSize);
-      const endRow = Math.floor(area.bottom / gridSize);
-      return { startCol, endCol, startRow, endRow };
-    };
+    const snapGrid = (area) => ({
+      startCol: Math.ceil(area.left / gridSize),
+      endCol: Math.floor(area.right / gridSize),
+      startRow: Math.ceil(area.top / gridSize),
+      endRow: Math.floor(area.bottom / gridSize),
+    });
 
     const heroVisible = () => window.scrollY < window.innerHeight * 0.9;
 
@@ -105,79 +100,113 @@ export default function SiteBackground({
       bg.style.setProperty("--dot-opacity", visible ? "1" : "0");
     };
 
-    const pickStart = () => {
+    let current = null;
+    let target = null;
+    let phaseStart = 0;
+    let phase = "move";
+    let lastDir = null;
+
+    const cellToXY = (cell) => ({ x: cell.col * gridSize, y: cell.row * gridSize });
+
+    const pickAnyCell = () => {
       const area = getPlayArea();
-      const { startCol, endCol, startRow, endRow } = snapGrid(area);
-      if (endCol < startCol || endRow < startRow) return null;
-      return {
-        col: randInt(startCol, endCol),
-        row: randInt(startRow, endRow),
-      };
+      const g = snapGrid(area);
+      if (g.endCol < g.startCol || g.endRow < g.startRow) return null;
+      return { col: randInt(g.startCol, g.endCol), row: randInt(g.startRow, g.endRow) };
     };
 
-    let pos = pickStart() || { col: 10, row: 4 };
-    let dir = randInt(0, 3);
-    let runLeft = randInt(3, 7);
-
-    const step = () => {
-      gridSize = getGridSize();
+    const pickNeighbor = (from) => {
       const area = getPlayArea();
-      const { startCol, endCol, startRow, endRow } = snapGrid(area);
+      const g = snapGrid(area);
+      if (g.endCol < g.startCol || g.endRow < g.startRow) return null;
 
-      if (endCol < startCol || endRow < startRow || !heroVisible()) {
+      const allDirs = [
+        { dc: 1, dr: 0, d: "r" },
+        { dc: -1, dr: 0, d: "l" },
+        { dc: 0, dr: 1, d: "d" },
+        { dc: 0, dr: -1, d: "u" },
+        { dc: 1, dr: 1, d: "dr" },
+        { dc: 1, dr: -1, d: "ur" },
+        { dc: -1, dr: 1, d: "dl" },
+        { dc: -1, dr: -1, d: "ul" },
+      ];
+
+      const options = allDirs
+        .map(({ dc, dr, d }) => ({ cell: { col: from.col + dc, row: from.row + dr }, d }))
+        .filter(({ cell }) => cell.col >= g.startCol && cell.col <= g.endCol && cell.row >= g.startRow && cell.row <= g.endRow);
+
+      if (!options.length) return null;
+
+      const preferred = lastDir ? options.filter((o) => o.d === lastDir) : [];
+      const keepChance = 0.55;
+      const pool = preferred.length && Math.random() < keepChance ? preferred : options;
+      const pick = pool[randInt(0, pool.length - 1)];
+      lastDir = pick.d;
+      return pick.cell;
+    };
+
+    current = pickAnyCell();
+    if (!current) current = { col: 12, row: 5 };
+    target = pickNeighbor(current) || current;
+    phaseStart = performance.now();
+    phase = "move";
+
+    const tick = () => {
+      gridSize = getGridSize();
+
+      if (!heroVisible()) {
         bg.style.setProperty("--dot-opacity", "0");
         return;
       }
 
-      pos.col = clamp(pos.col, startCol, endCol);
-      pos.row = clamp(pos.row, startRow, endRow);
+      const now = performance.now();
+      const elapsed = now - phaseStart;
 
-      const attemptMove = (d) => {
-        const dx = d === 0 ? 1 : d === 2 ? -1 : 0;
-        const dy = d === 1 ? 1 : d === 3 ? -1 : 0;
-        const nc = pos.col + dx;
-        const nr = pos.row + dy;
-        if (nc < startCol || nc > endCol || nr < startRow || nr > endRow) return null;
-        return { col: nc, row: nr };
-      };
+      if (phase === "move") {
+        const t = Math.min(1, elapsed / MOVE_DURATION);
+        const e = easeInOutCubic(t);
+        const a = cellToXY(current);
+        const b = cellToXY(target);
+        const x = a.x + (b.x - a.x) * e;
+        const y = a.y + (b.y - a.y) * e;
+        setDot(x, y, true);
 
-      let next = null;
-      if (runLeft > 0) next = attemptMove(dir);
-
-      if (!next) {
-        for (let i = 0; i < 6; i += 1) {
-          dir = pickNewDirection(dir);
-          runLeft = randInt(3, 7);
-          next = attemptMove(dir);
-          if (next) break;
+        if (t >= 1) {
+          current = target;
+          phase = "pause";
+          phaseStart = now;
+        }
+      } else {
+        const a = cellToXY(current);
+        setDot(a.x, a.y, true);
+        if (elapsed >= PAUSE_DURATION) {
+          const next = pickNeighbor(current);
+          if (next) {
+            target = next;
+          } else {
+            const any = pickAnyCell();
+            if (any) target = any;
+          }
+          phase = "move";
+          phaseStart = now;
         }
       }
-
-      if (!next) {
-        bg.style.setProperty("--dot-opacity", "0");
-        return;
-      }
-
-      pos = next;
-      runLeft -= 1;
-      setDot(pos.col * gridSize, pos.row * gridSize, true);
     };
 
-    step();
-    const intervalId = window.setInterval(step, 380);
+    tick();
+    const intervalId = window.setInterval(tick, 32);
 
     const onResize = () => {
       gridSize = getGridSize();
-      step();
     };
 
     window.addEventListener("resize", onResize, { passive: true });
-    window.addEventListener("scroll", step, { passive: true });
+    window.addEventListener("scroll", tick, { passive: true });
 
     return () => {
       window.clearInterval(intervalId);
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", step);
+      window.removeEventListener("scroll", tick);
     };
   }, [animateDot, anchorSelector]);
 
