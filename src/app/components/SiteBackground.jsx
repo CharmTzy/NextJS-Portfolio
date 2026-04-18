@@ -2,14 +2,28 @@
 
 import { useEffect, useRef } from "react";
 
+function clamp(value, min, max) {
+  return Math.max(min, Math.min(max, value));
+}
+
+function randInt(min, max) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function pickNewDirection(currentDir) {
+  const candidates = [0, 1, 2, 3].filter((d) => d !== currentDir);
+  return candidates[randInt(0, candidates.length - 1)];
+}
+
 /**
- * Background grid + animated dot that continuously travels around the
- * viewport perimeter (outside the content column) so it never crosses
- * the hero text or other words.
+ * Background grid + dot that walks around grid squares to the right of
+ * the hero name. The dot stays inside a rectangular play area defined by
+ * the name's right edge and the viewport right edge, moving one grid cell
+ * per step and occasionally changing direction.
  */
 export default function SiteBackground({
   animateDot = false,
-  avoidSelector = ".hero-inner, .hero-eyebrow, .hero-name, .hero-role-row, .hero-tagline, .hero-actions, h1, h2, p",
+  anchorSelector = ".hero-name",
 } = {}) {
   const bgRef = useRef(null);
 
@@ -22,104 +36,150 @@ export default function SiteBackground({
     const reduceMotion = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
     if (reduceMotion) return;
 
-    let progress = Math.random();
-    const DOT_RADIUS = 12;
-    const MARGIN = 28;
-    const SPEED = 0.0015;
-    const TICK_MS = 32;
+    const getGridSize = () => {
+      const raw = getComputedStyle(bg).getPropertyValue("--grid-size").trim();
+      const parsed = Number.parseFloat(raw);
+      return Number.isFinite(parsed) && parsed > 0 ? parsed : 60;
+    };
 
-    let avoidRects = [];
-    const PADDING = 16;
+    let gridSize = getGridSize();
+    const EDGE_MARGIN = 24;
+    const GAP_FROM_NAME = 24;
 
-    const refreshAvoidRects = () => {
-      const els = document.querySelectorAll(avoidSelector);
-      const rects = [];
-      for (const el of els) {
-        const r = el.getBoundingClientRect();
-        if (r.width < 4 || r.height < 4) continue;
-        if (r.bottom < -50 || r.top > window.innerHeight + 50) continue;
-        rects.push({
-          left: r.left - PADDING,
-          top: r.top - PADDING,
-          right: r.right + PADDING,
-          bottom: r.bottom + PADDING,
-        });
+    const measureTextRect = (el) => {
+      try {
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        const rects = range.getClientRects();
+        if (!rects.length) return el.getBoundingClientRect();
+        let left = Infinity, right = -Infinity, top = Infinity, bottom = -Infinity;
+        for (const r of rects) {
+          if (r.width < 1 || r.height < 1) continue;
+          left = Math.min(left, r.left);
+          right = Math.max(right, r.right);
+          top = Math.min(top, r.top);
+          bottom = Math.max(bottom, r.bottom);
+        }
+        return { left, right, top, bottom };
+      } catch {
+        return el.getBoundingClientRect();
       }
-      avoidRects = rects;
     };
 
-    const setDot = (x, y) => {
-      bg.style.setProperty("--dot-x", `${x}px`);
-      bg.style.setProperty("--dot-y", `${y}px`);
-      bg.style.setProperty("--dot-opacity", "1");
-    };
-
-    // Map progress [0,1) to a point on the perimeter rectangle.
-    const perimeterPoint = (p) => {
+    const getPlayArea = () => {
+      const anchor = document.querySelector(anchorSelector);
       const w = window.innerWidth;
       const h = window.innerHeight;
-      const left = MARGIN;
-      const right = w - MARGIN;
-      const top = MARGIN;
-      const bottom = h - MARGIN;
-      const width = right - left;
-      const height = bottom - top;
-      const total = 2 * (width + height);
-      const d = ((p % 1) + 1) % 1 * total;
 
-      if (d < width) return { x: left + d, y: top };
-      if (d < width + height) return { x: right, y: top + (d - width) };
-      if (d < 2 * width + height) return { x: right - (d - width - height), y: bottom };
-      return { x: left, y: bottom - (d - 2 * width - height) };
+      if (!anchor) {
+        return {
+          left: w * 0.55,
+          right: w - EDGE_MARGIN,
+          top: EDGE_MARGIN,
+          bottom: h - EDGE_MARGIN,
+        };
+      }
+
+      const r = measureTextRect(anchor);
+      return {
+        left: r.right + GAP_FROM_NAME,
+        right: w - EDGE_MARGIN,
+        top: Math.max(EDGE_MARGIN, r.top - gridSize),
+        bottom: Math.min(h - EDGE_MARGIN, r.bottom + gridSize),
+      };
     };
 
-    const insideAnyRect = (x, y) => {
-      for (const r of avoidRects) {
-        if (x + DOT_RADIUS >= r.left && x - DOT_RADIUS <= r.right && y + DOT_RADIUS >= r.top && y - DOT_RADIUS <= r.bottom) {
-          return true;
+    const snapGrid = (area) => {
+      const startCol = Math.ceil(area.left / gridSize);
+      const endCol = Math.floor(area.right / gridSize);
+      const startRow = Math.ceil(area.top / gridSize);
+      const endRow = Math.floor(area.bottom / gridSize);
+      return { startCol, endCol, startRow, endRow };
+    };
+
+    const heroVisible = () => window.scrollY < window.innerHeight * 0.9;
+
+    const setDot = (x, y, visible) => {
+      bg.style.setProperty("--dot-x", `${x}px`);
+      bg.style.setProperty("--dot-y", `${y}px`);
+      bg.style.setProperty("--dot-opacity", visible ? "1" : "0");
+    };
+
+    const pickStart = () => {
+      const area = getPlayArea();
+      const { startCol, endCol, startRow, endRow } = snapGrid(area);
+      if (endCol < startCol || endRow < startRow) return null;
+      return {
+        col: randInt(startCol, endCol),
+        row: randInt(startRow, endRow),
+      };
+    };
+
+    let pos = pickStart() || { col: 10, row: 4 };
+    let dir = randInt(0, 3);
+    let runLeft = randInt(3, 7);
+
+    const step = () => {
+      gridSize = getGridSize();
+      const area = getPlayArea();
+      const { startCol, endCol, startRow, endRow } = snapGrid(area);
+
+      if (endCol < startCol || endRow < startRow || !heroVisible()) {
+        bg.style.setProperty("--dot-opacity", "0");
+        return;
+      }
+
+      pos.col = clamp(pos.col, startCol, endCol);
+      pos.row = clamp(pos.row, startRow, endRow);
+
+      const attemptMove = (d) => {
+        const dx = d === 0 ? 1 : d === 2 ? -1 : 0;
+        const dy = d === 1 ? 1 : d === 3 ? -1 : 0;
+        const nc = pos.col + dx;
+        const nr = pos.row + dy;
+        if (nc < startCol || nc > endCol || nr < startRow || nr > endRow) return null;
+        return { col: nc, row: nr };
+      };
+
+      let next = null;
+      if (runLeft > 0) next = attemptMove(dir);
+
+      if (!next) {
+        for (let i = 0; i < 6; i += 1) {
+          dir = pickNewDirection(dir);
+          runLeft = randInt(3, 7);
+          next = attemptMove(dir);
+          if (next) break;
         }
       }
-      return false;
-    };
 
-    let tickCounter = 0;
-
-    const tick = () => {
-      tickCounter += 1;
-      if (tickCounter % 8 === 0) refreshAvoidRects();
-
-      progress += SPEED;
-      if (progress >= 1) progress -= 1;
-
-      let p = progress;
-      let pt = perimeterPoint(p);
-      // If current point happens to overlap content (rare on a proper
-      // perimeter path, but possible if a section extends to the edge),
-      // step forward along the perimeter until we find a clear spot.
-      for (let i = 0; i < 40; i += 1) {
-        if (!insideAnyRect(pt.x, pt.y)) break;
-        p += 0.01;
-        pt = perimeterPoint(p);
+      if (!next) {
+        bg.style.setProperty("--dot-opacity", "0");
+        return;
       }
-      progress = p;
 
-      setDot(pt.x, pt.y);
+      pos = next;
+      runLeft -= 1;
+      setDot(pos.col * gridSize, pos.row * gridSize, true);
     };
 
-    refreshAvoidRects();
-    tick();
-    const intervalId = window.setInterval(tick, TICK_MS);
+    step();
+    const intervalId = window.setInterval(step, 380);
 
-    const onResize = () => refreshAvoidRects();
+    const onResize = () => {
+      gridSize = getGridSize();
+      step();
+    };
+
     window.addEventListener("resize", onResize, { passive: true });
-    window.addEventListener("scroll", onResize, { passive: true });
+    window.addEventListener("scroll", step, { passive: true });
 
     return () => {
       window.clearInterval(intervalId);
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("scroll", onResize);
+      window.removeEventListener("scroll", step);
     };
-  }, [animateDot, avoidSelector]);
+  }, [animateDot, anchorSelector]);
 
   return <div ref={bgRef} className="site-background" aria-hidden="true" />;
 }
