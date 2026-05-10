@@ -11,10 +11,23 @@ type ProfileCardProps = {
   availability: string;
   stats: HeroStat[];
   primaryHref: string;
+  primaryLabel: string;
   secondaryHref: string;
+  secondaryLabel: string;
 };
 
-export default function ProfileCard({ name, role, location, tagline, availability, stats, primaryHref, secondaryHref }: ProfileCardProps) {
+export default function ProfileCard({
+  name,
+  role,
+  location,
+  tagline,
+  availability,
+  stats,
+  primaryHref,
+  primaryLabel,
+  secondaryHref,
+  secondaryLabel,
+}: ProfileCardProps) {
   const trimmed = name.trim();
   const nameParts = trimmed.split(/\s+/);
   const lastName = nameParts.length > 1 ? nameParts[nameParts.length - 1] : trimmed;
@@ -49,10 +62,10 @@ export default function ProfileCard({ name, role, location, tagline, availabilit
       <p className="hero-tagline" dangerouslySetInnerHTML={{ __html: tagline }} />
       <div className="hero-actions">
         <a href={primaryHref} className="btn-primary">
-          View My Work
+          {primaryLabel}
         </a>
         <a href={secondaryHref} className="btn-ghost">
-          Get in Touch →
+          {secondaryLabel}
         </a>
       </div>
       <div className="hero-stats">

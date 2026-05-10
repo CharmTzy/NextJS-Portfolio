@@ -6,6 +6,7 @@ import {
   MANAGED_UPDATES_STORAGE_KEY,
   normalizeUpdatesFeed,
 } from "../lib/managed-updates";
+import { updatesPageContent } from "../data/updates";
 import FadeUp from "./FadeUp";
 
 function formatDate(dateString) {
@@ -78,12 +79,9 @@ export default function UpdatesFeed({ updates = [], sidebarCards = [] }) {
           ))
         ) : (
           <FadeUp className="update-card update-empty-card">
-            <div className="section-label">Feed</div>
-            <h2 className="update-title">No posts yet</h2>
-            <p className="update-content">
-              Create your first update from the admin page and it will appear here automatically in this
-              browser.
-            </p>
+            <div className="section-label">{updatesPageContent.emptyState.label}</div>
+            <h2 className="update-title">{updatesPageContent.emptyState.title}</h2>
+            <p className="update-content">{updatesPageContent.emptyState.description}</p>
           </FadeUp>
         )}
       </div>

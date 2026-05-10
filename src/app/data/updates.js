@@ -1,3 +1,5 @@
+import { siteRoutes } from "./site-content";
+
 // Edit this file anytime to add new posts to your updates page.
 // Newer items should usually go at the top.
 
@@ -7,6 +9,17 @@ export const updatesPageContent = {
   titleBottom: "Notes & Status",
   description:
     "A small social-style page for build logs, quick thoughts, project milestones, and anything I want to share without writing a full blog post.",
+  actions: {
+    primary: {
+      label: "Back to Portfolio",
+      href: siteRoutes.home,
+    },
+    secondary: {
+      label: "Work With Me →",
+      href: siteRoutes.homeContact,
+    },
+  },
+  statusLabel: "Current status",
   currentStatus:
     "Currently polishing my portfolio, improving project storytelling, and building a more personal space on the web.",
   stats: [
@@ -14,6 +27,16 @@ export const updatesPageContent = {
     { value: "Now", label: "Posting style" },
     { value: "Live", label: "Feed status" },
   ],
+  feedSection: {
+    label: "Feed",
+    title: "Quick posts, build notes, and personal status updates",
+  },
+  emptyState: {
+    label: "Feed",
+    title: "No posts yet",
+    description:
+      "Create your first update from the admin page and it will appear here automatically in this browser.",
+  },
   sidebarCards: [
     {
       title: "What this page is for",
@@ -34,6 +57,102 @@ export const updatesPageContent = {
       ],
     },
   ],
+};
+
+export const adminDashboardContent = {
+  badge: "Portfolio control room",
+  titleTop: "Admin",
+  titleBottom: "Publishing",
+  cardLabel: "Admin",
+  description:
+    "A lightweight admin area for your personal portfolio. Use it to manage updates like a small social feed, preview changes, and keep your site feeling alive.",
+  cards: [
+    {
+      title: "Manage updates feed",
+      description:
+        "Create, edit, and delete social-style posts for your updates page from a focused publishing screen.",
+      href: siteRoutes.adminUpdates,
+      label: "Open composer",
+    },
+    {
+      title: "Preview public feed",
+      description:
+        "Check how the published posts look on the public updates page with your current portfolio styling.",
+      href: siteRoutes.updates,
+      label: "Open updates page",
+    },
+  ],
+};
+
+export const adminUpdatesContent = {
+  hero: {
+    badge: "Updates manager",
+    titleTop: "Social-style",
+    titleBottom: "Post Composer",
+    description:
+      "Write quick status updates, edit existing posts, and preview how they appear on your public feed. This is the first step toward a full portfolio admin workflow.",
+  },
+  composer: {
+    label: "Composer",
+    createTitle: "Create a post",
+    editTitle: "Edit post",
+    badge: "Local browser publishing",
+    helperText:
+      "This admin flow works like a lightweight social post composer. It saves updates in this browser and your public /updates page will read them automatically.",
+    initialMessage: "Compose a post and publish it to your updates feed.",
+    validationMessage: "Add a title and some content before publishing.",
+    clearedMessage: "Cleared the composer.",
+    resetMessage: "Reset the feed to the default starter posts.",
+    fieldLabels: {
+      title: "TITLE",
+      category: "CATEGORY",
+      date: "DATE",
+      mood: "MOOD",
+      post: "POST",
+      tags: "TAGS",
+      links: "LINKS",
+    },
+    placeholders: {
+      title: "What are you sharing today?",
+      category: "Portfolio, Build, Learning...",
+      content: "Write your status update here...",
+      tags: "Next.js, Personal site, Design polish",
+      links: "Live demo | https://example.com\nGitHub | https://github.com/...",
+    },
+    buttons: {
+      publish: "Publish Post",
+      update: "Update Post",
+      clear: "Clear Draft",
+      reset: "Reset Feed",
+      edit: "Edit",
+      delete: "Delete",
+    },
+    preview: {
+      label: "Preview",
+      title: "Live post preview",
+      fallbackTitle: "Preview title",
+      fallbackContent: "Your post preview will appear here while you type.",
+    },
+    publishedFeed: {
+      label: "Published Feed",
+      savedPostsSuffix: "saved posts",
+      helperText:
+        "Edit or delete existing posts here. These changes appear on /updates in this browser.",
+    },
+    moodOptions: ["focused", "shipping", "curious", "proud", "thoughtful", "reflecting"],
+    defaultCategory: "Update",
+    defaultMood: "focused",
+    messages: {
+      published: (title) => `Published "${title}".`,
+      updated: (title) => `Updated "${title}".`,
+      editing: (title) => `Editing "${title}".`,
+      deleted: (title) => `Deleted "${title}".`,
+    },
+    confirmations: {
+      delete: (title) => `Delete "${title}"?`,
+      reset: "Reset the feed back to the default starter posts?",
+    },
+  },
 };
 
 export const updatesFeed = [

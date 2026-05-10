@@ -7,14 +7,15 @@ import Skill from "./pages/Skill";
 import Projects from "./pages/Projects";
 import Contact from "./pages/Contact";
 import { contactLinks, experiences, getPortfolioData, personalInfo, skillCards } from "./data/portfolio";
+import { heroContent, homePageContent } from "./data/site-content";
 
 export default async function Home() {
   const githubData = await getPortfolioData();
 
   const heroStats = [
-    { value: "2+", label: "Years Building" },
-    { value: `${githubData.profile.publicRepos}+`, label: "Public Repos" },
-    { value: `${githubData.projects.length}+`, label: "Projects Built" },
+    { value: heroContent.stats.yearsBuildingValue, label: heroContent.stats.yearsBuildingLabel },
+    { value: `${githubData.profile.publicRepos}+`, label: heroContent.stats.publicReposLabel },
+    { value: `${githubData.projects.length}+`, label: heroContent.stats.projectsBuiltLabel },
   ];
 
   return (
@@ -27,7 +28,7 @@ export default async function Home() {
       <Skill skills={skillCards} />
       <About experiences={experiences} />
       <Projects projects={githubData.projects} />
-      <Contact contactLinks={contactLinks} intro="Whether it's a client project, a full-time opportunity, or a collaboration — if you need someone who thinks carefully about both design and engineering, reach out and let's talk." email={personalInfo.email} />
+      <Contact contactLinks={contactLinks} intro={homePageContent.contactSection.intro} />
 
       <SiteFooter personalInfo={personalInfo} />
     </main>

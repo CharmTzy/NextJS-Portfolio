@@ -1,4 +1,5 @@
 import ProfileCard from "../components/ProfileCard";
+import { heroContent } from "../data/site-content";
 
 export default function Welcome({ personalInfo, stats }) {
   return (
@@ -10,8 +11,10 @@ export default function Welcome({ personalInfo, stats }) {
         tagline={personalInfo.tagline}
         availability={personalInfo.availability}
         stats={stats}
-        primaryHref="#projects"
-        secondaryHref="#contact"
+        primaryHref={heroContent.primaryAction.href}
+        primaryLabel={heroContent.primaryAction.label}
+        secondaryHref={heroContent.secondaryAction.href}
+        secondaryLabel={heroContent.secondaryAction.label}
       />
     </section>
   );

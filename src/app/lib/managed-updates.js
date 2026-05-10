@@ -1,4 +1,10 @@
+import { adminUpdatesContent } from "../data/updates";
+
 export const MANAGED_UPDATES_STORAGE_KEY = "wya-portfolio-updates-v1";
+
+const {
+  composer: { defaultCategory, defaultMood },
+} = adminUpdatesContent;
 
 function slugifyValue(value = "") {
   return value
@@ -40,10 +46,10 @@ export function normalizeUpdatePost(post, index = 0) {
   return {
     id: post?.id || `${slugifyValue(`${date}-${title}`) || `post-${index + 1}`}`,
     date,
-    category: (post?.category || "Update").trim(),
+    category: (post?.category || defaultCategory).trim(),
     title,
     content: (post?.content || "").trim(),
-    mood: (post?.mood || "focused").trim().toLowerCase(),
+    mood: (post?.mood || defaultMood).trim().toLowerCase(),
     tags,
     links,
   };
@@ -101,10 +107,10 @@ export function createEmptyUpdateDraft() {
   return {
     id: "",
     date: new Date().toISOString().slice(0, 10),
-    category: "Update",
+    category: defaultCategory,
     title: "",
     content: "",
-    mood: "focused",
+    mood: defaultMood,
     tagsInput: "",
     linksInput: "",
   };

@@ -1,6 +1,6 @@
 import Image from "next/image";
 
-export default function FloatingCoffeeButton({ href }) {
+export default function FloatingCoffeeButton({ href, label, title, imageAlt }) {
   if (!href) {
     return null;
   }
@@ -11,10 +11,10 @@ export default function FloatingCoffeeButton({ href }) {
       target="_blank"
       rel="noreferrer"
       className="floating-coffee-button"
-      aria-label="Buy me a coffee"
-      title="Buy me a coffee"
+      aria-label={label}
+      title={title}
     >
-      <Image src="/coffee-logo.png" alt="Buy me a coffee" width={34} height={34} />
+      <Image src="/coffee-logo.png" alt={imageAlt} width={34} height={34} />
     </a>
   );
 }

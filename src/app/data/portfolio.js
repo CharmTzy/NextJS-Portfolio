@@ -63,7 +63,7 @@ export const skillCards = [
       {
         label: "OpenClaw",
         iconSlug: "openclaw",
-        color: "5b7cfe",
+        color: "17B8A6",
         iconUrl: "https://cdn.jsdelivr.net/gh/homarr-labs/dashboard-icons@master/svg/openclaw.svg",
       },
     ],
@@ -95,8 +95,8 @@ export const skillCards = [
     ],
   },
   {
-    title: "Desktop OS",
-    description: "Primary desktop environments I build and ship from.",
+    title: "Tooling & Deployment",
+    description: "Version control, desktop environments, deployment, and workflow tools used to build, ship, and maintain projects.",
     items: [
       {
         label: "Windows",
@@ -108,14 +108,7 @@ export const skillCards = [
         label: "macOS",
         iconSlug: "apple",
         color: "000000",
-        iconUrl: "https://cdn.jsdelivr.net/gh/devicons/devicon@latest/icons/apple/apple-original.svg",
       },
-    ],
-  },
-  {
-    title: "Tooling & Deployment",
-    description: "Version control, deployment, and workflow tools used to ship and maintain projects.",
-    items: [
       { label: "GitHub", iconSlug: "github", color: "181717" },
       { label: "Vercel", iconSlug: "vercel", color: "FFFFFF" },
       { label: "Render", iconSlug: "render", color: "46E3B7" },
@@ -126,40 +119,111 @@ export const skillCards = [
 
 export const experiences = [
   {
-    role: "Freelance Developer",
-    company: "Independent",
-    period: "2023 – Present",
-    description: "Delivered custom websites and full-stack interfaces for clients, taking projects from brief to deployment. Focused on fast load times, accessible design, and clean component architecture that clients can maintain.",
+    role: "Diploma in Information Technology",
+    company: "Singapore Polytechnic",
+    category: "Academic",
+    period: "2022 – 2025",
+    description: "Completed the Software Development Track with a Minor in 5G & Artificial Intelligence of Things, building full-stack, mobile, security, and low-code projects across the diploma.",
     techs: [
       { label: "Next.js", variant: "default" },
-      { label: "React", variant: "default" },
-      { label: "UI Design", variant: "green" },
-      { label: "Vercel", variant: "purple" },
+      { label: "TailwindCSS", variant: "purple" },
+      { label: "PostgreSQL", variant: "green" },
+      { label: "OWASP", variant: "default" },
+      { label: "Java", variant: "default" },
+      { label: "AWS", variant: "purple" },
+    ],
+    details: [
+      {
+        title: "Achievements",
+        items: ["Third Prize in Seed Code League Competition at Singapore Polytechnic in 2023.", "Learned and applied OWASP Top 10 security practices in coursework."],
+      },
+      {
+        title: "Academic Projects",
+        items: ["DailyHype e-commerce website with Next.js, TailwindCSS, PostgreSQL, and SDLC practice.", "Frontend responsive portfolio built with Bootstrap and JavaScript.", "DVD store with Express, plus a bookstore with Java, Apache Tomcat, and AWS.", "Productivity mobile app with Snake Game and Tic Tac Toe using React Native and Firebase.", "Low-code Food Waste Reduction project using Mendix Studio and MySQL Workbench."],
+      },
     ],
   },
   {
     role: "IT Application Engineer",
-    company: "BitCare — Singapore",
+    company: "BitCare",
+    category: "Internship",
     companyUrl: "https://bitcare.sg",
-    period: "2024 – 2025",
-    description: "Managed application lifecycle and internal tooling at a Singapore-based software company. Contributed to engineering workflows, triaged production issues, and coordinated cross-functional delivery to keep systems running reliably.",
+    period: "Mar 2024 – Jan 2025",
+    description: "Built and supported healthcare application systems, nurse-call device workflows, DevOps tasks, content updates, and technical research during the internship.",
     techs: [
-      { label: "Application Ops", variant: "default" },
-      { label: "Troubleshooting", variant: "purple" },
-      { label: "Process Improvement", variant: "green" },
-      { label: "Delivery", variant: "default" },
+      { label: "React Native", variant: "default" },
+      { label: "Next.js", variant: "purple" },
+      { label: "TailwindCSS", variant: "green" },
+      { label: "AWS EC2", variant: "default" },
+      { label: "S3", variant: "purple" },
+      { label: "DevOps", variant: "default" },
+    ],
+    details: [
+      {
+        title: "Internship Projects",
+        items: ["Developed an Alert Alarm System connecting local nurse-call devices to a React Native mobile app and a Next.js/TailwindCSS website.", "Developed an Inventory System for nurse-call device warranty checks, automated database entry, data management, and role-based access.", "Managed website design, content, DevOps, branding, and logo design work."],
+      },
+      {
+        title: "Impact",
+        items: ["Worked on nurse-call system device configuration and setup.", "Researched Europe market compliance requirements, including HTM compliance.", "Worked on system inventory management better efficiency."],
+      },
     ],
   },
   {
-    role: "Software Engineer (Academic Projects)",
+    role: "Freelancer",
+    company: "Independent",
+    category: "Freelance",
+    period: "2024 – Ongoing",
+    description: "Delivered rapid-turnaround freelance builds across Android, web systems, databases, and hardware prototypes, often shipping working results within a few days.",
+    techs: [
+      { label: "Java", variant: "default" },
+      { label: "SQLite", variant: "purple" },
+      { label: "Django", variant: "green" },
+      { label: "Prisma", variant: "default" },
+      { label: "Azure", variant: "purple" },
+      { label: "C++", variant: "default" },
+    ],
+    details: [
+      {
+        title: "Freelance Projects",
+        items: [
+          "Developed a Note Taking and Diary Android app with Java and SQLite in 2 days.",
+          "Developed a Hotel Booking Management System with HTML, CSS, Django, and MySQL in 2 days.",
+          "Developed a School Management System with REST API, Prisma, and Microsoft Azure hosting via GitHub Actions in 4 days.",
+          "Developed a Home Energy Saving Prototype using C++ with a microcontroller board in 2 days.",
+        ],
+      },
+      {
+        title: "Delivery Style",
+        items: [
+          "Worked across mobile, web, backend, database, and hardware contexts depending on project needs.",
+          "Focused on quick execution and turning requirements into usable working prototypes fast.",
+          "Adapted the stack to each build instead of relying on one fixed implementation path.",
+        ],
+      },
+    ],
+  },
+  {
+    role: "Bachelor of Science in Applied Artificial Intelligence",
     company: "Singapore Institute of Technology",
-    period: "2022 – 2025",
-    description: "Designed and shipped over 10 software projects covering AI/ML, full-stack web systems, data structures, and cloud-deployed apps. Highlights include a live phishing detection engine and an e-commerce platform with Stripe integration.",
+    category: "Academic",
+    period: "2025 – Ongoing",
+    description: "Currently pursuing an applied AI degree while continuing to connect software engineering, security, full-stack delivery, and practical AI project work.",
     techs: [
       { label: "Python", variant: "default" },
-      { label: "Node.js", variant: "purple" },
-      { label: "Flask", variant: "green" },
-      { label: "Java", variant: "default" },
+      { label: "Applied AI", variant: "purple" },
+      { label: "Machine Learning", variant: "green" },
+      { label: "Software Engineering", variant: "default" },
+    ],
+    details: [
+      {
+        title: "Current Focus",
+        items: ["Building deeper foundations in applied artificial intelligence and practical AI systems.", "Extending the software development background from polytechnic, internship, and portfolio projects into AI-focused engineering.", "Continuing hands-on learning through security, web, mobile, and product-style projects."],
+      },
+      {
+        title: "Project Direction",
+        items: ["Connecting AI learning with deployable portfolio work, including phishing detection and full-stack applications.", "Strengthening product-minded engineering through clean interfaces, maintainable architecture, and real deployment workflows."],
+      },
     ],
   },
 ];
@@ -197,32 +261,57 @@ export const contactLinks = [
 
 const projectOverrides = {
   Web_System_Project: {
-    title: "Nova Markets",
-    description: "A full-featured e-commerce platform with product listings, cart, checkout, Stripe payment integration, and an admin dashboard for order and inventory management.",
+    title: "Full E-commerce Project",
+    description: "A full-featured e-commerce website with product listings, cart, checkout, Stripe payment integration, and an admin dashboard for order and inventory management.",
     tags: [
       { label: "Node.js", variant: "default" },
       { label: "Express", variant: "purple" },
       { label: "MySQL", variant: "green" },
     ],
     emoji: "🛍️",
-    gradient: "linear-gradient(135deg,#0d1426,#1a2540)",
+    gradient: "linear-gradient(135deg,#161b22,#21262d)",
+    imageUrl: "/projects/full-ecommerce-home.png",
+    imageAlt: "Full E-commerce Project homepage screenshot",
     liveLabel: "Live",
     liveUrl: "https://nova-markets.org",
+    githubUrl: `https://github.com/${GITHUB_USERNAME}/Web_System_Project`,
     priority: 0,
   },
+  "daily-hype": {
+    title: "Daily-Hype",
+    description: "A modern fashion and lifestyle e-commerce experience with curated product presentation, shopper-friendly flows, and polished deployment on Vercel.",
+    tags: [
+      { label: "Next.js", variant: "default" },
+      { label: "E-commerce", variant: "purple" },
+      { label: "Vercel", variant: "green" },
+    ],
+    emoji: "👕",
+    gradient: "linear-gradient(135deg,#161b22,#2b2a17)",
+    imageUrl: "/projects/daily-hype-home.png",
+    imageAlt: "Daily-Hype homepage screenshot",
+    liveLabel: "Live",
+    liveUrl: "https://daily-hype-one.vercel.app",
+    githubUrl: `https://github.com/${GITHUB_USERNAME}/daily-hype`,
+    priority: 1,
+  },
   "Phishing-Email-Detection": {
-    title: "Phishing Email Detection",
-    description: "A rule-based phishing email detection app that analyzes keywords, suspicious URLs, and domain impersonation patterns through a simple interactive interface.",
+    title: "Phishing Detection Website",
+    description: "A phishing detection website that analyzes suspicious content, URLs, and impersonation patterns through a simple interactive security-focused interface.",
     tags: [
       { label: "Python", variant: "default" },
       { label: "Rule-based AI", variant: "default" },
       { label: "HuggingFace", variant: "green" },
     ],
     emoji: "🛡️",
-    gradient: "linear-gradient(135deg,#0d1426,#1a2540)",
+    gradient: "linear-gradient(135deg,#161b22,#21262d)",
+    imageUrl: "/projects/phishing-detection-home.png",
+    imageAlt: "Phishing Detection Website homepage screenshot",
     liveLabel: "Live",
     liveUrl: "https://huggingface.co/spaces/nik-fireball/phishing-email-detection",
-    priority: 1,
+    githubUrl: `https://github.com/${GITHUB_USERNAME}/Phishing-Email-Detection`,
+    videoLabel: "YouTube Demo",
+    videoUrl: "https://youtu.be/_c5pOhqVlF4?si=9eQVBxy7hJ5oBGZ4",
+    priority: 2,
   },
   "Lingo-Man": {
     title: "Lingo-Man",
@@ -233,10 +322,15 @@ const projectOverrides = {
       { label: "UI/UX", variant: "green" },
     ],
     emoji: "🗣️",
-    gradient: "linear-gradient(135deg,#0b1020,#0f2a5b)",
+    gradient: "linear-gradient(135deg,#0d1117,#14342f)",
+    imageUrl: "/projects/lingo-man-home.png",
+    imageAlt: "Lingo-Man homepage screenshot",
     liveLabel: "Live",
     liveUrl: "https://unique-gumption-cf1f09.netlify.app/",
-    priority: 2,
+    githubUrl: `https://github.com/${GITHUB_USERNAME}/Lingo-Man`,
+    videoLabel: "YouTube Demo",
+    videoUrl: "https://youtu.be/tuKQ-leo5Y0",
+    priority: 3,
   },
 };
 
@@ -253,7 +347,7 @@ const projectCaseStudyOverrides = {
     learnings: ["Security-related ideas land better when users can see the decision process clearly.", "A small but working interface often communicates more value than raw code alone.", "Rule-based systems are still useful when the problem space needs explainability."],
   },
   Web_System_Project: {
-    headline: "A full e-commerce experience with real product flows — browsing, cart, checkout, Stripe payments, and admin operations.",
+    headline: "A full e-commerce experience with real product flows: browsing, cart, checkout, Stripe payments, and admin operations.",
     status: "Live project",
     role: "Full‑stack development and product flow design",
     timeline: "Academic / personal build · 2026",
@@ -262,6 +356,17 @@ const projectCaseStudyOverrides = {
     outcome: "A deployable e-commerce platform that demonstrates full-stack delivery, practical system architecture, and product thinking.",
     highlights: ["Implemented cart → checkout → payment flows with Stripe integration.", "Built admin workflows for orders and inventory management.", "Shipped a live deployment so the experience is testable end-to-end."],
     learnings: ["Commerce projects get complex fast—clear boundaries keep features shippable.", "Payments require careful UX and robust error handling.", "Operational tooling (admin) is part of the product."],
+  },
+  "daily-hype": {
+    headline: "A fashion e-commerce experience focused on clean shopping flows, product presentation, and production-ready deployment.",
+    status: "Live project",
+    role: "Frontend/product implementation and deployment polish",
+    timeline: "Personal build · 2026",
+    challenge: "Create a shopper-facing storefront that feels modern, easy to scan, and dependable across product browsing and purchase-intent flows.",
+    solution: "I shaped the UI around clear product discovery, responsive layouts, and a hosted Vercel deployment so the project can be reviewed like a real storefront.",
+    outcome: "Daily-Hype adds a second commerce project to the portfolio, showing range across both full-stack systems and polished frontend e-commerce presentation.",
+    highlights: ["Built a curated fashion storefront experience with clear product presentation.", "Focused on responsive browsing and clean visual hierarchy.", "Deployed the project publicly on Vercel with a GitHub-backed codebase."],
+    learnings: ["Retail interfaces need fast scanning more than heavy decoration.", "Small layout choices matter when users compare products.", "A live deployment makes portfolio projects easier to trust and evaluate."],
   },
   "Lingo-Man": {
     headline: "A polished language-learning experience focused on interaction design, clarity, and smooth user flow.",
@@ -293,11 +398,21 @@ const fallbackRepos = [
     fork: false,
   },
   {
+    name: "daily-hype",
+    description: "Fashion and lifestyle e-commerce storefront deployed on Vercel.",
+    language: "TypeScript",
+    stargazers_count: 0,
+    homepage: "https://daily-hype-one.vercel.app",
+    html_url: `https://github.com/${GITHUB_USERNAME}/daily-hype`,
+    updated_at: "2026-05-01T00:00:00Z",
+    fork: false,
+  },
+  {
     name: "Phishing-Email-Detection",
-    description: "This is the phishing email detection that is based on the rule-based system.",
+    description: "Phishing detection website based on a rule-based system.",
     language: "Jupyter Notebook",
     stargazers_count: 1,
-    homepage: "https://phishing-email-detection-s0sg.onrender.com",
+    homepage: "https://huggingface.co/spaces/nik-fireball/phishing-email-detection",
     html_url: `https://github.com/${GITHUB_USERNAME}/Phishing-Email-Detection`,
     updated_at: "2026-03-27T09:51:02Z",
     fork: false,
@@ -314,19 +429,19 @@ const fallbackRepos = [
   },
 ];
 
-const INCLUDED_PROJECTS = new Set(["Web_System_Project", "Phishing-Email-Detection", "Lingo-Man"]);
+const INCLUDED_PROJECTS = new Set(["Web_System_Project", "daily-hype", "Phishing-Email-Detection", "Lingo-Man"]);
 const INCLUDED_PROJECT_LIST = Array.from(INCLUDED_PROJECTS);
 
 function getGradientFromLanguage(language = "") {
   const lower = language.toLowerCase();
 
-  if (lower.includes("python")) return "linear-gradient(135deg,#0d1426,#15304a)";
-  if (lower.includes("java")) return "linear-gradient(135deg,#0d1426,#2b2047)";
-  if (lower.includes("html")) return "linear-gradient(135deg,#0d1a1a,#12351b)";
-  if (lower.includes("css")) return "linear-gradient(135deg,#0d1426,#1a2540)";
-  if (lower.includes("javascript")) return "linear-gradient(135deg,#0d1426,#1b3040)";
+  if (lower.includes("python")) return "linear-gradient(135deg,#161b22,#14342f)";
+  if (lower.includes("java")) return "linear-gradient(135deg,#161b22,#2d2616)";
+  if (lower.includes("html")) return "linear-gradient(135deg,#161b22,#2b1f1f)";
+  if (lower.includes("css")) return "linear-gradient(135deg,#161b22,#182a3d)";
+  if (lower.includes("javascript")) return "linear-gradient(135deg,#161b22,#2b2a17)";
 
-  return "linear-gradient(135deg,#0d1426,#1a2540)";
+  return "linear-gradient(135deg,#161b22,#21262d)";
 }
 
 function getEmojiFromLanguage(language = "") {
@@ -401,9 +516,13 @@ function mapRepository(repo) {
     tags,
     emoji: override.emoji || getEmojiFromLanguage(repo.language),
     gradient: override.gradient || getGradientFromLanguage(repo.language),
-    githubUrl: repo.html_url,
+    imageUrl: override.imageUrl || null,
+    imageAlt: override.imageAlt || `${override.title || repo.name} homepage screenshot`,
+    githubUrl: override.githubUrl || repo.html_url,
     liveUrl: homepage,
     liveLabel: override.liveLabel || (homepage ? "Live" : null),
+    videoUrl: override.videoUrl || null,
+    videoLabel: override.videoLabel || null,
     stars: repo.stargazers_count || 0,
     priority: override.priority || 999,
     updatedAt: repo.updated_at,
@@ -443,7 +562,7 @@ export async function getPortfolioData() {
 
   const sourceRepos = Array.isArray(repos) ? repos.filter((repo) => !repo.fork) : fallbackRepos;
 
-  // Only show the 3 selected projects.
+  // Only show the selected portfolio projects.
   // If GitHub API omits any (private repo, API issue, etc.), fill from fallback.
   const selectedRepos = INCLUDED_PROJECT_LIST.map((name) => {
     const fromApi = sourceRepos.find((repo) => repo.name === name);

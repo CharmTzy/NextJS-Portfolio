@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FadeUp from "../../components/FadeUp";
@@ -5,6 +6,7 @@ import Navbar from "../../components/NavBar";
 import SiteBackground from "../../components/SiteBackground";
 import SiteFooter from "../../components/SiteFooter";
 import { getProjectBySlug, getProjectSlugs, personalInfo } from "../../data/portfolio";
+import { projectsContent, siteRoutes } from "../../data/site-content";
 
 export async function generateStaticParams() {
   const slugs = await getProjectSlugs();
@@ -16,12 +18,12 @@ export async function generateMetadata({ params }) {
 
   if (!project) {
     return {
-      title: "Project Not Found",
+      title: projectsContent.detail.notFoundTitle,
     };
   }
 
   return {
-    title: `${project.name} — Wai Yan`,
+    title: `${project.name} — ${personalInfo.name}`,
     description: project.caseStudy.headline,
   };
 }
@@ -34,43 +36,61 @@ export default async function ProjectDetailPage({ params }) {
   }
 
   const infoCards = [
-    { label: "Status", value: project.caseStudy.status },
-    { label: "Role", value: project.caseStudy.role },
-    { label: "Timeline", value: project.caseStudy.timeline },
-    { label: "Primary stack", value: project.primaryLanguage },
+    { label: projectsContent.detail.infoCards.status, value: project.caseStudy.status },
+    { label: projectsContent.detail.infoCards.role, value: project.caseStudy.role },
+    { label: projectsContent.detail.infoCards.timeline, value: project.caseStudy.timeline },
+    { label: projectsContent.detail.infoCards.primaryStack, value: project.primaryLanguage },
   ];
 
   return (
     <main className="site-shell">
       <SiteBackground />
-
-      <Navbar logo={personalInfo.shortLogo} ctaHref="/#contact" />
+      <Navbar logo={personalInfo.shortLogo} ctaHref={siteRoutes.homeContact} />
 
       <section className="project-detail-hero">
         <div className="section-wrap">
           <div className="project-detail-grid">
             <FadeUp className="project-detail-copy">
-              <Link href="/#projects" className="project-back-link">
-                ← Back to projects
+              <Link href={siteRoutes.homeProjects} className="project-back-link">
+                {projectsContent.detail.backLinkLabel}
               </Link>
               <div className="hero-badge">
                 <div className="badge-dot" />
                 {project.caseStudy.status}
               </div>
-              <div className="project-detail-emoji" style={{ background: project.gradient }}>
-                <span>{project.emoji}</span>
-              </div>
+              {project.imageUrl ? (
+                <div className="project-detail-preview" style={{ background: project.gradient }}>
+                  <Image
+                    src={project.imageUrl}
+                    alt={project.imageAlt}
+                    fill
+                    priority
+                    sizes="(max-width: 900px) 100vw, 680px"
+                    className="project-detail-preview-image"
+                  />
+                </div>
+              ) : (
+                <div className="project-detail-emoji" style={{ background: project.gradient }}>
+                  <span>{project.emoji}</span>
+                </div>
+              )}
               <h1 className="project-detail-title">{project.name}</h1>
               <p className="project-detail-headline">{project.caseStudy.headline}</p>
               <div className="hero-actions">
                 {project.liveUrl ? (
                   <a href={project.liveUrl} target="_blank" rel="noreferrer" className="btn-primary">
-                    Visit {project.liveLabel || "Live"}
+                    {projectsContent.detail.actions.livePrefix}{" "}
+                    {project.liveLabel || projectsContent.detail.actions.liveFallbackLabel}
                   </a>
                 ) : null}
                 <a href={project.githubUrl} target="_blank" rel="noreferrer" className="btn-ghost">
-                  View GitHub →
+                  {projectsContent.detail.actions.githubLabel}
                 </a>
+                {project.videoUrl ? (
+                  <a href={project.videoUrl} target="_blank" rel="noreferrer" className="btn-ghost">
+                    {project.videoLabel || projectsContent.detail.actions.videoLabel}
+                  </a>
+                ) : null}
               </div>
             </FadeUp>
 
@@ -96,8 +116,9 @@ export default async function ProjectDetailPage({ params }) {
               </div>
 
               <div className="project-meta-strip">
-                <span>Updated {project.updatedLabel}</span>
-                <span>⭐ {project.stars} stars</span>
+                <span>
+                  {projectsContent.detail.meta.updatedPrefix} {project.updatedLabel}
+                </span>
                 <span>{project.originalName}</span>
               </div>
             </FadeUp>
@@ -110,28 +131,28 @@ export default async function ProjectDetailPage({ params }) {
           <div className="project-body-grid">
             <div className="project-story-stack">
               <FadeUp className="project-story-card">
-                <div className="section-label">Overview</div>
-                <h2 className="project-section-title">What this project is about</h2>
+                <div className="section-label">{projectsContent.detail.overview.label}</div>
+                <h2 className="project-section-title">{projectsContent.detail.overview.title}</h2>
                 <p className="project-story-text">{project.caseStudy.challenge}</p>
               </FadeUp>
 
               <FadeUp className="project-story-card" delay={0.05}>
-                <div className="section-label">Approach</div>
-                <h2 className="project-section-title">How I built it</h2>
+                <div className="section-label">{projectsContent.detail.approach.label}</div>
+                <h2 className="project-section-title">{projectsContent.detail.approach.title}</h2>
                 <p className="project-story-text">{project.caseStudy.solution}</p>
               </FadeUp>
 
               <FadeUp className="project-story-card" delay={0.1}>
-                <div className="section-label">Outcome</div>
-                <h2 className="project-section-title">Why it matters</h2>
+                <div className="section-label">{projectsContent.detail.outcome.label}</div>
+                <h2 className="project-section-title">{projectsContent.detail.outcome.title}</h2>
                 <p className="project-story-text">{project.caseStudy.outcome}</p>
               </FadeUp>
             </div>
 
             <div className="project-side-stack">
               <FadeUp className="project-list-card" delay={0.06}>
-                <div className="section-label">Highlights</div>
-                <h2 className="project-section-title">What stands out</h2>
+                <div className="section-label">{projectsContent.detail.highlights.label}</div>
+                <h2 className="project-section-title">{projectsContent.detail.highlights.title}</h2>
                 <div className="project-bullet-list">
                   {project.caseStudy.highlights.map((item) => (
                     <div key={item} className="project-bullet-item">
@@ -143,8 +164,8 @@ export default async function ProjectDetailPage({ params }) {
               </FadeUp>
 
               <FadeUp className="project-list-card" delay={0.12}>
-                <div className="section-label">Learnings</div>
-                <h2 className="project-section-title">What I learned</h2>
+                <div className="section-label">{projectsContent.detail.learnings.label}</div>
+                <h2 className="project-section-title">{projectsContent.detail.learnings.title}</h2>
                 <div className="project-bullet-list">
                   {project.caseStudy.learnings.map((item) => (
                     <div key={item} className="project-bullet-item">

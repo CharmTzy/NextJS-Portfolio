@@ -5,16 +5,11 @@ import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import { MoonStar, SunMedium, Menu, X } from "lucide-react";
+import { navigationContent } from "../data/site-content";
 
-const navItems = [
-  { label: "Skills", sectionId: "skills", href: "/#skills" },
-  { label: "Experience", sectionId: "experience", href: "/#experience" },
-  { label: "Projects", sectionId: "projects", href: "/#projects" },
-  { label: "Updates", href: "/updates" },
-  { label: "Contact", sectionId: "contact", href: "/#contact" },
-];
+const navItems = navigationContent.items;
 
-export default function Navbar({ logo, ctaHref = "#contact" }) {
+export default function Navbar({ logo, ctaHref = navigationContent.ctaHref }) {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
@@ -81,8 +76,8 @@ export default function Navbar({ logo, ctaHref = "#contact" }) {
   };
 
   const isActive = (item) => {
-    if (item.href === "/updates") {
-      return pathname === "/updates";
+    if (!item.sectionId && item.href?.startsWith("/")) {
+      return pathname === item.href;
     }
 
     return isHomePage && item.sectionId ? activeHash === `#${item.sectionId}` : false;
@@ -119,13 +114,24 @@ export default function Navbar({ logo, ctaHref = "#contact" }) {
           ))}
         </ul>
         <div className="nav-right">
-          <button type="button" className="theme-toggle" title="Toggle theme" aria-label="Toggle theme" onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}>
+          <button
+            type="button"
+            className="theme-toggle"
+            title={navigationContent.themeToggleLabel}
+            aria-label={navigationContent.themeToggleLabel}
+            onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
+          >
             {currentTheme === "dark" ? <SunMedium size={16} /> : <MoonStar size={16} />}
           </button>
           <button type="button" className="nav-cta nav-cta-desktop" onClick={handleCta}>
-            Hire Me
+            {navigationContent.ctaLabel}
           </button>
-          <button type="button" className="nav-hamburger" aria-label={mobileOpen ? "Close menu" : "Open menu"} onClick={() => setMobileOpen((prev) => !prev)}>
+          <button
+            type="button"
+            className="nav-hamburger"
+            aria-label={mobileOpen ? navigationContent.closeMenuLabel : navigationContent.openMenuLabel}
+            onClick={() => setMobileOpen((prev) => !prev)}
+          >
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
           </button>
         </div>
@@ -144,7 +150,7 @@ export default function Navbar({ logo, ctaHref = "#contact" }) {
           ))}
         </ul>
         <button type="button" className="btn-primary mobile-hire-btn" onClick={handleCta}>
-          Hire Me
+          {navigationContent.ctaLabel}
         </button>
       </div>
     </>
