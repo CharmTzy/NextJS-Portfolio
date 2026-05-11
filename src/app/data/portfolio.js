@@ -165,9 +165,24 @@ export const experiences = [
       },
       {
         title: "Impact",
-        items: ["Worked on nurse-call system device configuration and setup.", "Researched Europe market compliance requirements, including HTM compliance.", "Worked on system inventory management better efficiency."],
+        items: [
+          "Worked on nurse-call system device configuration, deployment, and troubleshooting for healthcare and assisted-living projects.",
+          "Researched Europe market compliance requirements, including HTM compliance reviews and design recommendations.",
+          "Supported system inventory management, database maintenance, and more efficient internal operational workflows.",
+        ],
       },
     ],
+    testimonial: {
+      quote:
+        "Wai Yan has been an invaluable member of our team. His hard work, technical acumen, and dedication to continuous improvement position him as an exceptional candidate for technical roles.",
+      author: "Javier Boon",
+      title: "Manager, BitCare",
+    },
+    testimonialFile: {
+      href: "/bitcare-recommendation-letter.pdf",
+      label: "BitCare Recommendation Letter (PDF)",
+      action: "Open testimonial file →",
+    },
   },
   {
     role: "Freelancer",
@@ -188,7 +203,6 @@ export const experiences = [
         title: "Freelance Projects",
         items: [
           "Developed a Note Taking and Diary Android app with Java and SQLite in 2 days.",
-          "Developed a Hotel Booking Management System with HTML, CSS, Django, and MySQL in 2 days.",
           "Developed a School Management System with REST API, Prisma, and Microsoft Azure hosting via GitHub Actions in 4 days.",
           "Developed a Home Energy Saving Prototype using C++ with a microcontroller board in 2 days.",
         ],

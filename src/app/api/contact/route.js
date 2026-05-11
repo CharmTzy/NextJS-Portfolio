@@ -5,7 +5,6 @@ import { personalInfo } from "../../data/portfolio";
 
 export const runtime = "nodejs";
 
-const CHALLENGE_TTL_MS = 20 * 60 * 1000;
 const MIN_SUBMIT_MS = 2500;
 const MAX_SUBMIT_MS = 30 * 60 * 1000;
 const MAX_MESSAGE_LENGTH = 4000;
@@ -14,26 +13,8 @@ const DEFAULT_RATE_LIMIT_MAX = 5;
 const EMAIL_CODE_TTL_MS = 10 * 60 * 1000;
 const EMAIL_CODE_RATE_LIMIT_MAX = 3;
 
-const challenges = [
-  { id: "sum-4-7", question: "What is 4 + 7?", answer: "11" },
-  { id: "sum-8-5", question: "What is 8 + 5?", answer: "13" },
-  { id: "minus-15-6", question: "What is 15 - 6?", answer: "9" },
-  { id: "minus-18-9", question: "What is 18 - 9?", answer: "9" },
-  { id: "sum-6-9", question: "What is 6 + 9?", answer: "15" },
-];
-
-function getChallengeSecret() {
-  return process.env.CONTACT_CHALLENGE_SECRET || process.env.SMTP_PASS || "development-contact-secret";
-}
-
 function getEmailVerificationSecret() {
-  return process.env.CONTACT_EMAIL_VERIFY_SECRET || getChallengeSecret();
-}
-
-function signChallenge({ id, answer, expiresAt }) {
-  return createHmac("sha256", getChallengeSecret())
-    .update(`${id}.${answer}.${expiresAt}`)
-    .digest("hex");
+  return process.env.CONTACT_EMAIL_VERIFY_SECRET || process.env.SMTP_PASS || "development-contact-secret";
 }
 
 function safeCompare(a, b) {
@@ -45,38 +26,6 @@ function safeCompare(a, b) {
   }
 
   return timingSafeEqual(left, right);
-}
-
-function createChallengePayload() {
-  const challenge = challenges[Math.floor(Math.random() * challenges.length)];
-  const expiresAt = Date.now() + CHALLENGE_TTL_MS;
-  const signature = signChallenge({ ...challenge, expiresAt });
-
-  return {
-    id: challenge.id,
-    question: challenge.question,
-    token: `${expiresAt}.${signature}`,
-  };
-}
-
-function verifyChallenge({ challengeId, challengeToken, challengeAnswer }) {
-  const challenge = challenges.find((item) => item.id === challengeId);
-
-  if (!challenge || !challengeToken || !challengeAnswer) {
-    return false;
-  }
-
-  const [expiresAtRaw, signature] = String(challengeToken).split(".");
-  const expiresAt = Number(expiresAtRaw);
-
-  if (!expiresAt || !signature || expiresAt < Date.now()) {
-    return false;
-  }
-
-  const expectedSignature = signChallenge({ ...challenge, expiresAt });
-  const normalizedAnswer = String(challengeAnswer).trim().toLowerCase();
-
-  return normalizedAnswer === challenge.answer && safeCompare(signature, expectedSignature);
 }
 
 function getRateBucket(key) {
@@ -395,7 +344,7 @@ export async function GET(request) {
     return NextResponse.json(response);
   }
 
-  return NextResponse.json({ ok: true, challenge: createChallengePayload() });
+  return NextResponse.json({ ok: true });
 }
 
 async function handleEmailVerificationRequest({ body, ip, userAgent }) {
@@ -420,16 +369,6 @@ async function handleEmailVerificationRequest({ body, ip, userAgent }) {
 
   if (isRateLimited(`email-code-ip:${ip}`, codeLimit) || isRateLimited(`email-code-email:${senderEmail}`, codeLimit)) {
     return jsonError("Too many verification codes requested. Please try again later.", 429);
-  }
-
-  if (
-    !verifyChallenge({
-      challengeId: body.challengeId,
-      challengeToken: body.challengeToken,
-      challengeAnswer: body.challengeAnswer,
-    })
-  ) {
-    return jsonError("Please answer the verification check before requesting an email code.");
   }
 
   const { transporter, status } = createTransporter();
@@ -502,16 +441,6 @@ export async function POST(request) {
 
   if (message.length < 10) {
     return jsonError("Please write a slightly longer message.");
-  }
-
-  if (
-    !verifyChallenge({
-      challengeId: body.challengeId,
-      challengeToken: body.challengeToken,
-      challengeAnswer: body.challengeAnswer,
-    })
-  ) {
-    return jsonError("Verification failed. Please try the new question.");
   }
 
   if (

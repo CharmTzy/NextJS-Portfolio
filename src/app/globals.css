@@ -902,7 +902,7 @@ nav {
   gap: 1px;
   border: 1px solid var(--border);
   border-radius: var(--radius-lg);
-  overflow: hidden;
+  overflow: visible;
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(14px);
   position: relative;
@@ -930,10 +930,15 @@ nav {
     background 0.2s,
     box-shadow 0.2s;
   position: relative;
+  overflow: visible;
+  z-index: 0;
 }
 
-.exp-card:hover {
+.exp-card:hover,
+.exp-card:focus-within {
   background: var(--card-hover);
+  box-shadow: inset 0 0 0 1px var(--accent-border);
+  z-index: 8;
 }
 
 .exp-card:focus-visible {
@@ -1039,26 +1044,38 @@ a.exp-company:hover {
 
 .exp-hover-panel {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
   gap: 0.85rem;
-  max-height: 0;
+  width: min(44rem, calc(100% - 6.5rem));
+  max-height: min(38rem, calc(100vh - 6rem));
   margin-top: 0;
   opacity: 0;
-  overflow: hidden;
-  transform: translateY(-8px);
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 1rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  border: 1px solid var(--accent-border);
+  border-radius: 22px;
+  background:
+    linear-gradient(140deg, rgba(var(--accent-rgb), 0.14), transparent 38%),
+    var(--card);
+  box-shadow: var(--card-hover-shadow);
+  backdrop-filter: blur(22px);
+  pointer-events: none;
+  transform: translate(-50%, -50%) translateY(12px) scale(0.98);
   transition:
-    max-height 0.35s ease,
-    margin-top 0.25s ease,
-    opacity 0.25s ease,
-    transform 0.25s ease;
+    opacity 0.24s ease,
+    transform 0.24s ease;
+  z-index: 10;
 }
 
 .exp-card:hover .exp-hover-panel,
 .exp-card:focus-within .exp-hover-panel {
-  max-height: 760px;
-  margin-top: 1.15rem;
   opacity: 1;
-  transform: translateY(0);
+  pointer-events: auto;
+  transform: translate(-50%, -50%) scale(1);
 }
 
 .exp-detail-card {
@@ -1106,6 +1123,86 @@ a.exp-company:hover {
   border-radius: 999px;
   background: var(--accent);
   box-shadow: 0 0 0 4px var(--accent-dim);
+}
+
+.exp-testimonial-card {
+  grid-column: 1 / -1;
+  border: 1px solid var(--accent-border);
+  border-radius: var(--radius-md);
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), 0.14), transparent 52%),
+    var(--card);
+  padding: 1.1rem 1.15rem;
+}
+
+.exp-testimonial-quote {
+  color: var(--text);
+  font-size: 0.9rem;
+  font-style: italic;
+  line-height: 1.8;
+  margin: 0;
+}
+
+.exp-testimonial-author {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.9rem;
+  margin-top: 0.9rem;
+}
+
+.exp-testimonial-author span:first-child {
+  color: var(--accent-bright);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.exp-testimonial-author span:last-child {
+  color: var(--muted2);
+  font-size: 0.78rem;
+}
+
+.exp-testimonial-file {
+  grid-column: 1 / -1;
+  align-items: center;
+  border: 1px solid var(--border2);
+  border-radius: var(--radius-md);
+  color: inherit;
+  display: flex;
+  gap: 1rem;
+  justify-content: space-between;
+  padding: 1rem 1.1rem;
+  transition:
+    border-color 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), transparent 50%),
+    var(--tag-bg);
+}
+
+.exp-testimonial-file:hover {
+  background:
+    linear-gradient(135deg, rgba(var(--accent-rgb), 0.14), transparent 56%),
+    var(--card-hover);
+  border-color: var(--accent-border);
+  transform: translateY(-1px);
+}
+
+.exp-testimonial-file-label {
+  color: var(--text);
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.exp-testimonial-file-action {
+  color: var(--accent-bright);
+  font-family: var(--font-jetbrains-mono), monospace;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
 }
 
 /* ═══════════════════════════════════════════
@@ -1515,11 +1612,6 @@ a.exp-company:hover {
   font-size: 0.75rem;
   line-height: 1.6;
   margin: 0;
-}
-
-.verification-question {
-  color: var(--accent-bright);
-  font-size: 0.8rem;
 }
 
 .contact-form-status {
@@ -2199,7 +2291,7 @@ footer span {
     left: 20px;
   }
   .exp-hover-panel {
-    grid-template-columns: 1fr;
+    width: calc(100% - 5.25rem);
   }
 }
 
@@ -2237,10 +2329,23 @@ footer span {
     font-size: 2.5rem;
   }
   .exp-hover-panel {
-    max-height: none;
+    width: auto;
     margin-top: 1rem;
     opacity: 1;
+    overflow: visible;
+    padding: 0;
+    position: static;
+    border: none;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    pointer-events: auto;
     transform: none;
+  }
+  .exp-testimonial-file {
+    align-items: flex-start;
+    flex-direction: column;
   }
   .admin-card-header {
     flex-direction: column;

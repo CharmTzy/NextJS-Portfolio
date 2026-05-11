@@ -137,14 +137,12 @@ export const contactFormContent = {
     name: "NAME",
     email: "EMAIL",
     message: "MESSAGE",
-    verification: "VERIFICATION",
     emailVerificationCode: "EMAIL CODE",
   },
   placeholders: {
     name: "Your name",
     email: "your@email.com",
     message: "Tell me about your project or opportunity...",
-    verification: "Answer the check",
     emailVerificationCode: "6-digit code",
   },
   buttons: {
@@ -157,10 +155,8 @@ export const contactFormContent = {
     sendingVerification: "Sending...",
   },
   messages: {
-    loadingVerification: "Loading verification...",
-    verificationUnavailable: "Verification is unavailable. Please refresh and try again.",
-    emailCodeHelp: "Answer the check above, then send a code to your email before submitting.",
-    emailCodeRequirements: "Enter your email and answer the verification check before requesting a code.",
+    emailCodeHelp: "Enter your email, request a verification code, then submit your message.",
+    emailCodeRequirements: "Enter your email address before requesting a code.",
     emailCodeSent: "Code sent to",
     success: "Thanks, your message was sent successfully.",
     fallbackError: "Something went wrong. Please try again in a moment.",

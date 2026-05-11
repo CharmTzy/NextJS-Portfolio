@@ -42,6 +42,29 @@ export default function ExperienceCard({ experiences = [] }) {
                   </ul>
                 </div>
               ))}
+              {experience.testimonial ? (
+                <div className="exp-testimonial-card">
+                  <div className="exp-detail-title">Testimonial</div>
+                  <blockquote className="exp-testimonial-quote">
+                    &ldquo;{experience.testimonial.quote}&rdquo;
+                  </blockquote>
+                  <div className="exp-testimonial-author">
+                    <span>{experience.testimonial.author}</span>
+                    <span>{experience.testimonial.title}</span>
+                  </div>
+                </div>
+              ) : null}
+              {experience.testimonialFile ? (
+                <a
+                  href={experience.testimonialFile.href}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="exp-testimonial-file"
+                >
+                  <span className="exp-testimonial-file-label">{experience.testimonialFile.label}</span>
+                  <span className="exp-testimonial-file-action">{experience.testimonialFile.action}</span>
+                </a>
+              ) : null}
             </div>
           ) : null}
         </div>

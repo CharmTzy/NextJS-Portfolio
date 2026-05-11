@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 import FadeUp from "./FadeUp";
 import { contactFormContent } from "../data/site-content";
 
@@ -9,7 +9,6 @@ const initialFormData = {
   senderEmail: "",
   message: "",
   website: "",
-  challengeAnswer: "",
   emailVerificationCode: "",
 };
 
@@ -17,7 +16,6 @@ export default function ContactSection({ links = [], intro }) {
   const [formData, setFormData] = useState({
     ...initialFormData,
   });
-  const [challenge, setChallenge] = useState(null);
   const [startedAt, setStartedAt] = useState(Date.now());
   const [emailVerificationToken, setEmailVerificationToken] = useState("");
   const [emailCodeSentTo, setEmailCodeSentTo] = useState("");
@@ -25,31 +23,6 @@ export default function ContactSection({ links = [], intro }) {
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "idle", message: "" });
   const [sent, setSent] = useState(false);
-
-  const loadChallenge = useCallback(async () => {
-    try {
-      const response = await fetch(contactFormContent.apiEndpoint, { method: "GET" });
-      const data = await response.json();
-
-      if (!response.ok || !data.challenge) {
-        throw new Error(contactFormContent.messages.verificationUnavailable);
-      }
-
-      setChallenge(data.challenge);
-      setStartedAt(Date.now());
-      setFormData((current) => ({ ...current, challengeAnswer: "" }));
-    } catch {
-      setChallenge(null);
-      setStatus({
-        type: "error",
-        message: contactFormContent.messages.verificationUnavailable,
-      });
-    }
-  }, []);
-
-  useEffect(() => {
-    loadChallenge();
-  }, [loadChallenge]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -72,7 +45,7 @@ export default function ContactSection({ links = [], intro }) {
   };
 
   const handleRequestEmailCode = async () => {
-    if (!formData.senderEmail?.trim() || !formData.challengeAnswer?.trim() || !challenge) {
+    if (!formData.senderEmail?.trim()) {
       setStatus({
         type: "error",
         message: contactFormContent.messages.emailCodeRequirements,
@@ -93,10 +66,7 @@ export default function ContactSection({ links = [], intro }) {
           action: "request-email-code",
           senderEmail: formData.senderEmail,
           website: formData.website,
-          challengeAnswer: formData.challengeAnswer,
           startedAt,
-          challengeId: challenge.id,
-          challengeToken: challenge.token,
         }),
       });
 
@@ -131,10 +101,8 @@ export default function ContactSection({ links = [], intro }) {
     if (
       !formData.message?.trim() ||
       !formData.senderEmail?.trim() ||
-      !formData.challengeAnswer?.trim() ||
       !formData.emailVerificationCode?.trim() ||
-      !emailVerificationToken ||
-      !challenge
+      !emailVerificationToken
     ) {
       return;
     }
@@ -152,8 +120,6 @@ export default function ContactSection({ links = [], intro }) {
           ...formData,
           emailVerificationToken,
           startedAt,
-          challengeId: challenge.id,
-          challengeToken: challenge.token,
         }),
       });
 
@@ -165,10 +131,10 @@ export default function ContactSection({ links = [], intro }) {
 
       setSent(true);
       setFormData({ ...initialFormData });
+      setStartedAt(Date.now());
       setEmailVerificationToken("");
       setEmailCodeSentTo("");
       setStatus({ type: "success", message: data.message || contactFormContent.messages.success });
-      loadChallenge();
       window.setTimeout(() => {
         setSent(false);
         setStatus({ type: "idle", message: "" });
@@ -178,7 +144,6 @@ export default function ContactSection({ links = [], intro }) {
         type: "error",
         message: error.message || contactFormContent.messages.fallbackError,
       });
-      loadChallenge();
     } finally {
       setSubmitting(false);
     }
@@ -189,12 +154,10 @@ export default function ContactSection({ links = [], intro }) {
     requestingCode ||
     !formData.message?.trim() ||
     !formData.senderEmail?.trim() ||
-    !formData.challengeAnswer?.trim() ||
     !formData.emailVerificationCode?.trim() ||
-    !emailVerificationToken ||
-    !challenge;
+    !emailVerificationToken;
 
-  const requestCodeDisabled = requestingCode || submitting || !formData.senderEmail?.trim() || !formData.challengeAnswer?.trim() || !challenge;
+  const requestCodeDisabled = requestingCode || submitting || !formData.senderEmail?.trim();
 
   return (
     <FadeUp className="contact-grid">
@@ -271,24 +234,6 @@ export default function ContactSection({ links = [], intro }) {
               placeholder={contactFormContent.placeholders.message}
               value={formData.message}
               onChange={handleChange}
-              required
-            />
-          </div>
-
-          <div className="form-group">
-            <label htmlFor="challengeAnswer">{contactFormContent.labels.verification}</label>
-            <div className="verification-question">
-              {challenge?.question || contactFormContent.messages.loadingVerification}
-            </div>
-            <input
-              id="challengeAnswer"
-              name="challengeAnswer"
-              type="text"
-              placeholder={contactFormContent.placeholders.verification}
-              value={formData.challengeAnswer}
-              onChange={handleChange}
-              autoComplete="off"
-              inputMode="numeric"
               required
             />
           </div>
