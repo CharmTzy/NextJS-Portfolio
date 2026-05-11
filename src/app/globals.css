@@ -514,6 +514,41 @@ nav {
   letter-spacing: 0.08em;
 }
 
+.hero-identity {
+  display: flex;
+  align-items: flex-start;
+  gap: clamp(1rem, 2vw, 1.75rem);
+  margin-bottom: 1.75rem;
+}
+
+.hero-identity-copy {
+  min-width: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.hero-portrait {
+  width: clamp(4.85rem, 9vw, 6.75rem);
+  height: clamp(4.85rem, 9vw, 6.75rem);
+  padding: 0.22rem;
+  border-radius: 1.6rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(23, 184, 166, 0.4) 100%);
+  box-shadow: 0 22px 48px rgba(4, 10, 18, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
+}
+
+.hero-portrait-image {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center 20%;
+  border-radius: 1.38rem;
+}
+
 .hero-name {
   font-family: var(--font-jetbrains-mono), monospace;
   font-size: clamp(3.5rem, 8.5vw, 7.5rem);
@@ -522,6 +557,11 @@ nav {
   letter-spacing: -0.04em;
   color: var(--text);
   margin-bottom: 1.5rem;
+}
+
+.hero-identity .hero-name,
+.hero-identity .hero-role-row {
+  margin-bottom: 0;
 }
 
 .hero-name.hero-name-lockup {
@@ -1044,15 +1084,13 @@ a.exp-company:hover {
 
 .exp-hover-panel {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 0.85rem;
-  width: min(44rem, calc(100% - 6.5rem));
-  max-height: min(38rem, calc(100vh - 6rem));
+  width: min(52rem, calc(100vw - 5rem));
   margin-top: 0;
   opacity: 0;
-  overflow-y: auto;
-  overflow-x: hidden;
-  padding: 1rem;
+  overflow: visible;
+  padding: 1.15rem;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -2252,6 +2290,9 @@ footer span {
     gap: 0;
     padding-top: 2.25rem;
   }
+  .hero-identity {
+    align-items: flex-start;
+  }
   .hero-stats > div {
     border-right: none;
     padding: 1.25rem 0;
@@ -2291,7 +2332,8 @@ footer span {
     left: 20px;
   }
   .exp-hover-panel {
-    width: calc(100% - 5.25rem);
+    grid-template-columns: 1fr;
+    width: min(44rem, calc(100vw - 3rem));
   }
 }
 
@@ -2307,6 +2349,23 @@ footer span {
   }
   .hero-name {
     font-size: 3rem;
+  }
+  .hero-identity {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .hero-identity-copy {
+    width: 100%;
+  }
+  .hero-portrait {
+    width: 5.25rem;
+    height: 5.25rem;
+    border-radius: 1.45rem;
+  }
+  .hero-portrait-image {
+    border-radius: 1.23rem;
   }
   .projects-grid {
     grid-template-columns: 1fr;

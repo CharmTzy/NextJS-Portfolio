@@ -32,7 +32,7 @@ export default function ProjectsGrid({ projects = [] }) {
             </div>
             <div className="project-body">
               <div className="project-meta-row">
-                <div className="project-kicker">{card.kicker}</div>
+                <div className="project-kicker">{project.name}</div>
                 <div className="project-meta">
                   <span className="project-meta-item">{project.primaryLanguage}</span>
                   <span className="project-meta-dot" aria-hidden="true">

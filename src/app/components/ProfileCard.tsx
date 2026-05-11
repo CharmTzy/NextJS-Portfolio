@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 type HeroStat = {
   value: string;
   label: string;
@@ -5,6 +7,8 @@ type HeroStat = {
 
 type ProfileCardProps = {
   name: string;
+  profileImageUrl?: string;
+  profileImageAlt?: string;
   role: string;
   location: string;
   tagline: string;
@@ -18,6 +22,8 @@ type ProfileCardProps = {
 
 export default function ProfileCard({
   name,
+  profileImageUrl,
+  profileImageAlt,
   role,
   location,
   tagline,
@@ -44,20 +50,36 @@ export default function ProfileCard({
         </div>
         <span className="hero-location">{location}</span>
       </div>
-      <h1 className={`hero-name${useFullNameLockup ? " hero-name-lockup" : ""}`}>
-        {useFullNameLockup ? (
-          <span className="hero-name-highlight">{trimmed}</span>
-        ) : firstNames ? (
-          <>
-            {firstNames} <span className="hero-name-highlight">{lastName}</span>
-          </>
-        ) : (
-          <span className="hero-name-highlight">{lastName}</span>
-        )}
-      </h1>
-      <div className="hero-role-row">
-        <div className="hero-rule" />
-        <span className="hero-role">{role}</span>
+      <div className="hero-identity">
+        {profileImageUrl ? (
+          <div className="hero-portrait">
+            <Image
+              src={profileImageUrl}
+              alt={profileImageAlt || `Portrait of ${name}`}
+              width={176}
+              height={176}
+              className="hero-portrait-image"
+              priority
+            />
+          </div>
+        ) : null}
+        <div className="hero-identity-copy">
+          <h1 className={`hero-name${useFullNameLockup ? " hero-name-lockup" : ""}`}>
+            {useFullNameLockup ? (
+              <span className="hero-name-highlight">{trimmed}</span>
+            ) : firstNames ? (
+              <>
+                {firstNames} <span className="hero-name-highlight">{lastName}</span>
+              </>
+            ) : (
+              <span className="hero-name-highlight">{lastName}</span>
+            )}
+          </h1>
+          <div className="hero-role-row">
+            <div className="hero-rule" />
+            <span className="hero-role">{role}</span>
+          </div>
+        </div>
       </div>
       <p className="hero-tagline" dangerouslySetInnerHTML={{ __html: tagline }} />
       <div className="hero-actions">

@@ -54,12 +54,12 @@ export const homePageContent = {
       "A curated stack of tools and technologies I use to design, build, deploy, and improve modern digital products.",
   },
   experienceSection: {
-    label: "Experience",
+    label: "Academic & Work",
     title: "Experience",
   },
   projectsSection: {
-    label: "Selected Work",
-    title: "Selected Work",
+    label: "Projects",
+    title: "Projects",
     subtitle:
       "A focused set of projects that best represent my full-stack delivery, practical AI work, and product-level UI polish.",
   },
@@ -74,7 +74,6 @@ export const homePageContent = {
 export const projectsContent = {
   card: {
     badge: "Case study",
-    kicker: "Selected work",
     primaryActionLabel: "Read case study →",
     caseStudyLinkLabel: "Case study",
     githubLinkLabel: "GitHub",

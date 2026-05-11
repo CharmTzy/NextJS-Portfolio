@@ -3,6 +3,8 @@ const GITHUB_USERNAME = "CharmTzy";
 export const personalInfo = {
   name: "Wai Yan",
   shortLogo: "NIK_FIREBALL",
+  profileImageUrl: "/wai-yan-portrait.jpeg",
+  profileImageAlt: "Portrait of Wai Yan Aung",
   role: "AI Engineer",
   location: "Singapore",
   email: "wai71308@gmail.com",
@@ -274,6 +276,21 @@ export const contactLinks = [
 ];
 
 const projectOverrides = {
+  "NextJS-Portfolio": {
+    title: "AI Engineer Portfolio",
+    description: "A personal portfolio website with polished dark-mode UI, project case studies, updates, admin tooling, and verified contact flow.",
+    tags: [
+      { label: "Next.js", variant: "default" },
+      { label: "Portfolio", variant: "purple" },
+      { label: "UI Systems", variant: "green" },
+    ],
+    emoji: "🧠",
+    gradient: "linear-gradient(135deg,#0d1117,#14342f)",
+    imageUrl: "/projects/portfolio-home.png",
+    imageAlt: "AI Engineer Portfolio homepage screenshot",
+    githubUrl: `https://github.com/${GITHUB_USERNAME}/NextJS-Portfolio`,
+    priority: -1,
+  },
   Web_System_Project: {
     title: "Full E-commerce Project",
     description: "A full-featured e-commerce website with product listings, cart, checkout, Stripe payment integration, and an admin dashboard for order and inventory management.",
@@ -349,6 +366,25 @@ const projectOverrides = {
 };
 
 const projectCaseStudyOverrides = {
+  "NextJS-Portfolio": {
+    headline: "A portfolio site designed as a polished product experience instead of a static profile page.",
+    status: "Active portfolio project",
+    role: "Product design, frontend implementation, content architecture, and developer experience",
+    timeline: "Personal build · 2026",
+    challenge: "Build a portfolio that feels memorable and modern while still being structured enough to grow with projects, updates, and future content.",
+    solution: "I designed the site as a reusable Next.js product with themed sections, case-study style project pages, an updates feed, an admin surface, and a verified contact flow to make the portfolio feel alive instead of static.",
+    outcome: "The result is a portfolio that showcases not only my work, but also how I think about interface quality, product structure, and ongoing iteration.",
+    highlights: [
+      "Built a full portfolio system with project detail pages, updates, and admin management screens.",
+      "Designed a strong visual system with dark/light theme support and consistent component styling.",
+      "Added verified contact flow and maintainable project/content data for ongoing updates.",
+    ],
+    learnings: [
+      "A portfolio becomes stronger when it behaves like a real product instead of a one-page resume.",
+      "Content structure matters as much as visual polish when a site needs to keep evolving.",
+      "Small interaction details create trust and make personal work feel more professional.",
+    ],
+  },
   "Phishing-Email-Detection": {
     headline: "A practical phishing-detection demo that turns a rule-based idea into something people can actually test.",
     status: "Live demo available",
@@ -402,6 +438,16 @@ const fallbackProfile = {
 
 const fallbackRepos = [
   {
+    name: "NextJS-Portfolio",
+    description: "Personal portfolio website with project case studies, updates, and a verified contact flow.",
+    language: "JavaScript",
+    stargazers_count: 0,
+    homepage: "",
+    html_url: `https://github.com/${GITHUB_USERNAME}/NextJS-Portfolio`,
+    updated_at: "2026-05-11T00:00:00Z",
+    fork: false,
+  },
+  {
     name: "Web_System_Project",
     description: "Full e-commerce platform with Stripe integration and admin dashboard.",
     language: "JavaScript",
@@ -443,7 +489,7 @@ const fallbackRepos = [
   },
 ];
 
-const INCLUDED_PROJECTS = new Set(["Web_System_Project", "daily-hype", "Phishing-Email-Detection", "Lingo-Man"]);
+const INCLUDED_PROJECTS = new Set(["NextJS-Portfolio", "Web_System_Project", "daily-hype", "Phishing-Email-Detection", "Lingo-Man"]);
 const INCLUDED_PROJECT_LIST = Array.from(INCLUDED_PROJECTS);
 
 function getGradientFromLanguage(language = "") {
@@ -538,7 +584,7 @@ function mapRepository(repo) {
     videoUrl: override.videoUrl || null,
     videoLabel: override.videoLabel || null,
     stars: repo.stargazers_count || 0,
-    priority: override.priority || 999,
+    priority: override.priority ?? 999,
     updatedAt: repo.updated_at,
     updatedLabel: formatProjectDate(repo.updated_at),
     primaryLanguage: repo.language || tags[0]?.label || "Software",
@@ -585,8 +631,8 @@ export async function getPortfolioData() {
   }).filter(Boolean);
 
   const publicRepos = selectedRepos.sort((a, b) => {
-    const aPriority = projectOverrides[a.name]?.priority || 999;
-    const bPriority = projectOverrides[b.name]?.priority || 999;
+    const aPriority = projectOverrides[a.name]?.priority ?? 999;
+    const bPriority = projectOverrides[b.name]?.priority ?? 999;
 
     if (aPriority !== bPriority) {
       return aPriority - bPriority;

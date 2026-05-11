@@ -6,6 +6,8 @@ export default function Welcome({ personalInfo, stats }) {
     <section id="hero">
       <ProfileCard
         name={personalInfo.name}
+        profileImageUrl={personalInfo.profileImageUrl}
+        profileImageAlt={personalInfo.profileImageAlt}
         role={personalInfo.role}
         location={personalInfo.location}
         tagline={personalInfo.tagline}

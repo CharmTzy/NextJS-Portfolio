@@ -20,16 +20,7 @@ export default function ExperienceCard({ experiences = [] }) {
             <div className="exp-period">{experience.period}</div>
           </div>
           <div className="exp-desc">{experience.description}</div>
-          <div className="exp-techs">
-            {experience.techs.map((tech) => (
-              <span
-                key={`${experience.role}-${tech.label}`}
-                className={`tag ${tech.variant === "default" ? "" : tech.variant}`.trim()}
-              >
-                {tech.label}
-              </span>
-            ))}
-          </div>
+        
           {experience.details?.length ? (
             <div className="exp-hover-panel" aria-label={`${experience.role} achievements and projects`}>
               {experience.details.map((section) => (
