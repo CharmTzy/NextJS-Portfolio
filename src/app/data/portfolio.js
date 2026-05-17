@@ -126,24 +126,6 @@ export const experiences = [
     category: "Academic",
     period: "2022 – 2025",
     description: "Completed the Software Development Track with a Minor in 5G & Artificial Intelligence of Things, building full-stack, mobile, security, and low-code projects across the diploma.",
-    techs: [
-      { label: "Next.js", variant: "default" },
-      { label: "TailwindCSS", variant: "purple" },
-      { label: "PostgreSQL", variant: "green" },
-      { label: "OWASP", variant: "default" },
-      { label: "Java", variant: "default" },
-      { label: "AWS", variant: "purple" },
-    ],
-    details: [
-      {
-        title: "Achievements",
-        items: ["Third Prize in Seed Code League Competition at Singapore Polytechnic in 2023.", "Learned and applied OWASP Top 10 security practices in coursework."],
-      },
-      {
-        title: "Academic Projects",
-        items: ["DailyHype e-commerce website with Next.js, TailwindCSS, PostgreSQL, and SDLC practice.", "Frontend responsive portfolio built with Bootstrap and JavaScript.", "DVD store with Express, plus a bookstore with Java, Apache Tomcat, and AWS.", "Productivity mobile app with Snake Game and Tic Tac Toe using React Native and Firebase.", "Low-code Food Waste Reduction project using Mendix Studio and MySQL Workbench."],
-      },
-    ],
   },
   {
     role: "IT Application Engineer",
@@ -152,34 +134,6 @@ export const experiences = [
     companyUrl: "https://bitcare.sg",
     period: "Mar 2024 – Jan 2025",
     description: "Built and supported healthcare application systems, nurse-call device workflows, DevOps tasks, content updates, and technical research during the internship.",
-    techs: [
-      { label: "React Native", variant: "default" },
-      { label: "Next.js", variant: "purple" },
-      { label: "TailwindCSS", variant: "green" },
-      { label: "AWS EC2", variant: "default" },
-      { label: "S3", variant: "purple" },
-      { label: "DevOps", variant: "default" },
-    ],
-    details: [
-      {
-        title: "Internship Projects",
-        items: ["Developed an Alert Alarm System connecting local nurse-call devices to a React Native mobile app and a Next.js/TailwindCSS website.", "Developed an Inventory System for nurse-call device warranty checks, automated database entry, data management, and role-based access.", "Managed website design, content, DevOps, branding, and logo design work."],
-      },
-      {
-        title: "Impact",
-        items: [
-          "Worked on nurse-call system device configuration, deployment, and troubleshooting for healthcare and assisted-living projects.",
-          "Researched Europe market compliance requirements, including HTM compliance reviews and design recommendations.",
-          "Supported system inventory management, database maintenance, and more efficient internal operational workflows.",
-        ],
-      },
-    ],
-    testimonial: {
-      quote:
-        "Wai Yan has been an invaluable member of our team. His hard work, technical acumen, and dedication to continuous improvement position him as an exceptional candidate for technical roles.",
-      author: "Javier Boon",
-      title: "Manager, BitCare",
-    },
     testimonialFile: {
       href: "/bitcare-recommendation-letter.pdf",
       label: "BitCare Recommendation Letter (PDF)",
@@ -192,32 +146,6 @@ export const experiences = [
     category: "Freelance",
     period: "2024 – Ongoing",
     description: "Delivered rapid-turnaround freelance builds across Android, web systems, databases, and hardware prototypes, often shipping working results within a few days.",
-    techs: [
-      { label: "Java", variant: "default" },
-      { label: "SQLite", variant: "purple" },
-      { label: "Django", variant: "green" },
-      { label: "Prisma", variant: "default" },
-      { label: "Azure", variant: "purple" },
-      { label: "C++", variant: "default" },
-    ],
-    details: [
-      {
-        title: "Freelance Projects",
-        items: [
-          "Developed a Note Taking and Diary Android app with Java and SQLite in 2 days.",
-          "Developed a School Management System with REST API, Prisma, and Microsoft Azure hosting via GitHub Actions in 4 days.",
-          "Developed a Home Energy Saving Prototype using C++ with a microcontroller board in 2 days.",
-        ],
-      },
-      {
-        title: "Delivery Style",
-        items: [
-          "Worked across mobile, web, backend, database, and hardware contexts depending on project needs.",
-          "Focused on quick execution and turning requirements into usable working prototypes fast.",
-          "Adapted the stack to each build instead of relying on one fixed implementation path.",
-        ],
-      },
-    ],
   },
   {
     role: "Bachelor of Science in Applied Artificial Intelligence",
@@ -225,22 +153,6 @@ export const experiences = [
     category: "Academic",
     period: "2025 – Ongoing",
     description: "Currently pursuing an applied AI degree while continuing to connect software engineering, security, full-stack delivery, and practical AI project work.",
-    techs: [
-      { label: "Python", variant: "default" },
-      { label: "Applied AI", variant: "purple" },
-      { label: "Machine Learning", variant: "green" },
-      { label: "Software Engineering", variant: "default" },
-    ],
-    details: [
-      {
-        title: "Current Focus",
-        items: ["Building deeper foundations in applied artificial intelligence and practical AI systems.", "Extending the software development background from polytechnic, internship, and portfolio projects into AI-focused engineering.", "Continuing hands-on learning through security, web, mobile, and product-style projects."],
-      },
-      {
-        title: "Project Direction",
-        items: ["Connecting AI learning with deployable portfolio work, including phishing detection and full-stack applications.", "Strengthening product-minded engineering through clean interfaces, maintainable architecture, and real deployment workflows."],
-      },
-    ],
   },
 ];
 

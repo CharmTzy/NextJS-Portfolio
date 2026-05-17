@@ -160,14 +160,12 @@ body {
   opacity: 0.9;
 }
 
-/* moving accent dot */
+/* grid accent marker */
 .site-background::after {
   content: "";
   position: absolute;
-  width: 9px;
-  height: 9px;
-  margin-left: -5px;
-  margin-top: -5px;
+  width: 10px;
+  height: 10px;
   border-radius: 999px;
   background: var(--accent);
   box-shadow:
@@ -176,12 +174,15 @@ body {
     0 0 22px 4px rgba(var(--accent-rgb), 0.24);
   opacity: var(--dot-opacity, 0);
 
-  left: 0;
-  top: 0;
-  transform: translate3d(var(--dot-x, 70vw), var(--dot-y, 70vh), 0);
-  transition: opacity 0.4s ease;
+  left: var(--dot-x, 75vw);
+  top: var(--dot-y, 50vh);
+  transform: translate3d(-50%, -50%, 0);
+  transition:
+    left 0.32s ease,
+    top 0.32s ease,
+    opacity 0.25s ease;
   animation: dot-pulse 2.4s ease-in-out infinite;
-  will-change: transform;
+  will-change: left, top;
 }
 
 @keyframes dot-pulse {
@@ -534,9 +535,10 @@ nav {
   height: clamp(4.85rem, 9vw, 6.75rem);
   padding: 0.22rem;
   border-radius: 1.6rem;
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.18) 0%, rgba(23, 184, 166, 0.4) 100%);
-  box-shadow: 0 22px 48px rgba(4, 10, 18, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-bright) 100%);
+  box-shadow:
+    0 18px 44px rgba(var(--accent-rgb), 0.16),
+    0 0 0 1px rgba(var(--accent-bright-rgb), 0.18);
   flex-shrink: 0;
 }
 
@@ -948,7 +950,6 @@ nav {
   position: relative;
 }
 
-/* Left timeline rail */
 .timeline::before {
   content: "";
   position: absolute;
@@ -966,31 +967,18 @@ nav {
   background: rgba(255, 255, 255, 0.02);
   backdrop-filter: blur(14px);
   padding: 2rem 2.25rem 2rem 4.25rem;
+  position: relative;
   transition:
     background 0.2s,
     box-shadow 0.2s;
-  position: relative;
-  overflow: visible;
-  z-index: 0;
 }
 
 .exp-card:hover,
 .exp-card:focus-within {
   background: var(--card-hover);
   box-shadow: inset 0 0 0 1px var(--accent-border);
-  z-index: 8;
 }
 
-.exp-card:focus-visible {
-  outline: 2px solid var(--accent-border);
-  outline-offset: -6px;
-}
-
-.exp-card::before {
-  content: none;
-}
-
-/* Timeline dot per experience */
 .exp-card::after {
   content: "";
   position: absolute;
@@ -1073,136 +1061,9 @@ a.exp-company:hover {
   font-size: 0.875rem;
   color: var(--muted2);
   line-height: 1.85;
-  margin-bottom: 1.1rem;
-}
-
-.exp-techs {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.45rem;
-}
-
-.exp-hover-panel {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.85rem;
-  width: min(52rem, calc(100vw - 5rem));
-  margin-top: 0;
-  opacity: 0;
-  overflow: visible;
-  padding: 1.15rem;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  border: 1px solid var(--accent-border);
-  border-radius: 22px;
-  background:
-    linear-gradient(140deg, rgba(var(--accent-rgb), 0.14), transparent 38%),
-    var(--card);
-  box-shadow: var(--card-hover-shadow);
-  backdrop-filter: blur(22px);
-  pointer-events: none;
-  transform: translate(-50%, -50%) translateY(12px) scale(0.98);
-  transition:
-    opacity 0.24s ease,
-    transform 0.24s ease;
-  z-index: 10;
-}
-
-.exp-card:hover .exp-hover-panel,
-.exp-card:focus-within .exp-hover-panel {
-  opacity: 1;
-  pointer-events: auto;
-  transform: translate(-50%, -50%) scale(1);
-}
-
-.exp-detail-card {
-  border: 1px solid var(--border2);
-  border-radius: var(--radius-md);
-  background:
-    linear-gradient(135deg, rgba(var(--accent-rgb), 0.08), transparent 44%),
-    var(--tag-bg);
-  padding: 1rem;
-}
-
-.exp-detail-title {
-  color: var(--text);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-}
-
-.exp-detail-list {
-  color: var(--muted2);
-  display: grid;
-  gap: 0.55rem;
-  font-size: 0.78rem;
-  line-height: 1.65;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.exp-detail-list li {
-  position: relative;
-  padding-left: 1rem;
-}
-
-.exp-detail-list li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.72em;
-  width: 5px;
-  height: 5px;
-  border-radius: 999px;
-  background: var(--accent);
-  box-shadow: 0 0 0 4px var(--accent-dim);
-}
-
-.exp-testimonial-card {
-  grid-column: 1 / -1;
-  border: 1px solid var(--accent-border);
-  border-radius: var(--radius-md);
-  background:
-    linear-gradient(135deg, rgba(var(--accent-rgb), 0.14), transparent 52%),
-    var(--card);
-  padding: 1.1rem 1.15rem;
-}
-
-.exp-testimonial-quote {
-  color: var(--text);
-  font-size: 0.9rem;
-  font-style: italic;
-  line-height: 1.8;
-  margin: 0;
-}
-
-.exp-testimonial-author {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem 0.9rem;
-  margin-top: 0.9rem;
-}
-
-.exp-testimonial-author span:first-child {
-  color: var(--accent-bright);
-  font-family: var(--font-jetbrains-mono), monospace;
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-}
-
-.exp-testimonial-author span:last-child {
-  color: var(--muted2);
-  font-size: 0.78rem;
 }
 
 .exp-testimonial-file {
-  grid-column: 1 / -1;
   align-items: center;
   border: 1px solid var(--border2);
   border-radius: var(--radius-md);
@@ -1210,6 +1071,8 @@ a.exp-company:hover {
   display: flex;
   gap: 1rem;
   justify-content: space-between;
+  margin-top: 1rem;
+  max-width: 46rem;
   padding: 1rem 1.1rem;
   transition:
     border-color 0.2s ease,
@@ -2290,9 +2153,6 @@ footer span {
     gap: 0;
     padding-top: 2.25rem;
   }
-  .hero-identity {
-    align-items: flex-start;
-  }
   .hero-stats > div {
     border-right: none;
     padding: 1.25rem 0;
@@ -2330,10 +2190,6 @@ footer span {
   }
   .exp-card::after {
     left: 20px;
-  }
-  .exp-hover-panel {
-    grid-template-columns: 1fr;
-    width: min(44rem, calc(100vw - 3rem));
   }
 }
 
@@ -2387,21 +2243,6 @@ footer span {
   .project-detail-title {
     font-size: 2.5rem;
   }
-  .exp-hover-panel {
-    width: auto;
-    margin-top: 1rem;
-    opacity: 1;
-    overflow: visible;
-    padding: 0;
-    position: static;
-    border: none;
-    border-radius: 0;
-    background: none;
-    box-shadow: none;
-    backdrop-filter: none;
-    pointer-events: auto;
-    transform: none;
-  }
   .exp-testimonial-file {
     align-items: flex-start;
     flex-direction: column;
@@ -2444,10 +2285,9 @@ footer span {
   }
 
   .site-background::after {
-    opacity: 0.25;
-    left: 60%;
-    top: 20%;
-    transform: translate3d(0, 0, 0) !important;
+    opacity: 0.6;
     transition: none !important;
+    animation: none !important;
+    will-change: auto;
   }
 }

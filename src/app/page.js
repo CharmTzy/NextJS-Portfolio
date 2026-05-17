@@ -20,7 +20,7 @@ export default async function Home() {
 
   return (
     <main className="site-shell">
-      <SiteBackground animateDot anchorSelector=".hero-name" />
+      <SiteBackground />
 
       <Navbar logo={personalInfo.shortLogo} />
 
