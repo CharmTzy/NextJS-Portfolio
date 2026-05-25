@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+<div align="center">
+
+# Wai Yan Portfolio
+
+AI Engineer portfolio built with Next.js, React, Tailwind CSS, and a clean project-first content system.
+
+![Next.js](https://img.shields.io/badge/Next.js-15-black?style=for-the-badge&logo=nextdotjs)
+![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=111)
+![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-3-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2023-F7DF1E?style=for-the-badge&logo=javascript&logoColor=111)
+
+</div>
+
+## Preview
+
+<img src="public/portfolio-homepage-preview.jpg" alt="Wai Yan portfolio homepage preview" width="100%" />
+
+## About
+
+This is my personal portfolio for presenting who I am, what I build, and the projects that best represent my work across full-stack development, practical AI, security, and polished product interfaces.
+
+The site is designed to feel more like a real product than a static profile page. It includes a strong homepage, curated skills, experience, project case studies, updates, admin tooling, theme support, and a verified contact flow.
+
+## Highlights
+
+- Homepage hero with profile photo, availability status, project navigation, and dark visual system.
+- Curated skills across programming, web and API work, databases, cloud, AI, ML, tooling, and deployment.
+- Project system backed by GitHub data with selected overrides for stronger case studies.
+- Project detail pages for portfolio work, e-commerce builds, phishing detection, and Lingo-Man.
+- Updates feed and admin screens for managing portfolio content.
+- Verified contact form with email code flow and Nodemailer delivery.
+- Dark and light theme support through `next-themes`.
+
+## Tech Stack
+
+| Area | Tools |
+| --- | --- |
+| Framework | Next.js 15, React 18 |
+| Styling | Tailwind CSS, custom global design system |
+| UI | Lucide React, Heroicons, reusable app components |
+| Data | GitHub API, local portfolio content maps |
+| Contact | Next.js API routes, Nodemailer, email verification |
+| Deployment | Vercel-ready Next.js app |
+
+## Featured Projects
+
+- **AI Engineer Portfolio**: this portfolio, with project case studies, updates, admin tooling, and contact flow.
+- **Full E-commerce Project**: e-commerce platform with product listings, cart, checkout, Stripe payments, and admin dashboard.
+- **Daily-Hype**: fashion and lifestyle e-commerce storefront deployed on Vercel.
+- **Phishing Detection Website**: interactive security-focused phishing detection experience.
+- **Lingo-Man**: language-learning web app with a polished product-style UI.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies:
+
+```bash
+npm install
+```
+
+Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+The portfolio works without mail credentials, but the contact form needs SMTP configuration to send messages.
 
-## Learn More
+Common local setup:
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+SMTP_HOST=smtp.gmail.com
+SMTP_PORT=465
+SMTP_USER=your-email@gmail.com
+SMTP_PASS=your-app-password
+CONTACT_TO_EMAIL=wai71308@gmail.com
+CONTACT_EMAIL_VERIFY_SECRET=your-local-secret
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The API also supports equivalent `EMAIL_*`, `MAIL_*`, and `GMAIL_*` variable names.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Scripts
 
-## Deploy on Vercel
+```bash
+npm run dev      # Start local development
+npm run build    # Build for production
+npm run start    # Start the production server
+npm run lint     # Run Next.js linting
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Project Structure
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+```text
+src/app
+|-- api/contact          # Contact form and email verification API
+|-- components           # Shared UI and page components
+|-- data                 # Portfolio content, routes, metadata, and updates
+|-- pages                # Homepage sections
+|-- projects/[slug]      # Project case study pages
+|-- updates              # Public updates page
+`-- page.js              # Homepage composition
+```
+
+## Contact
+
+- GitHub: [CharmTzy](https://github.com/CharmTzy)
+- LinkedIn: [linkedin.com/in/wai-yan-1839512a8](https://sg.linkedin.com/in/wai-yan-1839512a8)
+- Email: [wai71308@gmail.com](mailto:wai71308@gmail.com)
