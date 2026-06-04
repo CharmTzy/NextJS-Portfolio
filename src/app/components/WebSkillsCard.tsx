@@ -43,8 +43,9 @@ function resolveIconHex(iconSlug: string, fallback: string, theme: "dark" | "lig
   return fallback;
 }
 
-function buildIconSrc(iconSlug: string, hex: string) {
-  return `https://cdn.simpleicons.org/${iconSlug}/${hex}`;
+/** Self-hosted monochrome icons live in /public/icons; the brand color is applied via CSS mask. */
+function buildIconSrc(iconSlug: string) {
+  return `/icons/${iconSlug}.svg`;
 }
 
 export default function WebSkillsCard({ skills = [] }) {
@@ -106,12 +107,25 @@ export default function WebSkillsCard({ skills = [] }) {
 
       <FadeUp className="skill-tile-grid">
         {visibleItems.map((item) => {
-          const hex = resolveIconHex(item.iconSlug, item.color, theme);
-          const src = item.iconUrl ?? buildIconSrc(item.iconSlug, hex);
+          // Multicolor brand marks keep their own artwork; monochrome icons are
+          // tinted per-theme through a CSS mask so a single SVG works on both themes.
+          const logo = item.iconUrl ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img className="skill-tile-logo" src={item.iconUrl} alt="" aria-hidden="true" />
+          ) : (
+            <span
+              className="skill-tile-logo skill-tile-logo--mask"
+              style={{
+                WebkitMaskImage: `url(${buildIconSrc(item.iconSlug)})`,
+                maskImage: `url(${buildIconSrc(item.iconSlug)})`,
+                backgroundColor: `#${resolveIconHex(item.iconSlug, item.color, theme)}`,
+              }}
+              aria-hidden="true"
+            />
+          );
           return (
             <div key={`${item.groupTitle}-${item.label}`} className="skill-tile" title={item.groupTitle}>
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img className="skill-tile-logo" src={src} alt="" aria-hidden="true" />
+              {logo}
               <div className="skill-tile-label">{item.label}</div>
             </div>
           );

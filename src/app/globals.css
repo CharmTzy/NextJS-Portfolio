@@ -918,6 +918,17 @@ nav {
   filter: drop-shadow(0 10px 28px rgba(0, 0, 0, 0.22));
 }
 
+/* Monochrome icons: the SVG is used as a mask and tinted via background-color. */
+.skill-tile-logo--mask {
+  display: inline-block;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
 [data-theme="light"] .skill-tile-logo {
   filter: drop-shadow(0 10px 22px rgba(15, 23, 42, 0.12));
 }
