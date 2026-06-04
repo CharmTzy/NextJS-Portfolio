@@ -190,7 +190,7 @@ export const contactLinks = [
 const projectOverrides = {
   "NextJS-Portfolio": {
     title: "AI Engineer Portfolio",
-    description: "A personal portfolio website with polished dark-mode UI, project case studies, updates, admin tooling, and verified contact flow.",
+    description: "A personal portfolio website with polished dark-mode UI, project case studies, and a verified contact flow.",
     tags: [
       { label: "Next.js", variant: "default" },
       { label: "Portfolio", variant: "purple" },
@@ -283,13 +283,13 @@ const projectCaseStudyOverrides = {
     status: "Active portfolio project",
     role: "Product design, frontend implementation, content architecture, and developer experience",
     timeline: "Personal build · 2026",
-    challenge: "Build a portfolio that feels memorable and modern while still being structured enough to grow with projects, updates, and future content.",
-    solution: "I designed the site as a reusable Next.js product with themed sections, case-study style project pages, an updates feed, an admin surface, and a verified contact flow to make the portfolio feel alive instead of static.",
+    challenge: "Build a portfolio that feels memorable and modern while still being structured enough to grow with new projects and future content.",
+    solution: "I designed the site as a reusable Next.js product with themed sections, case-study style project pages, and a verified contact flow to make the portfolio feel alive instead of static.",
     outcome: "The result is a portfolio that showcases not only my work, but also how I think about interface quality, product structure, and ongoing iteration.",
     highlights: [
-      "Built a full portfolio system with project detail pages, updates, and admin management screens.",
+      "Built a full portfolio system with project detail pages and reusable, content-driven sections.",
       "Designed a strong visual system with dark/light theme support and consistent component styling.",
-      "Added verified contact flow and maintainable project/content data for ongoing updates.",
+      "Added verified contact flow and maintainable project/content data for ongoing iteration.",
     ],
     learnings: [
       "A portfolio becomes stronger when it behaves like a real product instead of a one-page resume.",
@@ -351,7 +351,7 @@ const fallbackProfile = {
 const fallbackRepos = [
   {
     name: "NextJS-Portfolio",
-    description: "Personal portfolio website with project case studies, updates, and a verified contact flow.",
+    description: "Personal portfolio website with project case studies and a verified contact flow.",
     language: "JavaScript",
     stargazers_count: 0,
     homepage: "",

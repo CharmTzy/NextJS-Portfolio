@@ -4,9 +4,6 @@ export const siteRoutes = {
   home: "/",
   homeContact: "/#contact",
   homeProjects: "/#projects",
-  updates: "/updates",
-  admin: "/admin",
-  adminUpdates: "/admin/updates",
 };
 
 export const siteMetadata = {
@@ -19,7 +16,6 @@ export const navigationContent = {
     { label: "Skills", sectionId: "skills", href: "/#skills" },
     { label: "Experience", sectionId: "experience", href: "/#experience" },
     { label: "Projects", sectionId: "projects", href: siteRoutes.homeProjects },
-    { label: "Updates", href: siteRoutes.updates },
     { label: "Contact", sectionId: "contact", href: siteRoutes.homeContact },
   ],
   ctaHref: "#contact",
