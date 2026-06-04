@@ -49,31 +49,35 @@ export default async function ProjectDetailPage({ params }) {
 
       <section className="project-detail-hero">
         <div className="section-wrap">
+          <Link href={siteRoutes.homeProjects} className="project-back-link">
+            {projectsContent.detail.backLinkLabel}
+          </Link>
+
+          <FadeUp className="project-detail-head">
+            <div className="hero-badge">
+              <div className="badge-dot" />
+              {project.caseStudy.status}
+            </div>
+            {project.imageUrl ? (
+              <div className="project-detail-banner" style={{ background: project.gradient }}>
+                <Image
+                  src={project.imageUrl}
+                  alt={project.imageAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 1200px) 100vw, 1200px"
+                  className="project-detail-preview-image"
+                />
+              </div>
+            ) : (
+              <div className="project-detail-emoji" style={{ background: project.gradient }}>
+                <span>{project.emoji}</span>
+              </div>
+            )}
+          </FadeUp>
+
           <div className="project-detail-grid">
             <FadeUp className="project-detail-copy">
-              <Link href={siteRoutes.homeProjects} className="project-back-link">
-                {projectsContent.detail.backLinkLabel}
-              </Link>
-              <div className="hero-badge">
-                <div className="badge-dot" />
-                {project.caseStudy.status}
-              </div>
-              {project.imageUrl ? (
-                <div className="project-detail-preview" style={{ background: project.gradient }}>
-                  <Image
-                    src={project.imageUrl}
-                    alt={project.imageAlt}
-                    fill
-                    priority
-                    sizes="(max-width: 900px) 100vw, 680px"
-                    className="project-detail-preview-image"
-                  />
-                </div>
-              ) : (
-                <div className="project-detail-emoji" style={{ background: project.gradient }}>
-                  <span>{project.emoji}</span>
-                </div>
-              )}
               <h1 className="project-detail-title">{project.name}</h1>
               <p className="project-detail-headline">{project.caseStudy.headline}</p>
               <div className="hero-actions">

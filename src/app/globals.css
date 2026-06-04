@@ -1812,21 +1812,29 @@ footer span {
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
 }
 
-.project-detail-preview {
+.project-detail-head {
+  margin-bottom: 2.75rem;
+}
+
+.project-detail-head .hero-badge {
+  margin-bottom: 1.35rem;
+}
+
+.project-detail-banner {
   position: relative;
-  width: min(100%, 680px);
-  aspect-ratio: 16 / 9;
-  border-radius: 18px;
+  width: 100%;
+  aspect-ratio: 21 / 9;
+  border-radius: 20px;
   border: 1px solid var(--border2);
   overflow: hidden;
   box-shadow: var(--card-shadow);
 }
 
-.project-detail-preview::after {
+.project-detail-banner::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(to bottom, transparent 68%, rgba(0, 0, 0, 0.22));
+  background: linear-gradient(to bottom, transparent 72%, rgba(0, 0, 0, 0.28));
   pointer-events: none;
 }
 
@@ -2164,6 +2172,12 @@ footer span {
   .project-detail-grid,
   .project-body-grid {
     grid-template-columns: 1fr;
+  }
+  .project-detail-banner {
+    aspect-ratio: 16 / 10;
+  }
+  .project-detail-head {
+    margin-bottom: 2rem;
   }
   .admin-dashboard-grid,
   .admin-layout {
