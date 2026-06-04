@@ -180,7 +180,7 @@ export const contactLinks = [
   },
   {
     label: "Resume",
-    value: "Download PDF",
+    value: "View PDF",
     href: personalInfo.resumeUrl,
     icon: "📄",
     iconBackground: "rgba(56,189,248,0.15)",

@@ -170,9 +170,8 @@ export default function ContactSection({ links = [], intro }) {
               key={link.label}
               href={link.href}
               className="contact-link"
-              target={link.href.startsWith("mailto:") || link.href.startsWith("/") ? undefined : "_blank"}
-              rel={link.href.startsWith("mailto:") || link.href.startsWith("/") ? undefined : "noreferrer"}
-              download={link.href.startsWith("/") ? true : undefined}
+              target={link.href.startsWith("mailto:") ? undefined : "_blank"}
+              rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"}
             >
               <div className="cl-icon" style={{ background: link.iconBackground }}>
                 {link.icon}
