@@ -96,5 +96,13 @@ export default function SiteBackground() {
     };
   }, []);
 
-  return <div ref={bgRef} className="site-background" aria-hidden="true" />;
+  return (
+    <div ref={bgRef} className="site-background" aria-hidden="true">
+      <div className="grid-dot">
+        <span className="grid-dot__ring" />
+        <span className="grid-dot__ring grid-dot__ring--delayed" />
+        <span className="grid-dot__core" />
+      </div>
+    </div>
+  );
 }
