@@ -3,14 +3,14 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Background grid + a perpetually drifting accent marker.
+ * Background grid + an accent marker that travels the grid lines.
  *
- * The marker glides continuously between free grid intersections — spots
- * where nothing paints (no text, cards, images, buttons) — steering with
- * a soft spring so it never stops, and leaving a fading trail on a canvas
- * behind it. The viewport is re-scanned twice a second so the marker can
- * slip away when content moves over its position, and it fades out
- * entirely when there is no free space.
+ * The marker runs along grid lines like a signal on a circuit trace —
+ * straight runs, right-angle turns at intersections, never stopping —
+ * and leaves a slowly fading glow mark on the lines it has traveled.
+ * It only enters intersections and segments that are clear of painted
+ * content (text, cards, images, buttons); when its position gets covered
+ * or it has nowhere safe to go, it dissolves and respawns in free space.
  */
 export default function SiteBackground() {
   const bgRef = useRef(null);
@@ -29,33 +29,27 @@ export default function SiteBackground() {
     const SAFETY_DEBOUNCE = 160; // extra scan after scroll/resize bursts (ms)
     const CLEARANCE = 36; // min gap between the dot and content (px)
     const EDGE = 48; // min gap from viewport edges (px)
-    const NEAR_CELLS = 5; // wander legs stay within this many grid cells
-    const ARRIVE = 40; // retarget this early so motion never stops (px)
-    const PATH_PAD = 28; // travel paths keep this margin from content (px)
-    const SPRING = 3; // idle glide stiffness
-    const DAMP = 3.45; // just under critical damping → soft arcs
-    const EVADE_SPRING = 12; // quicker step-aside when content covers the spot
-    const EVADE_DAMP = 7;
+    const PATH_PAD = 24; // traveled segments keep this margin from content (px)
+    const SPEED = 120; // travel speed along grid lines (px/s)
+    const STRAIGHT_BIAS = 0.65; // odds of continuing straight through an intersection
     const MAX_DT = 0.05; // clamp frame delta (s), e.g. after tab switches
-    const TRAIL_FADE = 4.2; // trail dissolve rate (/s)
-    const TRAIL_WIDTH = 5; // px
-    const TRAIL_ALPHA = 0.4;
+    const TRAIL_FADE = 0.8; // mark dissolve rate (/s) — lingers a few seconds
+    const FADE_CHUNK = 0.09; // apply fade in chunks so 8-bit alpha fully clears (s)
 
     const PAINTED_TAGS = /^(IMG|SVG|VIDEO|CANVAS|PICTURE|IFRAME|BUTTON|INPUT|TEXTAREA|SELECT)$/;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const paintCache = new WeakMap();
 
-    let pos = null;
-    let vel = { x: 0, y: 0 };
-    let target = null;
+    let pos = null; // current position, always on a grid line
+    let from = null; // intersection the current segment started at
+    let to = null; // intersection the marker is heading to
     let prev = null; // last trail point
-    let lastPoints = [];
     let lastRects = [];
-    let evading = false;
     let visible = false;
     let accent = "23, 184, 166";
     let rafId = 0;
     let lastTime = 0;
+    let fadeAcc = 0;
     let pollTimer = 0;
     let burstTimer = 0;
 
@@ -114,37 +108,6 @@ export default function SiteBackground() {
         (r) => x < r.left - CLEARANCE || x > r.right + CLEARANCE || y < r.top - CLEARANCE || y > r.bottom + CLEARANCE,
       );
 
-    /** All free grid intersections plus the occluder rects that shaped them. */
-    const scan = () => {
-      const rects = getOccluderRects();
-      const gridSize = getGridSize();
-      const start = Math.ceil(EDGE / gridSize) * gridSize;
-      const points = [];
-
-      for (let x = start; x <= window.innerWidth - EDGE; x += gridSize) {
-        for (let y = start; y <= window.innerHeight - EDGE; y += gridSize) {
-          if (isFree(x, y, rects)) points.push({ x, y });
-        }
-      }
-
-      return { rects, points };
-    };
-
-    const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
-
-    const nearestOf = (points, x, y) => {
-      let best = points[0];
-      let bestDist = Infinity;
-      for (const p of points) {
-        const d = (p.x - x) ** 2 + (p.y - y) ** 2;
-        if (d < bestDist) {
-          bestDist = d;
-          best = p;
-        }
-      }
-      return best;
-    };
-
     /** Liang-Barsky: does segment a→b cross the rect inflated by pad? */
     const segmentHitsRect = (a, b, r, pad) => {
       const dx = b.x - a.x;
@@ -176,31 +139,62 @@ export default function SiteBackground() {
       return true;
     };
 
-    /**
-     * Next wander leg: a nearby free point, preferring the current heading
-     * and a travel path that does not cross content.
-     */
-    const pickNextTarget = (points) => {
+    /** All free grid intersections plus the occluder rects that shaped them. */
+    const scan = () => {
+      const rects = getOccluderRects();
       const gridSize = getGridSize();
-      const range = NEAR_CELLS * gridSize;
-      const minLeg = gridSize * 0.75;
+      const start = Math.ceil(EDGE / gridSize) * gridSize;
+      const points = [];
 
-      let candidates = points.filter((p) => {
-        const dx = p.x - pos.x;
-        const dy = p.y - pos.y;
-        return Math.abs(dx) <= range && Math.abs(dy) <= range && Math.hypot(dx, dy) > minLeg;
-      });
-
-      if (Math.hypot(vel.x, vel.y) > 24) {
-        const ahead = candidates.filter((p) => (p.x - pos.x) * vel.x + (p.y - pos.y) * vel.y > 0);
-        if (ahead.length) candidates = ahead;
+      for (let x = start; x <= window.innerWidth - EDGE; x += gridSize) {
+        for (let y = start; y <= window.innerHeight - EDGE; y += gridSize) {
+          if (isFree(x, y, rects)) points.push({ x, y });
+        }
       }
 
-      const clearPath = candidates.filter((p) => !lastRects.some((r) => segmentHitsRect(pos, p, r, PATH_PAD)));
-      if (clearPath.length) candidates = clearPath;
+      return { rects, points };
+    };
 
-      if (!candidates.length) candidates = points;
-      return randomOf(candidates);
+    const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    /**
+     * Where to go from the intersection `to`: an adjacent intersection
+     * that is free and reachable along a clear grid segment. Prefers
+     * continuing straight, avoids doubling back unless dead-ended.
+     */
+    const chooseNext = () => {
+      const gridSize = getGridSize();
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const hx = Math.sign(to.x - from.x);
+      const hy = Math.sign(to.y - from.y);
+      const options = [];
+
+      for (const [dx, dy] of [
+        [1, 0],
+        [-1, 0],
+        [0, 1],
+        [0, -1],
+      ]) {
+        const n = { x: to.x + dx * gridSize, y: to.y + dy * gridSize };
+        if (n.x < EDGE || n.x > width - EDGE || n.y < EDGE || n.y > height - EDGE) continue;
+        if (!isFree(n.x, n.y, lastRects)) continue;
+        if (lastRects.some((r) => segmentHitsRect(to, n, r, PATH_PAD))) continue;
+
+        options.push({
+          point: n,
+          straight: dx === hx && dy === hy,
+          reverse: dx === -hx && dy === -hy && (hx !== 0 || hy !== 0),
+        });
+      }
+
+      if (!options.length) return null;
+
+      const forward = options.filter((o) => !o.reverse);
+      const pool = forward.length ? forward : options;
+      const straight = pool.find((o) => o.straight);
+      if (straight && Math.random() < STRAIGHT_BIAS) return straight.point;
+      return randomOf(pool).point;
     };
 
     const applyTransform = () => {
@@ -217,43 +211,50 @@ export default function SiteBackground() {
       visible = false;
     };
 
-    /** Re-read the world: free spots, theme accent; reposition if needed. */
+    /** Re-read the world: free spots, theme accent; react to coverage. */
     const refresh = () => {
       accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim() || accent;
       const { rects, points } = scan();
+      lastRects = rects;
 
       if (!points.length) {
         hide();
         return;
       }
 
-      lastPoints = points;
-      lastRects = rects;
-
       if (!visible) {
-        // reappear in place — no streak from a stale position
-        target = randomOf(points);
-        pos = { ...target };
-        prev = { ...target };
-        vel = { x: 0, y: 0 };
+        // respawn at a free intersection — no streak from a stale position
+        const spawn = randomOf(points);
+        pos = { ...spawn };
+        from = { ...spawn };
+        to = { ...spawn };
+        prev = { ...spawn };
         applyTransform();
         show();
         return;
       }
 
       if (!isFree(pos.x, pos.y, rects)) {
-        evading = true;
-        target = nearestOf(points, pos.x, pos.y);
-      } else if (!points.some((p) => p.x === target.x && p.y === target.y)) {
-        target = pickNextTarget(points);
+        // content slid over the marker — dissolve; a later poll respawns it
+        hide();
+        return;
       }
 
-      if (reduceMotion.matches) {
-        // no animation loop → place instantly
-        pos = { ...target };
-        vel = { x: 0, y: 0 };
-        evading = false;
-        applyTransform();
+      if (reduceMotion.matches) return;
+
+      // path ahead compromised → double back along the same line if clear
+      const aheadBlocked =
+        !isFree(to.x, to.y, rects) || rects.some((r) => segmentHitsRect(pos, to, r, PATH_PAD));
+      if (aheadBlocked) {
+        const backClear =
+          isFree(from.x, from.y, rects) && !rects.some((r) => segmentHitsRect(pos, from, r, PATH_PAD));
+        if (backClear) {
+          const swap = from;
+          from = to;
+          to = swap;
+        } else {
+          hide();
+        }
       }
     };
 
@@ -268,44 +269,75 @@ export default function SiteBackground() {
     };
 
     const fadeTrail = (dt) => {
+      fadeAcc += dt;
+      if (fadeAcc < FADE_CHUNK) return;
+      const alpha = 1 - Math.exp(-TRAIL_FADE * fadeAcc);
+      fadeAcc = 0;
       ctx.save();
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.globalCompositeOperation = "destination-out";
-      ctx.fillStyle = `rgba(0, 0, 0, ${1 - Math.exp(-TRAIL_FADE * dt)})`;
+      ctx.fillStyle = `rgba(0, 0, 0, ${alpha})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
       ctx.restore();
     };
 
-    const drawTrail = () => {
-      if (!prev) {
-        prev = { ...pos };
-        return;
+    /**
+     * Advance along the current segment at constant speed, carrying
+     * leftover distance through intersections so motion never pauses.
+     * Returns the intersections passed this frame (for crisp trail corners).
+     */
+    const step = (dt) => {
+      let travel = SPEED * dt;
+      const corners = [];
+      let guard = 8;
+
+      while (travel > 0 && guard-- > 0) {
+        const remaining = Math.abs(to.x - pos.x) + Math.abs(to.y - pos.y);
+        if (travel < remaining) {
+          pos.x += Math.sign(to.x - pos.x) * travel;
+          pos.y += Math.sign(to.y - pos.y) * travel;
+          break;
+        }
+
+        travel -= remaining;
+        pos.x = to.x;
+        pos.y = to.y;
+        corners.push({ x: to.x, y: to.y });
+
+        const next = chooseNext();
+        if (!next) {
+          // boxed in — dissolve; a later poll respawns in open space
+          hide();
+          break;
+        }
+        from = to;
+        to = next;
       }
-      if (Math.hypot(pos.x - prev.x, pos.y - prev.y) < 0.75) return;
-      ctx.strokeStyle = `rgba(${accent}, ${TRAIL_ALPHA})`;
-      ctx.lineWidth = TRAIL_WIDTH;
-      ctx.beginPath();
-      ctx.moveTo(prev.x, prev.y);
-      ctx.lineTo(pos.x, pos.y);
-      ctx.stroke();
-      prev = { x: pos.x, y: pos.y };
+
+      return corners;
     };
 
-    /** Spring toward the target; hand off to the next leg before stopping. */
-    const step = (dt) => {
-      const spring = evading ? EVADE_SPRING : SPRING;
-      const damp = evading ? EVADE_DAMP : DAMP;
-      vel.x += ((target.x - pos.x) * spring - vel.x * damp) * dt;
-      vel.y += ((target.y - pos.y) * spring - vel.y * damp) * dt;
-      pos.x += vel.x * dt;
-      pos.y += vel.y * dt;
-
-      const dist = Math.hypot(target.x - pos.x, target.y - pos.y);
-      if (evading) {
-        if (dist < 12) evading = false;
-      } else if (dist < ARRIVE && lastPoints.length) {
-        target = pickNextTarget(lastPoints);
+    /** Stroke this frame's movement: a soft glow pass + a bright core. */
+    const drawTrail = (corners) => {
+      if (!prev) {
+        prev = { x: pos.x, y: pos.y };
+        return;
       }
+      if (!corners.length && Math.hypot(pos.x - prev.x, pos.y - prev.y) < 0.5) return;
+
+      ctx.beginPath();
+      ctx.moveTo(prev.x, prev.y);
+      for (const c of corners) ctx.lineTo(c.x, c.y);
+      ctx.lineTo(pos.x, pos.y);
+
+      ctx.strokeStyle = `rgba(${accent}, 0.12)`;
+      ctx.lineWidth = 9;
+      ctx.stroke();
+      ctx.strokeStyle = `rgba(${accent}, 0.5)`;
+      ctx.lineWidth = 3.5;
+      ctx.stroke();
+
+      prev = { x: pos.x, y: pos.y };
     };
 
     const tick = (time) => {
@@ -314,10 +346,10 @@ export default function SiteBackground() {
       lastTime = time;
 
       fadeTrail(dt);
-      if (!visible || !target) return;
+      if (!visible) return;
 
-      step(dt);
-      drawTrail();
+      const corners = step(dt);
+      drawTrail(corners);
       applyTransform();
     };
 
