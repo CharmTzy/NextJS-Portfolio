@@ -3,38 +3,61 @@
 import { useEffect, useRef } from "react";
 
 /**
- * Background grid + a wandering accent marker.
+ * Background grid + a perpetually drifting accent marker.
  *
- * The marker drifts between free grid intersections — spots where nothing
- * paints (no text, cards, images, buttons) — so it never hides behind
- * content. A timer keeps it wandering while the page is idle; scroll and
- * resize checks make it step aside when content moves over its spot, and
- * it fades out entirely when the viewport has no free space.
+ * The marker glides continuously between free grid intersections — spots
+ * where nothing paints (no text, cards, images, buttons) — steering with
+ * a soft spring so it never stops, and leaving a fading trail on a canvas
+ * behind it. The viewport is re-scanned twice a second so the marker can
+ * slip away when content moves over its position, and it fades out
+ * entirely when there is no free space.
  */
 export default function SiteBackground() {
   const bgRef = useRef(null);
   const dotRef = useRef(null);
+  const trailRef = useRef(null);
 
   useEffect(() => {
     const bg = bgRef.current;
     const dot = dotRef.current;
-    if (!bg || !dot) return;
+    const canvas = trailRef.current;
+    if (!bg || !dot || !canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
 
-    const HOP_INTERVAL = 4200; // idle wander cadence (ms)
-    const SAFETY_INTERVAL = 180; // scroll/resize re-check cadence (ms)
-    const SAFETY_POLL = 450; // fallback cadence when no events fire (ms)
+    const SAFETY_POLL = 450; // occlusion re-scan cadence (ms)
+    const SAFETY_DEBOUNCE = 160; // extra scan after scroll/resize bursts (ms)
     const CLEARANCE = 36; // min gap between the dot and content (px)
     const EDGE = 48; // min gap from viewport edges (px)
-    const NEAR_CELLS = 4; // idle hops stay within this many grid cells
+    const NEAR_CELLS = 5; // wander legs stay within this many grid cells
+    const ARRIVE = 40; // retarget this early so motion never stops (px)
+    const PATH_PAD = 28; // travel paths keep this margin from content (px)
+    const SPRING = 3; // idle glide stiffness
+    const DAMP = 3.45; // just under critical damping → soft arcs
+    const EVADE_SPRING = 12; // quicker step-aside when content covers the spot
+    const EVADE_DAMP = 7;
+    const MAX_DT = 0.05; // clamp frame delta (s), e.g. after tab switches
+    const TRAIL_FADE = 4.2; // trail dissolve rate (/s)
+    const TRAIL_WIDTH = 5; // px
+    const TRAIL_ALPHA = 0.4;
 
     const PAINTED_TAGS = /^(IMG|SVG|VIDEO|CANVAS|PICTURE|IFRAME|BUTTON|INPUT|TEXTAREA|SELECT)$/;
     const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     const paintCache = new WeakMap();
 
-    let current = null;
+    let pos = null;
+    let vel = { x: 0, y: 0 };
+    let target = null;
+    let prev = null; // last trail point
+    let lastPoints = [];
+    let lastRects = [];
+    let evading = false;
     let visible = false;
-    let hopTimer = 0;
-    let safetyTimer = 0;
+    let accent = "23, 184, 166";
+    let rafId = 0;
+    let lastTime = 0;
+    let pollTimer = 0;
+    let burstTimer = 0;
 
     const getGridSize = () => {
       const value = getComputedStyle(document.documentElement).getPropertyValue("--grid-size");
@@ -91,9 +114,10 @@ export default function SiteBackground() {
         (r) => x < r.left - CLEARANCE || x > r.right + CLEARANCE || y < r.top - CLEARANCE || y > r.bottom + CLEARANCE,
       );
 
-    const getFreePoints = () => {
-      const gridSize = getGridSize();
+    /** All free grid intersections plus the occluder rects that shaped them. */
+    const scan = () => {
       const rects = getOccluderRects();
+      const gridSize = getGridSize();
       const start = Math.ceil(EDGE / gridSize) * gridSize;
       const points = [];
 
@@ -103,15 +127,88 @@ export default function SiteBackground() {
         }
       }
 
-      return points;
+      return { rects, points };
     };
 
-    const showAt = (point, swift) => {
-      dot.classList.toggle("grid-dot--swift", Boolean(swift));
-      bg.style.setProperty("--dot-x", `${point.x}px`);
-      bg.style.setProperty("--dot-y", `${point.y}px`);
+    const randomOf = (arr) => arr[Math.floor(Math.random() * arr.length)];
+
+    const nearestOf = (points, x, y) => {
+      let best = points[0];
+      let bestDist = Infinity;
+      for (const p of points) {
+        const d = (p.x - x) ** 2 + (p.y - y) ** 2;
+        if (d < bestDist) {
+          bestDist = d;
+          best = p;
+        }
+      }
+      return best;
+    };
+
+    /** Liang-Barsky: does segment a→b cross the rect inflated by pad? */
+    const segmentHitsRect = (a, b, r, pad) => {
+      const dx = b.x - a.x;
+      const dy = b.y - a.y;
+      let t0 = 0;
+      let t1 = 1;
+      const edges = [
+        [-dx, a.x - (r.left - pad)],
+        [dx, r.right + pad - a.x],
+        [-dy, a.y - (r.top - pad)],
+        [dy, r.bottom + pad - a.y],
+      ];
+
+      for (const [p, q] of edges) {
+        if (p === 0) {
+          if (q < 0) return false;
+        } else {
+          const t = q / p;
+          if (p < 0) {
+            if (t > t1) return false;
+            if (t > t0) t0 = t;
+          } else {
+            if (t < t0) return false;
+            if (t < t1) t1 = t;
+          }
+        }
+      }
+
+      return true;
+    };
+
+    /**
+     * Next wander leg: a nearby free point, preferring the current heading
+     * and a travel path that does not cross content.
+     */
+    const pickNextTarget = (points) => {
+      const gridSize = getGridSize();
+      const range = NEAR_CELLS * gridSize;
+      const minLeg = gridSize * 0.75;
+
+      let candidates = points.filter((p) => {
+        const dx = p.x - pos.x;
+        const dy = p.y - pos.y;
+        return Math.abs(dx) <= range && Math.abs(dy) <= range && Math.hypot(dx, dy) > minLeg;
+      });
+
+      if (Math.hypot(vel.x, vel.y) > 24) {
+        const ahead = candidates.filter((p) => (p.x - pos.x) * vel.x + (p.y - pos.y) * vel.y > 0);
+        if (ahead.length) candidates = ahead;
+      }
+
+      const clearPath = candidates.filter((p) => !lastRects.some((r) => segmentHitsRect(pos, p, r, PATH_PAD)));
+      if (clearPath.length) candidates = clearPath;
+
+      if (!candidates.length) candidates = points;
+      return randomOf(candidates);
+    };
+
+    const applyTransform = () => {
+      dot.style.transform = `translate3d(${pos.x}px, ${pos.y}px, 0) translate(-50%, -50%)`;
+    };
+
+    const show = () => {
       bg.style.setProperty("--dot-opacity", "1");
-      current = point;
       visible = true;
     };
 
@@ -120,80 +217,155 @@ export default function SiteBackground() {
       visible = false;
     };
 
-    /** Idle hops wander to a nearby free intersection; fall back to any. */
-    const pickTarget = (points, gridSize) => {
-      let pool = points;
-
-      if (current && visible) {
-        const away = points.filter((p) => p.x !== current.x || p.y !== current.y);
-        const near = away.filter(
-          (p) =>
-            Math.abs(p.x - current.x) <= NEAR_CELLS * gridSize &&
-            Math.abs(p.y - current.y) <= NEAR_CELLS * gridSize,
-        );
-        pool = near.length ? near : away.length ? away : points;
-      }
-
-      return pool[Math.floor(Math.random() * pool.length)];
-    };
-
-    /**
-     * forceHop → idle wander (always move).
-     * Otherwise move only when the current spot is covered or gone,
-     * using the quicker "swift" glide to step out of the way.
-     */
-    const retarget = (forceHop) => {
-      const points = getFreePoints();
+    /** Re-read the world: free spots, theme accent; reposition if needed. */
+    const refresh = () => {
+      accent = getComputedStyle(document.documentElement).getPropertyValue("--accent-rgb").trim() || accent;
+      const { rects, points } = scan();
 
       if (!points.length) {
         hide();
         return;
       }
 
-      const stillFree = current && points.some((p) => p.x === current.x && p.y === current.y);
-      if (!forceHop && visible && stillFree) return;
+      lastPoints = points;
+      lastRects = rects;
 
-      showAt(pickTarget(points, getGridSize()), !forceHop);
-    };
+      if (!visible) {
+        // reappear in place — no streak from a stale position
+        target = randomOf(points);
+        pos = { ...target };
+        prev = { ...target };
+        vel = { x: 0, y: 0 };
+        applyTransform();
+        show();
+        return;
+      }
 
-    const scheduleSafetyCheck = () => {
-      if (safetyTimer) return;
-      safetyTimer = window.setTimeout(() => {
-        safetyTimer = 0;
-        retarget(false);
-      }, SAFETY_INTERVAL);
-    };
+      if (!isFree(pos.x, pos.y, rects)) {
+        evading = true;
+        target = nearestOf(points, pos.x, pos.y);
+      } else if (!points.some((p) => p.x === target.x && p.y === target.y)) {
+        target = pickNextTarget(points);
+      }
 
-    const startWandering = () => {
-      window.clearInterval(hopTimer);
-      hopTimer = 0;
-      if (!reduceMotion.matches) {
-        hopTimer = window.setInterval(() => retarget(true), HOP_INTERVAL);
+      if (reduceMotion.matches) {
+        // no animation loop → place instantly
+        pos = { ...target };
+        vel = { x: 0, y: 0 };
+        evading = false;
+        applyTransform();
       }
     };
 
-    retarget(true);
-    startWandering();
-    reduceMotion.addEventListener("change", startWandering);
-    window.addEventListener("scroll", scheduleSafetyCheck, { passive: true });
-    window.addEventListener("resize", scheduleSafetyCheck, { passive: true });
-    // Content can slide over the dot without firing scroll events
-    // (entrance animations, lazy images, momentum scrolling quirks),
-    // so a poll backs up the listeners. It only acts when the spot is lost.
-    const safetyPoll = window.setInterval(() => retarget(false), SAFETY_POLL);
+    const sizeCanvas = () => {
+      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      canvas.width = Math.round(window.innerWidth * dpr);
+      canvas.height = Math.round(window.innerHeight * dpr);
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      ctx.lineCap = "round";
+      ctx.lineJoin = "round";
+      if (pos) prev = { ...pos };
+    };
+
+    const fadeTrail = (dt) => {
+      ctx.save();
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.globalCompositeOperation = "destination-out";
+      ctx.fillStyle = `rgba(0, 0, 0, ${1 - Math.exp(-TRAIL_FADE * dt)})`;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.restore();
+    };
+
+    const drawTrail = () => {
+      if (!prev) {
+        prev = { ...pos };
+        return;
+      }
+      if (Math.hypot(pos.x - prev.x, pos.y - prev.y) < 0.75) return;
+      ctx.strokeStyle = `rgba(${accent}, ${TRAIL_ALPHA})`;
+      ctx.lineWidth = TRAIL_WIDTH;
+      ctx.beginPath();
+      ctx.moveTo(prev.x, prev.y);
+      ctx.lineTo(pos.x, pos.y);
+      ctx.stroke();
+      prev = { x: pos.x, y: pos.y };
+    };
+
+    /** Spring toward the target; hand off to the next leg before stopping. */
+    const step = (dt) => {
+      const spring = evading ? EVADE_SPRING : SPRING;
+      const damp = evading ? EVADE_DAMP : DAMP;
+      vel.x += ((target.x - pos.x) * spring - vel.x * damp) * dt;
+      vel.y += ((target.y - pos.y) * spring - vel.y * damp) * dt;
+      pos.x += vel.x * dt;
+      pos.y += vel.y * dt;
+
+      const dist = Math.hypot(target.x - pos.x, target.y - pos.y);
+      if (evading) {
+        if (dist < 12) evading = false;
+      } else if (dist < ARRIVE && lastPoints.length) {
+        target = pickNextTarget(lastPoints);
+      }
+    };
+
+    const tick = (time) => {
+      rafId = window.requestAnimationFrame(tick);
+      const dt = lastTime ? Math.min((time - lastTime) / 1000, MAX_DT) : 0.016;
+      lastTime = time;
+
+      fadeTrail(dt);
+      if (!visible || !target) return;
+
+      step(dt);
+      drawTrail();
+      applyTransform();
+    };
+
+    const startLoop = () => {
+      window.cancelAnimationFrame(rafId);
+      rafId = 0;
+      lastTime = 0;
+      if (!reduceMotion.matches) {
+        rafId = window.requestAnimationFrame(tick);
+      } else {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+      }
+    };
+
+    const scheduleBurstCheck = () => {
+      if (burstTimer) return;
+      burstTimer = window.setTimeout(() => {
+        burstTimer = 0;
+        refresh();
+      }, SAFETY_DEBOUNCE);
+    };
+
+    const onResize = () => {
+      sizeCanvas();
+      scheduleBurstCheck();
+    };
+
+    sizeCanvas();
+    refresh();
+    startLoop();
+    pollTimer = window.setInterval(refresh, SAFETY_POLL);
+    reduceMotion.addEventListener("change", startLoop);
+    window.addEventListener("scroll", scheduleBurstCheck, { passive: true });
+    window.addEventListener("resize", onResize);
 
     return () => {
-      window.clearInterval(hopTimer);
-      window.clearInterval(safetyPoll);
-      window.clearTimeout(safetyTimer);
-      reduceMotion.removeEventListener("change", startWandering);
-      window.removeEventListener("scroll", scheduleSafetyCheck);
-      window.removeEventListener("resize", scheduleSafetyCheck);
+      window.cancelAnimationFrame(rafId);
+      window.clearInterval(pollTimer);
+      window.clearTimeout(burstTimer);
+      reduceMotion.removeEventListener("change", startLoop);
+      window.removeEventListener("scroll", scheduleBurstCheck);
+      window.removeEventListener("resize", onResize);
     };
   }, []);
 
   return (
     <div ref={bgRef} className="site-background" aria-hidden="true">
+      <canvas ref={trailRef} className="grid-trail" />
       <div ref={dotRef} className="grid-dot">
         <span className="grid-dot__ring" />
         <span className="grid-dot__ring grid-dot__ring--delayed" />

@@ -160,25 +160,25 @@ body {
   opacity: 0.9;
 }
 
-/* grid accent marker — sonar ping */
-.grid-dot {
+/* fading trail behind the accent marker */
+.grid-trail {
   position: absolute;
-  width: 10px;
-  height: 10px;
-  left: var(--dot-x, 75vw);
-  top: var(--dot-y, 50vh);
-  opacity: var(--dot-opacity, 0);
-  transform: translate3d(-50%, -50%, 0);
-  transition:
-    left 1.5s cubic-bezier(0.65, 0, 0.35, 1),
-    top 1.5s cubic-bezier(0.65, 0, 0.35, 1),
-    opacity 0.6s ease;
-  will-change: left, top;
+  inset: 0;
+  width: 100%;
+  height: 100%;
 }
 
-/* quicker glide used when stepping out of content's way */
-.grid-dot--swift {
-  transition-duration: 0.6s, 0.6s, 0.35s;
+/* grid accent marker — sonar ping; JS drives position via transform */
+.grid-dot {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 10px;
+  height: 10px;
+  opacity: var(--dot-opacity, 0);
+  transform: translate3d(-50%, -50%, 0);
+  transition: opacity 0.6s ease;
+  will-change: transform;
 }
 
 .grid-dot__core {
