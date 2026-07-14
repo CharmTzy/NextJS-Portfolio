@@ -4,17 +4,44 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
-import { MoonStar, SunMedium, Menu, X } from "lucide-react";
+import {
+  BriefcaseBusiness,
+  Code2,
+  FolderKanban,
+  FileText,
+  Home,
+  Mail,
+  MoonStar,
+  Send,
+  SunMedium,
+} from "lucide-react";
 import { navigationContent } from "../data/site-content";
+import { OPEN_RESUME_VIEWER_EVENT } from "../lib/site-events";
+import ResumeViewer from "./ResumeViewer";
 
 const navItems = navigationContent.items;
+
+const navIcons = {
+  Skills: Code2,
+  Experience: BriefcaseBusiness,
+  Projects: FolderKanban,
+  Contact: Mail,
+};
+
+const navClasses = {
+  Skills: "skills",
+  Experience: "experience",
+  Projects: "projects",
+  Contact: "contact",
+};
 
 export default function Navbar({ logo, ctaHref = navigationContent.ctaHref }) {
   const { theme, setTheme } = useTheme();
   const pathname = usePathname();
   const [mounted, setMounted] = useState(false);
   const [activeHash, setActiveHash] = useState("");
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [resumeOpen, setResumeOpen] = useState(false);
+  const [resumeMinimized, setResumeMinimized] = useState(false);
   const isHomePage = pathname === "/";
 
   useEffect(() => {
@@ -26,65 +53,54 @@ export default function Navbar({ logo, ctaHref = navigationContent.ctaHref }) {
     }
 
     const handleScroll = () => {
+      const marker = window.scrollY + window.innerHeight * 0.36;
       const sections = navItems
         .filter((item) => item.sectionId)
         .map((item) => document.getElementById(item.sectionId))
         .filter(Boolean);
 
       const current = sections.find((section) => {
-        const top = section.offsetTop - 120;
+        const top = section.offsetTop;
         const bottom = top + section.offsetHeight;
-        return window.scrollY >= top && window.scrollY < bottom;
+        return marker >= top && marker < bottom;
       });
 
-      if (current?.id) {
-        setActiveHash(`#${current.id}`);
-      }
+      setActiveHash(current?.id ? `#${current.id}` : "");
     };
 
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
+    window.addEventListener("resize", handleScroll);
 
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      window.removeEventListener("resize", handleScroll);
+    };
   }, [isHomePage]);
 
-  // Close mobile menu on route change
   useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
-
-  // Prevent body scroll when menu is open
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => {
-      document.body.style.overflow = "";
+    const handleResumeRequest = () => {
+      setResumeOpen(true);
+      setResumeMinimized(false);
     };
-  }, [mobileOpen]);
+
+    window.addEventListener(OPEN_RESUME_VIEWER_EVENT, handleResumeRequest);
+    return () => window.removeEventListener(OPEN_RESUME_VIEWER_EVENT, handleResumeRequest);
+  }, []);
 
   const currentTheme = mounted ? theme || "dark" : "dark";
 
   const getHref = (item) => {
-    if (isHomePage && item.sectionId) {
-      return `#${item.sectionId}`;
-    }
-
+    if (isHomePage && item.sectionId) return `#${item.sectionId}`;
     return item.href;
   };
 
   const isActive = (item) => {
-    if (!item.sectionId && item.href?.startsWith("/")) {
-      return pathname === item.href;
-    }
-
-    return isHomePage && item.sectionId ? activeHash === `#${item.sectionId}` : false;
+    if (item.label === "Projects" && pathname.startsWith("/projects/")) return true;
+    return isHomePage && item.sectionId ? activeHash === `#${item.sectionId}` : pathname === item.href;
   };
 
   const handleCta = () => {
-    setMobileOpen(false);
     if (isHomePage && ctaHref.startsWith("#")) {
       document.querySelector(ctaHref)?.scrollIntoView({ behavior: "smooth" });
       return;
@@ -93,66 +109,115 @@ export default function Navbar({ logo, ctaHref = navigationContent.ctaHref }) {
     window.location.href = ctaHref;
   };
 
-  const handleMobileNavClick = () => {
-    setMobileOpen(false);
+  const handleHome = (event) => {
+    if (!isHomePage) return;
+
+    event.preventDefault();
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    document.getElementById("hero")?.scrollIntoView({
+      behavior: reduceMotion ? "auto" : "smooth",
+      block: "start",
+    });
+  };
+
+  const openResume = () => {
+    setResumeOpen(true);
+    setResumeMinimized(false);
+  };
+
+  const closeResume = () => {
+    setResumeOpen(false);
+    setResumeMinimized(false);
   };
 
   return (
     <>
-      <nav>
-        <Link href="/" className="nav-logo">
-          <span className="nav-logo-dot" />
-          {logo}
-        </Link>
-        <ul className="nav-links">
-          {navItems.map((item) => (
+      <nav className="dock-nav" aria-label="Primary navigation">
+        <ul className="dock-list">
+        <li>
+          <Link
+            href={isHomePage ? "#hero" : "/"}
+            className={`dock-item dock-item--home${isHomePage && !activeHash ? " active" : ""}`}
+            aria-label={`${logo} home`}
+            aria-current={isHomePage && !activeHash ? "page" : undefined}
+            onClick={handleHome}
+          >
+            <Home aria-hidden="true" />
+            <span className="dock-tooltip">{logo}</span>
+            <span className="dock-active-dot" aria-hidden="true" />
+          </Link>
+        </li>
+
+        {navItems.map((item) => {
+          const Icon = navIcons[item.label] || Code2;
+          const active = isActive(item);
+
+          return (
             <li key={`${item.label}-${item.href}`}>
-              <Link href={getHref(item)} className={isActive(item) ? "active" : ""}>
-                {item.label}
+              <Link
+                href={getHref(item)}
+                className={`dock-item dock-item--${navClasses[item.label] || "default"}${active ? " active" : ""}`}
+                aria-label={item.label}
+                aria-current={active ? "location" : undefined}
+              >
+                <Icon aria-hidden="true" />
+                <span className="dock-tooltip">{item.label}</span>
+                <span className="dock-active-dot" aria-hidden="true" />
               </Link>
             </li>
-          ))}
-        </ul>
-        <div className="nav-right">
+          );
+        })}
+
+        <li>
           <button
             type="button"
-            className="theme-toggle"
-            title={navigationContent.themeToggleLabel}
+            className={`dock-item dock-item--resume${resumeOpen ? " active" : ""}`}
+            aria-label={navigationContent.resumeLabel}
+            onClick={openResume}
+          >
+            <FileText aria-hidden="true" />
+            <span className="dock-tooltip">
+              {resumeMinimized ? navigationContent.restoreResumeLabel : navigationContent.resumeLabel}
+            </span>
+            <span className="dock-active-dot" aria-hidden="true" />
+          </button>
+        </li>
+
+        <li className="dock-divider" aria-hidden="true" />
+
+        <li>
+          <button
+            type="button"
+            className="dock-item dock-item--theme"
             aria-label={navigationContent.themeToggleLabel}
             onClick={() => setTheme(currentTheme === "dark" ? "light" : "dark")}
           >
-            {currentTheme === "dark" ? <SunMedium size={16} /> : <MoonStar size={16} />}
+            {currentTheme === "dark" ? <SunMedium aria-hidden="true" /> : <MoonStar aria-hidden="true" />}
+            <span className="dock-tooltip">{currentTheme === "dark" ? "Light mode" : "Dark mode"}</span>
           </button>
-          <button type="button" className="nav-cta nav-cta-desktop" onClick={handleCta}>
-            {navigationContent.ctaLabel}
-          </button>
+        </li>
+
+        <li>
           <button
             type="button"
-            className="nav-hamburger"
-            aria-label={mobileOpen ? navigationContent.closeMenuLabel : navigationContent.openMenuLabel}
-            onClick={() => setMobileOpen((prev) => !prev)}
+            className="dock-item dock-item--hire"
+            aria-label={navigationContent.ctaLabel}
+            onClick={handleCta}
           >
-            {mobileOpen ? <X size={20} /> : <Menu size={20} />}
+            <Send aria-hidden="true" />
+            <span className="dock-tooltip">{navigationContent.ctaLabel}</span>
           </button>
-        </div>
+        </li>
+        </ul>
       </nav>
 
-      {/* Mobile menu overlay */}
-      {mobileOpen && <div className="mobile-menu-overlay" onClick={() => setMobileOpen(false)} />}
-      <div className={`mobile-menu${mobileOpen ? " open" : ""}`}>
-        <ul className="mobile-nav-links">
-          {navItems.map((item) => (
-            <li key={`mobile-${item.label}-${item.href}`}>
-              <Link href={getHref(item)} className={isActive(item) ? "active" : ""} onClick={handleMobileNavClick}>
-                {item.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <button type="button" className="btn-primary mobile-hire-btn" onClick={handleCta}>
-          {navigationContent.ctaLabel}
-        </button>
-      </div>
+      <ResumeViewer
+        open={resumeOpen && !resumeMinimized}
+        resumeUrl={navigationContent.resumeHref}
+        title={navigationContent.resumeTitle}
+        onClose={closeResume}
+        onMinimize={() => setResumeMinimized(true)}
+      />
     </>
   );
 }

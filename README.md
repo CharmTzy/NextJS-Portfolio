@@ -19,7 +19,7 @@ AI Engineer portfolio built with Next.js, React, Tailwind CSS, and a clean proje
 
 This is my personal portfolio for presenting who I am, what I build, and the projects that best represent my work across full-stack development, practical AI, security, and polished product interfaces.
 
-The site is designed to feel more like a real product than a static profile page. It includes a strong homepage, curated skills, experience, project case studies, updates, admin tooling, theme support, and a verified contact flow.
+The site is designed to feel more like a real product than a static profile page. It includes a strong homepage, curated skills, experience, project case studies, theme support, and a low-friction contact flow with invisible spam protection.
 
 ## Highlights
 
@@ -27,8 +27,7 @@ The site is designed to feel more like a real product than a static profile page
 - Curated skills across programming, web and API work, databases, cloud, AI, ML, tooling, and deployment.
 - Project system backed by GitHub data with selected overrides for stronger case studies.
 - Project detail pages for portfolio work, e-commerce builds, phishing detection, and Lingo-Man.
-- Updates feed and admin screens for managing portfolio content.
-- Verified contact form with email code flow and Nodemailer delivery.
+- Contact form with honeypot, timing checks, rate limiting, and Nodemailer delivery.
 - Dark and light theme support through `next-themes`.
 
 ## Tech Stack
@@ -39,12 +38,12 @@ The site is designed to feel more like a real product than a static profile page
 | Styling | Tailwind CSS, custom global design system |
 | UI | Lucide React, Heroicons, reusable app components |
 | Data | GitHub API, local portfolio content maps |
-| Contact | Next.js API routes, Nodemailer, email verification |
+| Contact | Next.js API routes, Nodemailer, invisible spam protection |
 | Deployment | Vercel-ready Next.js app |
 
 ## Featured Projects
 
-- **AI Engineer Portfolio**: this portfolio, with project case studies, updates, admin tooling, and contact flow.
+- **AI Engineer Portfolio**: this portfolio, with project case studies, theme support, and a protected contact flow.
 - **Full E-commerce Project**: e-commerce platform with product listings, cart, checkout, Stripe payments, and admin dashboard.
 - **Daily-Hype**: fashion and lifestyle e-commerce storefront deployed on Vercel.
 - **Phishing Detection Website**: interactive security-focused phishing detection experience.
@@ -78,7 +77,6 @@ SMTP_PORT=465
 SMTP_USER=your-email@gmail.com
 SMTP_PASS=your-app-password
 CONTACT_TO_EMAIL=wai71308@gmail.com
-CONTACT_EMAIL_VERIFY_SECRET=your-local-secret
 ```
 
 The API also supports equivalent `EMAIL_*`, `MAIL_*`, and `GMAIL_*` variable names.
@@ -96,12 +94,11 @@ npm run lint     # Run Next.js linting
 
 ```text
 src/app
-|-- api/contact          # Contact form and email verification API
+|-- api/contact          # Contact form and spam-protection API
 |-- components           # Shared UI and page components
-|-- data                 # Portfolio content, routes, metadata, and updates
+|-- data                 # Portfolio content, routes, metadata, and project maps
 |-- pages                # Homepage sections
 |-- projects/[slug]      # Project case study pages
-|-- updates              # Public updates page
 `-- page.js              # Homepage composition
 ```
 

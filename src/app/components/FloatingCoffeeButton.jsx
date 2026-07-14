@@ -1,6 +1,6 @@
-import Image from "next/image";
+import { Coffee } from "lucide-react";
 
-export default function FloatingCoffeeButton({ href, label, title, imageAlt }) {
+export default function FloatingCoffeeButton({ href, label, title }) {
   if (!href) {
     return null;
   }
@@ -14,7 +14,7 @@ export default function FloatingCoffeeButton({ href, label, title, imageAlt }) {
       aria-label={label}
       title={title}
     >
-      <Image src="/coffee-logo.png" alt={imageAlt} width={34} height={34} />
+      <Coffee aria-hidden="true" />
     </a>
   );
 }

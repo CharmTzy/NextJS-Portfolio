@@ -1,4 +1,3 @@
-import { createHmac, randomInt, timingSafeEqual } from "crypto";
 import nodemailer from "nodemailer";
 import { NextResponse } from "next/server";
 import { personalInfo } from "../../data/portfolio";
@@ -10,23 +9,7 @@ const MAX_SUBMIT_MS = 30 * 60 * 1000;
 const MAX_MESSAGE_LENGTH = 4000;
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1000;
 const DEFAULT_RATE_LIMIT_MAX = 5;
-const EMAIL_CODE_TTL_MS = 10 * 60 * 1000;
-const EMAIL_CODE_RATE_LIMIT_MAX = 3;
-
-function getEmailVerificationSecret() {
-  return process.env.CONTACT_EMAIL_VERIFY_SECRET || process.env.SMTP_PASS || "development-contact-secret";
-}
-
-function safeCompare(a, b) {
-  const left = Buffer.from(a);
-  const right = Buffer.from(b);
-
-  if (left.length !== right.length) {
-    return false;
-  }
-
-  return timingSafeEqual(left, right);
-}
+const DEFAULT_EMAIL_RATE_LIMIT_MAX = 3;
 
 function getRateBucket(key) {
   globalThis.__portfolioContactRateLimit ??= new Map();
@@ -83,47 +66,6 @@ function isValidEmail(email) {
 
 function normalizeEmail(email) {
   return sanitizeText(email, 254).toLowerCase();
-}
-
-function normalizeEmailCode(code) {
-  return String(code || "").replace(/\D/g, "").slice(0, 6);
-}
-
-function signEmailCode({ email, code, expiresAt }) {
-  return createHmac("sha256", getEmailVerificationSecret())
-    .update(`${email}.${code}.${expiresAt}`)
-    .digest("hex");
-}
-
-function createEmailVerificationPayload(email) {
-  const code = String(randomInt(100000, 1000000));
-  const expiresAt = Date.now() + EMAIL_CODE_TTL_MS;
-  const signature = signEmailCode({ email, code, expiresAt });
-
-  return {
-    code,
-    expiresAt,
-    token: `${expiresAt}.${signature}`,
-  };
-}
-
-function verifyEmailCode({ senderEmail, emailVerificationCode, emailVerificationToken }) {
-  const email = normalizeEmail(senderEmail);
-  const code = normalizeEmailCode(emailVerificationCode);
-
-  if (!email || !code || !emailVerificationToken) {
-    return false;
-  }
-
-  const [expiresAtRaw, signature] = String(emailVerificationToken).split(".");
-  const expiresAt = Number(expiresAtRaw);
-
-  if (!expiresAt || !signature || expiresAt < Date.now()) {
-    return false;
-  }
-
-  const expectedSignature = signEmailCode({ email, code, expiresAt });
-  return safeCompare(signature, expectedSignature);
 }
 
 const mailEnvKeys = {
@@ -276,46 +218,6 @@ function buildEmail({ name, senderEmail, message, ip, userAgent }) {
   };
 }
 
-function buildEmailVerification({ senderEmail, code, expiresAt, ip, userAgent }) {
-  const mailEnv = getMailEnv();
-  const from = mailEnv.from || mailEnv.user || mailEnv.to;
-  const expiresInMinutes = Math.max(1, Math.round((expiresAt - Date.now()) / 60000));
-
-  const text = [
-    `Your Wai Yan portfolio contact verification code is ${code}.`,
-    "",
-    `This code expires in about ${expiresInMinutes} minutes.`,
-    "If you did not request this code, you can ignore this email.",
-    "",
-    "Request details:",
-    `IP: ${ip}`,
-    `User agent: ${userAgent || "Unknown"}`,
-  ].join("\n");
-
-  const html = `
-    <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #1f2328;">
-      <h2 style="margin: 0 0 12px;">Verify your email</h2>
-      <p>Use this code to send your message through Wai Yan's portfolio contact form:</p>
-      <div style="font-size: 32px; letter-spacing: 8px; font-weight: 700; padding: 16px; border: 1px solid #d0d7de; border-radius: 12px; background: #f6f8fa; text-align: center;">${escapeHtml(
-        code
-      )}</div>
-      <p>This code expires in about ${expiresInMinutes} minutes.</p>
-      <p style="font-size: 12px; color: #656d76;">If you did not request this code, you can ignore this email.</p>
-      <hr style="border: 0; border-top: 1px solid #d0d7de; margin: 20px 0;" />
-      <p style="font-size: 12px; color: #656d76;"><strong>IP:</strong> ${escapeHtml(ip)}</p>
-      <p style="font-size: 12px; color: #656d76;"><strong>User agent:</strong> ${escapeHtml(userAgent || "Unknown")}</p>
-    </div>
-  `;
-
-  return {
-    from,
-    to: senderEmail,
-    subject: "Your portfolio contact verification code",
-    text,
-    html,
-  };
-}
-
 export async function GET(request) {
   const url = new URL(request.url);
 
@@ -347,62 +249,6 @@ export async function GET(request) {
   return NextResponse.json({ ok: true });
 }
 
-async function handleEmailVerificationRequest({ body, ip, userAgent }) {
-  const startedAt = Number(body.startedAt);
-  const elapsedMs = Date.now() - startedAt;
-  const honeypot = sanitizeText(body.website, 200);
-
-  if (honeypot || !startedAt || elapsedMs > MAX_SUBMIT_MS) {
-    return NextResponse.json({
-      ok: true,
-      message: "If that email can receive mail, a verification code is on the way.",
-    });
-  }
-
-  const senderEmail = normalizeEmail(body.senderEmail);
-
-  if (!senderEmail || !isValidEmail(senderEmail)) {
-    return jsonError("Please enter a valid email address before requesting a code.");
-  }
-
-  const codeLimit = Number(process.env.CONTACT_EMAIL_CODE_RATE_LIMIT_MAX || EMAIL_CODE_RATE_LIMIT_MAX);
-
-  if (isRateLimited(`email-code-ip:${ip}`, codeLimit) || isRateLimited(`email-code-email:${senderEmail}`, codeLimit)) {
-    return jsonError("Too many verification codes requested. Please try again later.", 429);
-  }
-
-  const { transporter, status } = createTransporter();
-
-  if (!transporter) {
-    const missingText = status.missing.join(", ");
-    console.error(`Portfolio contact email verification is not configured. Missing: ${missingText}`);
-    return jsonError(`Email verification is not configured yet. Please email me directly at ${status.recipient}.`, 500);
-  }
-
-  const verification = createEmailVerificationPayload(senderEmail);
-
-  try {
-    await transporter.sendMail(
-      buildEmailVerification({
-        senderEmail,
-        code: verification.code,
-        expiresAt: verification.expiresAt,
-        ip,
-        userAgent,
-      })
-    );
-
-    return NextResponse.json({
-      ok: true,
-      emailVerificationToken: verification.token,
-      message: `A 6-digit verification code was sent to ${senderEmail}.`,
-    });
-  } catch (error) {
-    console.error("Portfolio contact email verification failed:", error);
-    return jsonError("Unable to send the verification code right now. Please try again later.", 500);
-  }
-}
-
 export async function POST(request) {
   const ip = getClientIp(request);
   const userAgent = request.headers.get("user-agent");
@@ -413,10 +259,6 @@ export async function POST(request) {
     body = await request.json();
   } catch {
     return jsonError("Invalid request body.");
-  }
-
-  if (body.action === "request-email-code") {
-    return handleEmailVerificationRequest({ body, ip, userAgent });
   }
 
   if (isRateLimited(`message:${ip}`)) {
@@ -443,14 +285,10 @@ export async function POST(request) {
     return jsonError("Please write a slightly longer message.");
   }
 
-  if (
-    !verifyEmailCode({
-      senderEmail,
-      emailVerificationCode: body.emailVerificationCode,
-      emailVerificationToken: body.emailVerificationToken,
-    })
-  ) {
-    return jsonError("Please verify your email address with the 6-digit code before sending.");
+  const emailLimit = Number(process.env.CONTACT_EMAIL_RATE_LIMIT_MAX || DEFAULT_EMAIL_RATE_LIMIT_MAX);
+
+  if (isRateLimited(`message-email:${senderEmail}`, emailLimit)) {
+    return jsonError("Too many messages from this email address. Please try again later.", 429);
   }
 
   const { transporter, status } = createTransporter();

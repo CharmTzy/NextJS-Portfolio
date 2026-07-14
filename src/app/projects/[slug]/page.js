@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import FadeUp from "../../components/FadeUp";
 import Navbar from "../../components/NavBar";
-import SiteBackground from "../../components/SiteBackground";
 import SiteFooter from "../../components/SiteFooter";
 import { getProjectBySlug, getProjectSlugs, personalInfo } from "../../data/portfolio";
 import { projectsContent, siteRoutes } from "../../data/site-content";
@@ -44,7 +43,6 @@ export default async function ProjectDetailPage({ params }) {
 
   return (
     <main className="site-shell">
-      <SiteBackground />
       <Navbar logo={personalInfo.shortLogo} ctaHref={siteRoutes.homeContact} />
 
       <section className="project-detail-hero">

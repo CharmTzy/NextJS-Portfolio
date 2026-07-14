@@ -32,12 +32,8 @@ export default function ProjectsGrid({ projects = [] }) {
             </div>
             <div className="project-body">
               <div className="project-meta-row">
-                <div className="project-kicker">{project.name}</div>
+                <div className="project-kicker">{project.kicker}</div>
                 <div className="project-meta">
-                  <span className="project-meta-item">{project.primaryLanguage}</span>
-                  <span className="project-meta-dot" aria-hidden="true">
-                    ·
-                  </span>
                   <span className="project-meta-item">Updated {project.updatedLabel}</span>
                 </div>
               </div>
@@ -51,9 +47,6 @@ export default function ProjectsGrid({ projects = [] }) {
 
           <div className="project-footer">
             <div className="project-links">
-              <Link href={`/projects/${project.slug}`} className="proj-link">
-                {card.caseStudyLinkLabel}
-              </Link>
               {project.liveUrl ? (
                 <a href={project.liveUrl} target="_blank" rel="noreferrer" className="proj-link">
                   ↗ {project.liveLabel || card.liveFallbackLabel}
@@ -70,11 +63,12 @@ export default function ProjectsGrid({ projects = [] }) {
             </div>
 
             <div className="project-tags-row">
-              {project.tags.map((tag) => (
+              {project.tags.slice(0, 3).map((tag) => (
                 <span key={`${project.originalName}-${tag.label}`} className={`tag ${tag.variant === "default" ? "" : tag.variant}`.trim()}>
                   {tag.label}
                 </span>
               ))}
+              {project.tags.length > 3 ? <span className="tag">+{project.tags.length - 3}</span> : null}
             </div>
           </div>
         </FadeUp>

@@ -1,5 +1,4 @@
 import Navbar from "./components/NavBar";
-import SiteBackground from "./components/SiteBackground";
 import SiteFooter from "./components/SiteFooter";
 import Welcome from "./pages/Welcome";
 import About from "./pages/About";
@@ -20,8 +19,6 @@ export default async function Home() {
 
   return (
     <main className="site-shell">
-      <SiteBackground />
-
       <Navbar logo={personalInfo.shortLogo} />
 
       <Welcome personalInfo={personalInfo} stats={heroStats} />

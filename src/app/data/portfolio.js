@@ -2,7 +2,7 @@ const GITHUB_USERNAME = "CharmTzy";
 
 export const personalInfo = {
   name: "Wai Yan",
-  shortLogo: "NIK_FIREBALL",
+  shortLogo: "A To The I",
   profileImageUrl: "/wai-yan-portrait.jpeg",
   profileImageAlt: "Portrait of Wai Yan Aung",
   role: "AI Engineer",
@@ -161,36 +161,33 @@ export const contactLinks = [
     label: "Email",
     value: personalInfo.email,
     href: `mailto:${personalInfo.email}`,
-    icon: "📧",
-    iconBackground: "rgba(56,189,248,0.15)",
+    icon: "mail",
   },
   {
     label: "LinkedIn",
     value: "linkedin.com/in/waiyanaung-ai",
     href: personalInfo.linkedinUrl,
-    icon: "💼",
-    iconBackground: "rgba(129,140,248,0.15)",
+    icon: "linkedin",
   },
   {
     label: "GitHub",
     value: `github.com/${GITHUB_USERNAME}`,
     href: personalInfo.githubUrl,
-    icon: "⌨️",
-    iconBackground: "rgba(52,211,153,0.15)",
+    icon: "github",
   },
   {
     label: "Resume",
     value: "View PDF",
     href: personalInfo.resumeUrl,
-    icon: "📄",
-    iconBackground: "rgba(56,189,248,0.15)",
+    icon: "file",
   },
 ];
 
 const projectOverrides = {
   "NextJS-Portfolio": {
     title: "AI Engineer Portfolio",
-    description: "A personal portfolio website with polished dark-mode UI, project case studies, and a verified contact flow.",
+    kicker: "Portfolio · Next.js",
+    description: "A personal portfolio website with polished dark-mode UI, project case studies, and a protected low-friction contact flow.",
     tags: [
       { label: "Next.js", variant: "default" },
       { label: "Portfolio", variant: "purple" },
@@ -205,6 +202,7 @@ const projectOverrides = {
   },
   Web_System_Project: {
     title: "Full E-commerce Project",
+    kicker: "E-commerce · Node.js",
     description: "A full-featured e-commerce website with product listings, cart, checkout, Stripe payment integration, and an admin dashboard for order and inventory management.",
     tags: [
       { label: "Node.js", variant: "default" },
@@ -222,6 +220,7 @@ const projectOverrides = {
   },
   "daily-hype": {
     title: "Daily-Hype",
+    kicker: "E-commerce · Next.js",
     description: "A modern fashion and lifestyle e-commerce experience with curated product presentation, shopper-friendly flows, and polished deployment on Vercel.",
     tags: [
       { label: "Next.js", variant: "default" },
@@ -239,6 +238,7 @@ const projectOverrides = {
   },
   "Phishing-Email-Detection": {
     title: "Phishing Detection Website",
+    kicker: "AI Security · Python",
     description: "A phishing detection website that analyzes suspicious content, URLs, and impersonation patterns through a simple interactive security-focused interface.",
     tags: [
       { label: "Python", variant: "default" },
@@ -258,6 +258,7 @@ const projectOverrides = {
   },
   "Lingo-Man": {
     title: "Lingo-Man",
+    kicker: "EdTech · React",
     description: "A language-learning web app experience built as an interactive product-style UI — focused on clean flows, playful polish, and practical frontend delivery.",
     tags: [
       { label: "React", variant: "default" },
@@ -284,12 +285,12 @@ const projectCaseStudyOverrides = {
     role: "Product design, frontend implementation, content architecture, and developer experience",
     timeline: "Personal build · 2026",
     challenge: "Build a portfolio that feels memorable and modern while still being structured enough to grow with new projects and future content.",
-    solution: "I designed the site as a reusable Next.js product with themed sections, case-study style project pages, and a verified contact flow to make the portfolio feel alive instead of static.",
+    solution: "I designed the site as a reusable Next.js product with themed sections, case-study style project pages, and a protected low-friction contact flow to make the portfolio feel alive instead of static.",
     outcome: "The result is a portfolio that showcases not only my work, but also how I think about interface quality, product structure, and ongoing iteration.",
     highlights: [
       "Built a full portfolio system with project detail pages and reusable, content-driven sections.",
       "Designed a strong visual system with dark/light theme support and consistent component styling.",
-      "Added verified contact flow and maintainable project/content data for ongoing iteration.",
+      "Added a spam-protected contact flow and maintainable project/content data for ongoing iteration.",
     ],
     learnings: [
       "A portfolio becomes stronger when it behaves like a real product instead of a one-page resume.",
@@ -351,7 +352,7 @@ const fallbackProfile = {
 const fallbackRepos = [
   {
     name: "NextJS-Portfolio",
-    description: "Personal portfolio website with project case studies and a verified contact flow.",
+    description: "Personal portfolio website with project case studies and a protected low-friction contact flow.",
     language: "JavaScript",
     stargazers_count: 0,
     homepage: "",
@@ -500,6 +501,7 @@ function mapRepository(repo) {
     updatedAt: repo.updated_at,
     updatedLabel: formatProjectDate(repo.updated_at),
     primaryLanguage: repo.language || tags[0]?.label || "Software",
+    kicker: override.kicker || tags.slice(0, 2).map((tag) => tag.label).join(" · "),
     caseStudy,
   };
 }

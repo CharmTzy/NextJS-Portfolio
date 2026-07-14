@@ -1,111 +1,41 @@
 "use client";
 
+import { FileText, Github, Linkedin, Mail } from "lucide-react";
 import { useState } from "react";
 import FadeUp from "./FadeUp";
 import { contactFormContent } from "../data/site-content";
+import { OPEN_RESUME_VIEWER_EVENT } from "../lib/site-events";
 
 const initialFormData = {
   name: "",
   senderEmail: "",
   message: "",
   website: "",
-  emailVerificationCode: "",
+};
+
+const contactIcons = {
+  mail: Mail,
+  linkedin: Linkedin,
+  github: Github,
+  file: FileText,
 };
 
 export default function ContactSection({ links = [], intro }) {
-  const [formData, setFormData] = useState({
-    ...initialFormData,
-  });
+  const [formData, setFormData] = useState({ ...initialFormData });
   const [startedAt, setStartedAt] = useState(Date.now());
-  const [emailVerificationToken, setEmailVerificationToken] = useState("");
-  const [emailCodeSentTo, setEmailCodeSentTo] = useState("");
-  const [requestingCode, setRequestingCode] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [status, setStatus] = useState({ type: "idle", message: "" });
   const [sent, setSent] = useState(false);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
-
-    if (name === "senderEmail") {
-      setEmailVerificationToken("");
-      setEmailCodeSentTo("");
-      setFormData((current) => ({
-        ...current,
-        senderEmail: value,
-        emailVerificationCode: "",
-      }));
-      return;
-    }
-
-    setFormData((current) => ({
-      ...current,
-      [name]: value,
-    }));
-  };
-
-  const handleRequestEmailCode = async () => {
-    if (!formData.senderEmail?.trim()) {
-      setStatus({
-        type: "error",
-        message: contactFormContent.messages.emailCodeRequirements,
-      });
-      return;
-    }
-
-    setRequestingCode(true);
-    setStatus({ type: "idle", message: "" });
-
-    try {
-      const response = await fetch(contactFormContent.apiEndpoint, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          action: "request-email-code",
-          senderEmail: formData.senderEmail,
-          website: formData.website,
-          startedAt,
-        }),
-      });
-
-      const data = await response.json().catch(() => ({}));
-
-      if (!response.ok || !data.ok || !data.emailVerificationToken) {
-        throw new Error(data.message || contactFormContent.messages.fallbackError);
-      }
-
-      setEmailVerificationToken(data.emailVerificationToken);
-      setEmailCodeSentTo(formData.senderEmail.trim().toLowerCase());
-      setFormData((current) => ({ ...current, emailVerificationCode: "" }));
-      setStatus({
-        type: "success",
-        message: data.message || contactFormContent.messages.emailCodeSent,
-      });
-    } catch (error) {
-      setEmailVerificationToken("");
-      setEmailCodeSentTo("");
-      setStatus({
-        type: "error",
-        message: error.message || contactFormContent.messages.fallbackError,
-      });
-    } finally {
-      setRequestingCode(false);
-    }
+    setFormData((current) => ({ ...current, [name]: value }));
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    if (
-      !formData.message?.trim() ||
-      !formData.senderEmail?.trim() ||
-      !formData.emailVerificationCode?.trim() ||
-      !emailVerificationToken
-    ) {
-      return;
-    }
+    if (!formData.message.trim() || !formData.senderEmail.trim()) return;
 
     setSubmitting(true);
     setStatus({ type: "idle", message: "" });
@@ -113,16 +43,9 @@ export default function ContactSection({ links = [], intro }) {
     try {
       const response = await fetch(contactFormContent.apiEndpoint, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          ...formData,
-          emailVerificationToken,
-          startedAt,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...formData, startedAt }),
       });
-
       const data = await response.json().catch(() => ({}));
 
       if (!response.ok || !data.ok) {
@@ -132,8 +55,6 @@ export default function ContactSection({ links = [], intro }) {
       setSent(true);
       setFormData({ ...initialFormData });
       setStartedAt(Date.now());
-      setEmailVerificationToken("");
-      setEmailCodeSentTo("");
       setStatus({ type: "success", message: data.message || contactFormContent.messages.success });
       window.setTimeout(() => {
         setSent(false);
@@ -149,15 +70,7 @@ export default function ContactSection({ links = [], intro }) {
     }
   };
 
-  const submitDisabled =
-    submitting ||
-    requestingCode ||
-    !formData.message?.trim() ||
-    !formData.senderEmail?.trim() ||
-    !formData.emailVerificationCode?.trim() ||
-    !emailVerificationToken;
-
-  const requestCodeDisabled = requestingCode || submitting || !formData.senderEmail?.trim();
+  const submitDisabled = submitting || !formData.message.trim() || !formData.senderEmail.trim();
 
   return (
     <FadeUp className="contact-grid">
@@ -165,25 +78,39 @@ export default function ContactSection({ links = [], intro }) {
         <h3>{contactFormContent.headline}</h3>
         <p>{intro}</p>
         <div className="contact-links">
-          {links.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              className="contact-link"
-              target={link.href.startsWith("mailto:") ? undefined : "_blank"}
-              rel={link.href.startsWith("mailto:") ? undefined : "noreferrer"}
-            >
-              <div className="cl-icon" style={{ background: link.iconBackground }}>
-                {link.icon}
-              </div>
-              <div>
-                <div className="cl-label">{link.label}</div>
-                <div className="cl-value">{link.value}</div>
-              </div>
-            </a>
-          ))}
+          {links.map((link) => {
+            const LinkIcon = contactIcons[link.icon] || Mail;
+            const opensResumeViewer = link.icon === "file";
+
+            return (
+              <a
+                key={link.label}
+                href={link.href}
+                className="contact-link"
+                target={link.href.startsWith("mailto:") || opensResumeViewer ? undefined : "_blank"}
+                rel={link.href.startsWith("mailto:") || opensResumeViewer ? undefined : "noreferrer"}
+                onClick={
+                  opensResumeViewer
+                    ? (event) => {
+                        event.preventDefault();
+                        window.dispatchEvent(new Event(OPEN_RESUME_VIEWER_EVENT));
+                      }
+                    : undefined
+                }
+              >
+                <div className="cl-icon">
+                  <LinkIcon size={18} strokeWidth={1.8} aria-hidden="true" />
+                </div>
+                <div>
+                  <div className="cl-label">{link.label}</div>
+                  <div className="cl-value">{link.value}</div>
+                </div>
+              </a>
+            );
+          })}
         </div>
       </div>
+
       <div>
         <form className="contact-form" onSubmit={handleSubmit}>
           <div className="contact-honeypot" aria-hidden="true">
@@ -211,6 +138,7 @@ export default function ContactSection({ links = [], intro }) {
               autoComplete="name"
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="senderEmail">{contactFormContent.labels.email}</label>
             <input
@@ -224,6 +152,7 @@ export default function ContactSection({ links = [], intro }) {
               required
             />
           </div>
+
           <div className="form-group">
             <label htmlFor="message">{contactFormContent.labels.message}</label>
             <textarea
@@ -237,42 +166,17 @@ export default function ContactSection({ links = [], intro }) {
             />
           </div>
 
-          <div className="form-group">
-            <label htmlFor="emailVerificationCode">{contactFormContent.labels.emailVerificationCode}</label>
-            <div className="email-verification-row">
-              <input
-                id="emailVerificationCode"
-                name="emailVerificationCode"
-                type="text"
-                placeholder={contactFormContent.placeholders.emailVerificationCode}
-                value={formData.emailVerificationCode}
-                onChange={handleChange}
-                autoComplete="one-time-code"
-                inputMode="numeric"
-                maxLength={6}
-                required
-              />
-              <button className="btn-ghost email-code-button" type="button" onClick={handleRequestEmailCode} disabled={requestCodeDisabled}>
-                {requestingCode
-                  ? contactFormContent.buttons.sendingVerification
-                  : emailVerificationToken
-                    ? contactFormContent.buttons.resendVerification
-                    : contactFormContent.buttons.sendVerification}
-              </button>
-            </div>
-            <p className="form-hint">
-              {emailVerificationToken
-                ? `${contactFormContent.messages.emailCodeSent} ${emailCodeSentTo}.`
-                : contactFormContent.messages.emailCodeHelp}
-            </p>
-          </div>
-
           {status.message ? (
-            <p className={`contact-form-status ${status.type === "error" ? "error" : "success"}`}>{status.message}</p>
+            <p
+              className={`contact-form-status ${status.type === "error" ? "error" : "success"}`}
+              aria-live="polite"
+            >
+              {status.message}
+            </p>
           ) : null}
 
           <button className="btn-primary btn-block" type="submit" disabled={submitDisabled}>
-            {submitting ? contactFormContent.buttons.sending : sent ? contactFormContent.buttons.success : contactFormContent.buttons.submitVerified}
+            {submitting ? contactFormContent.buttons.sending : sent ? contactFormContent.buttons.success : contactFormContent.buttons.submit}
           </button>
         </form>
       </div>
